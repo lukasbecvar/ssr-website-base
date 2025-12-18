@@ -1,6 +1,9 @@
 ## Basic website template
 This is a basic website template for creating websites with Symfony and Bootstrap.
 
+## Description
+This template is essentially the skeleton of the becvar-site application, with just the public part removed. The admin system includes its own user system, visitor tracking, contact inbox, and logs, and is ready for further expansion. The public part is prepared for integrating a new design and content.
+
 ## Preview
 ### Public page (contact form)
 ![public page](.github/assets/public-preview.png)
