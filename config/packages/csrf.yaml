@@ -1,0 +1,14 @@
+framework:
+    csrf_protection: true
+    form:
+        csrf_protection:
+            enabled: true
+            field_name: 'csrf_token'
+
+# disable csrf protection for test environment
+when@test:
+    framework:
+        csrf_protection: false
+        form:
+            csrf_protection:
+                enabled: false

@@ -1,0 +1,19 @@
+{% extends 'common/bases/error-base.twig' %}
+
+{% block title %}
+    {{ 'error.banned.title'|trans }}
+{% endblock %}
+
+{% block body %}
+<p class="error-page-msg">
+	<strong>
+		{% if message != 'non-banned' and message != 'no-reason' %}
+			{{ 'error.banned.message.reason'|trans }}: {{ message|e }}.
+		{% else %}
+			{{ 'error.banned.message'|trans }}
+		{% endif %}
+		<br><br>
+		{{ 'error.banned.unban.email'|trans }} {{ contactEmail }}
+	</strong>
+</p>
+{% endblock %}

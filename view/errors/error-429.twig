@@ -1,0 +1,15 @@
+{% extends 'common/bases/error-base.twig' %}
+
+{% block title %}
+    {{ 'error.429.title'|trans }}
+{% endblock %}
+
+{% block body %}
+<p class="error-page-msg">
+    <strong>
+        {{ 'error.429.message'|trans }} 
+        <br><br>
+        {{ 'error.429.submessage'|trans }}
+    </strong>
+</p>
+{% endblock %}

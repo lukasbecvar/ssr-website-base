@@ -1,0 +1,57 @@
+{% extends 'common/bases/admin-base.twig' %}
+
+{% block title %}
+    inbox
+{% endblock %}
+
+{# CONTACT MESSAGES INBOX PAGE COMPONENT #}
+{% block component %}
+<div class="admin-panel">
+    {% if getUserRole() != 'Owner' and getUserRole() != 'Admin' %}
+        <h2 class="page-title">Sorry you dont have permission to this page</h2>
+    {% else %}
+        {% if inboxData != null %}
+            <center class="mt-3">
+                {% for message in inboxData %}
+                    <div class='card text-white mb-3 msg-box'>
+                        <div class="card-header">
+                            <a class='delete-link' href={{ path('admin_inbox_close', {'page': page, 'id':  message.id|e}) }}>X</a>
+                            {# BAN/UNBAN button #}
+                            {% if banManager.isVisitorBanned(message.ip_address) %}
+                                <a class='delete-link text-warning' href={{ path('admin_visitor_unban', {'page': page, 'id':  message.visitor_id|e, 'referer': 'inbox'}) }}>
+                                    UNBAN
+                                </a>
+                            {% else %}
+                                <a class='delete-link text-warning' href={{ path('admin_visitor_ban', {'page': page, 'id':  message.visitor_id|e, 'referer': 'inbox'}) }}>
+                                    BAN
+                                </a>
+                            {% endif %}
+                            <h5 class="left-center card-title mt-2">{{ message.name|e }}
+                                <span class='text-success phone-none'>[{{ message.time|date('Y-m-d H:i:s')|e }}]</span><span class="phone-none">, </span>
+                                <span class='text-warning phone-none'>[{{ message.ip_address|e }}]</span>
+                                <p class="left-centers email-line text-warning">
+                                    <span class="text-white">Email: </span>{{ message.email|e }}
+                                </p>
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="left-center card-text">{{message.message|linkify|raw}}</p>
+                        </div>
+                    </div>
+                {% endfor %}
+            </center>
+            <div class="page-button-box mt-3">
+                {% if page != 1 %}
+                    <a class="back-page-button" href={{ path('admin_inbox', {'page': page - 1}) }}>Back</a>
+                {% endif %}
+                {% if messageLimit == messageCount %}
+                    <a class="back-page-button" href={{ path('admin_inbox', {'page': page + 1}) }}>Next</a>
+                {% endif %}
+            </div>
+            <br>
+        {% else %}
+            <h2 class="page-title">no messages found</h2>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

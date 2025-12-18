@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang={{ 'config.lang'|trans }}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+	<link rel="icon" href={{ asset('build/images/favicon.png') }} type="image/x-icon"/>
+    {# INCLUDE CSS ASSETS #}
+    {{ encore_entry_link_tags('error-page-css') }}
+    {{ encore_entry_link_tags('scrollbar-css') }}
+</head>
+<body>
+    {% block body %}{% endblock %}
+</body>
+</html>

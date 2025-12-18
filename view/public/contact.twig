@@ -1,0 +1,72 @@
+{% extends 'common/bases/public-base.twig' %}
+
+{% block body %}
+{# INCLUDE NAVBAR #}
+{% include 'public/elements/navbar.twig' %}
+
+<main class="container py-5">
+    <section class="row justify-content-center">
+        <div class="col-lg-6">
+            <h1 class="h3 mb-3">{{ 'contact.title'|trans }}</h1>
+            <p class="text-muted mb-4">{{ 'contact.page.intro'|trans }}</p>
+
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    {{ form_start(contactForm) }}
+                        {% if errorMsg != null %}
+                            <div class="alert alert-danger small">
+                                {{ errorMsg|trans }}
+                            </div>
+                        {% endif %}
+                        {% if successMsg != null %}
+                            <div class="alert alert-success small">
+                                {{ successMsg|trans }}
+                            </div>
+                        {% endif %}
+
+                        <div class="mb-3">
+                            {{ form_label(contactForm.name, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(contactForm.name, {
+                                attr: {
+                                    class: 'form-control',
+                                    placeholder: 'contact.form.name.input'|trans
+                                }
+                            }) }}
+                            {{ form_errors(contactForm.name) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(contactForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(contactForm.email, {
+                                attr: {
+                                    class: 'form-control',
+                                    placeholder: 'contact.form.email.input'|trans
+                                }
+                            }) }}
+                            {{ form_errors(contactForm.email) }}
+                        </div>
+
+                        <div class="mb-3">
+                            {{ form_label(contactForm.message, null, {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(contactForm.message, {
+                                attr: {
+                                    class: 'form-control',
+                                    rows: 4,
+                                    placeholder: 'contact.from.message.input'|trans
+                                }
+                            }) }}
+                            {{ form_errors(contactForm.message) }}
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">
+                                {{ 'contact.form.submit.button'|trans }}
+                            </button>
+                        </div>
+                    {{ form_end(contactForm) }}
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

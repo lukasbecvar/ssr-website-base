@@ -1,0 +1,111 @@
+{% extends 'common/bases/admin-base.twig' %}
+
+{% block title %}
+    logs
+{% endblock %}
+
+{# LOG READER PAGE COMPONENT #}
+{% block component %}
+<div class="admin-panel">
+    {# SUB NAVIGATION #}
+    {% include "admin/element/navigation/log-reader-navigation.twig" %}
+
+    {# INFO CARD #}
+    <div class="card text-white mb-0 log-reader-info-card">
+        <div class="card-header">Basic info</div>
+        <div class="card-body">
+        <p class="card-text">
+            <strong>
+                Logs count: <span class="text-primary">{{ logsAllCount }}</span> / unreaded: 
+                <span class="text-primary">{{ unreeadedCount }}</span>
+            </strong>
+        </p>
+        <p class="card-text">
+            <strong>Login, Logout: <span class="text-primary">{{ loginLogsCount }}</span></strong>
+        </p>
+        </div>
+    </div>
+    {% if logsCount == 0 %}
+        <h2 class="page-title">No relative logs were found</h2>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-dark text-nowrap table-hover custom-header">
+                <thead>
+                    <tr>  
+                        <th scope='col'>#</th>
+                        <th scope='col'>name</th>
+                        <th scope='col'>value</th>
+                        <th scope='col'>time</th>
+                        <th scope='col'>ip</th>
+                        <th scope='col'>browser</th>
+                        <th scope='col'>visitor</th>
+                        <th cope='col'>X</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in logsData %}
+                            <tr>
+                                {% if row.name == 'internal-error' or row.name == 'exception' or row.name == 'ban-system' or row.name == 'authenticator' or row.name == 'geolocate-error' or row.name == 'system-error' %}
+                                    <th scope='row' class='text-red'>{{ row.id|e }}</th>
+                                    <th scope='row' class='text-red'>{{ row.name|e }}</th>
+                                    <th scope='row' class='text-red'>{{ row.value|e }}</th>
+                                    <th scope='row' class='text-red'>{{ row.time|date('Y-m-d H:i:s')|e }}</th>
+                                    <th scope='row' class='text-red'>{{ row.ipAddress|e }}</th>
+                                    <th scope='row' class='text-red'>{{ row.browser|e }}</th>
+                                {% elseif row.name == 'database' or row.name == 'project-update' %}
+                                    <th scope='row' class='text-primary'>{{ row.id|e }}</th>
+                                    <th scope='row' class='text-primary'>{{ row.name|e }}</th>
+                                    <th scope='row' class='text-primary'>{{ row.value|e }}</th>
+                                    <th scope='row' class='text-primary'>{{ row.time|date('Y-m-d H:i:s')|e }}</th>
+                                    <th scope='row' class='text-primary'>{{ row.ipAddress|e }}</th>
+                                    <th scope='row' class='text-primary'>{{ row.browser|e }}</th>
+                                {% elseif row.name == 'message-sender' or row.name == 'anti-log' %}
+                                    <th scope='row' class='text-warning'>{{ row.id|e }}</th>
+                                    <th scope='row' class='text-warning'>{{ row.name|e }}</th>
+                                    <th scope='row' class='text-warning'>{{ row.value|e }}</th>
+                                    <th scope='row' class='text-warning'>{{ row.time|date('Y-m-d H:i:s')|e }}</th>
+                                    <th scope='row' class='text-warning'>{{ row.ipAddress|e }}</th>
+                                    <th scope='row' class='text-warning'>{{ row.browser|e }}</th>
+                                {% else %}
+                                    <th scope='row'>{{ row.id|e }}</th>
+                                    <th scope='row'>{{ row.name|e }}</th>
+                                    <th scope='row'>{{ row.value|e }}</th>
+                                    <th scope='row'>{{ row.time|date('Y-m-d H:i:s')|e }}</th>
+                                    <th scope='row'>{{ row.ipAddress|e }}</th>
+                                    <th scope='row'>{{ row.browser|e }}</th>
+                                {% endif %}
+                                <th>
+                                    {% set result = row.visitorId / limitValue %}
+                                    {% set visitorPage = result | round(0, 'ceil') %}
+                                    <a class="db-delete-link text-warning" href="/admin/visitors?page={{ visitorPage }}#{{ row.visitorId|e }}">VISIT</a>
+                                </th>
+                                <th>
+                                    <a class="db-delete-link" href={{ path('admin_database_delete', {'table': 'logs', 'page': readerPage, 'id': row.id|e, 'referer': 'log_reader'}) }}>X</a>
+                                </th>
+                            </tr>
+                        {% endfor %} 
+                    </tbody>
+                </table>
+            </div>
+            <div class="page-button-box mt-3">
+                {% if readerPage != 1 %}
+                    {% if whereIp != null %}
+                        <a class="back-page-button" href={{ path('admin_log_list_whereIp', {'page': readerPage - 1, 'ip': whereIp}) }}>Back</a>
+                    {% else %}
+                        <a class="back-page-button" href={{ path('admin_log_list', {'page': readerPage - 1}) }}>Back</a>
+                    {% endif %}
+                {% endif %}
+                {% if limitValue == logsCount %}
+                    {% if whereIp != null %}
+                        <a class="back-page-button" href={{ path('admin_log_list_whereIp', {'page': readerPage + 1, 'ip': whereIp}) }}>Next</a>
+                    {% else %}
+                        <a class="back-page-button" href={{ path('admin_log_list', {'page': readerPage + 1}) }}>Next</a>
+                    {% endif %}
+                {% endif %}
+            </div>
+        {% if readerPage != 1 or limitValue == logsCount %}
+            <br>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

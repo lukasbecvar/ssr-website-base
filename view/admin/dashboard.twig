@@ -1,0 +1,163 @@
+{% extends 'common/bases/admin-base.twig' %}
+
+{% block title %}
+    dashboard
+{% endblock %}
+
+{# DASHBOARD PAGE COMPONENT #}
+{% block component %}
+<div class="admin-panel dashboard-panel">
+    {# WARNING BOX CARD #}
+    <div class="card-phone card text-white mb-2-5 dashbord-card" id="wrarning-box">
+        <div class="card-header p-2">Warnings</div>
+        <div class="card-body" id="wraning-elements"> 
+            {# SSL CHECK #}
+            {% if isSsl == false %}
+                <p class="card-text">
+                    <span class="text-red">
+                        <strong>
+                            Your session is running on http [non secure connction] please contact web admin for fix it
+                        </strong>
+                    </span>
+                </p>
+            {% endif %}
+
+            {# MAINTENANCE CHECK #}
+            {% if isMaintenance == true %}
+                <p class="card-text">
+                    <span class="text-red"><strong>Maintenance is enabled!</strong></span>
+                </p>
+            {% endif %}
+
+            {# DEV MODE CHECK #}
+            {% if isDevMode == true %}
+                <p class="card-text">
+                    <span class="text-red"><strong>Developer mode is enabled!</strong></span>
+                </p>
+            {% endif %}
+
+            {# BROWSER LIST CHECK #}
+            {% if isBrowserListExist == false %}
+                <p class="card-text text-red">
+                    <strong>error to load file browser-list.json in app root</strong>
+                </p>
+            {% endif %}
+
+            {# ANTILOG CHECK #}
+            {% if antiLogEnabled == false %}
+                <p class="card-text text-warning">
+                    <strong>
+                        Logging for your browser is enabled you can disable <a href={{ path('antilog') }}>here</a>
+                    </strong>
+                </p>
+            {% endif %}
+                
+            {# UNREADED LOGS CHECK #}
+            {% if unreadedLogsCount != 0 %}
+                <p class="card-text text-warning">
+                    <strong>
+                        New logs found you can see it <a href={{ path('admin_log_list', {'page': 1}) }}>here</a>
+                    </strong>
+                </p>
+            {% endif %}
+
+            {# UNREADED MESSAGES CHECK #}
+            {% if messagesCount != 0 %}
+                <p class="card-text text-warning">
+                    <strong>
+                        New messages found you can see it <a href={{ path('admin_inbox', {'page': 1}) }}>here</a>
+                    </strong>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    {# VISITORS INFO CARD #}
+    <div class="card-phone card text-white mb-2-5 dashbord-card">
+        <div class="card-header p-2">
+            Visitors info <span>[<a href={{ path('admin_visitor_manager', {'page': 1}) }}>table</a>]</span>
+        </div>
+        <div class="card-body p-2-5">
+            <p class="card-text">Count: {{ visitorsCount }}</p>
+            <p class="card-text">Banned: {{ banned_visitorsCount }}</p>
+            <p class="card-text">Online: {{ onlinevisitorsCount }} / Users: {{ online_users_count|length }} <a href={{ path('admin_visitor_manager', {'page': 1, 'filter': 'online'}) }}>view</a></p>
+        </div>
+    </div>
+    
+    {# COUNTER CARDS #}
+    <div class="card-phone card text-white dashbord-card counter-container">
+        <div class="row no-gutters">
+            {# LOGS COUNT #}
+            <div class="col-lg-4">
+                <div class="card counter-card">
+                    <div class="card-statistic-3 p-3">
+                        <div class="mb-1">
+                            <h5 class="card-title mb-0">
+                                <a class="card-link stats-link" href={{ path('admin_log_list', {'page': 1}) }}>Logs</a> <a href={{ path('antilog') }}>.</a>
+                            </h5>
+                        </div>
+                        <div class="align-items-center mb-0 d-flex">
+                            <div class="col-8">
+                                <h4 class="text-white d-flex align-items-center mb-0">
+                                    {{ unreadedLogsCount }}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            {# INBOX MESSAGES COUNT #}
+            <div class="col-lg-4">
+                <div class="card counter-card">
+                    <div class="card-statistic-3 p-3">
+                        <div class="mb-1">
+                            <h5 class="card-title mb-0">
+                                <a class="card-link stats-link" href={{ path('admin_inbox', {'page': 1}) }}>Messages</a>
+                            </h5>
+                        </div>
+                        <div class="align-items-center mb-0 d-flex">
+                            <div class="col-8">
+                                <h4 class="text-white d-flex align-items-center mb-0">
+                                    {{ messagesCount }}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>  
+            
+            {# VISITORS COUNT #}
+            <div class="col-lg-4"> 
+                <div class="card counter-card">
+                    <div class="card-statistic-3 p-3">
+                        <div class="mb-1">
+                            <h5 class="card-title mb-0">
+                                <a class="card-link stats-link" href={{ path('admin_visitor_manager', {'page': 1}) }}>Visitors</a>
+                            </h5>
+                        </div>
+                        <div class=" align-items-center mb-0 d-flex">
+                            <div class="col-8">
+                                <h4 class="text-white d-flex align-items-center mb-0">
+                                    {{ visitorsCount }}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>   
+        </div>
+    </div>    
+</div>
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        const divElement = document.getElementById('wrarning-box')
+        const elements = document.getElementById('wraning-elements')
+        if (elements.innerHTML.trim() === '') {
+            divElement.style.display = 'none'
+        } else {
+            divElement.style.display = 'block'
+        }
+    })
+</script>
+{% endblock %}

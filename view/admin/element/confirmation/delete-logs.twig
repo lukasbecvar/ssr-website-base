@@ -1,0 +1,18 @@
+{% extends 'common/bases/admin-base.twig' %}
+
+{% block title %}
+    confirmation
+{% endblock %}
+
+{# LOGS DELETE CONFIRMATION DIALOG COMPONENT #}
+{% block component %}
+<div class="admin-panel">
+    <div class="modal-overlay">
+        <div class="confirmation dark-table">
+            <p class="form-title">Are you sure you want to delete all logs?</p>
+            <a class="confirmation-button confirmation-button-confirm" href={{ path('admin_database_delete', {'table': 'logs', 'page': '1', 'id': 'all', 'referer': 'log_reader'}) }}>Yes</a>
+            <a class="confirmation-button confirmation-button-cancel" href={{ path('admin_log_list', {'page': page}) }}>No</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

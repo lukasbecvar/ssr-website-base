@@ -1,0 +1,58 @@
+<ul class="breadcrumb database-breadcrumb">
+    {# ROW EDITOR BACK BUTTON #}
+    {% if editorTable != null %}
+        <li>
+            <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': editorTable, 'page': editorPage}) }}>
+                <strong>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </strong>
+            </a>
+        </li>
+        <li class="count-text-in-menu">Row editor</li>
+    {# ROW ADD BACK BUTTON #}
+    {% elseif newRowTable != null %}
+        <li>
+            <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': newRowTable, 'page': newRowPage}) }}>
+                <strong>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </strong>
+            </a>
+        </li>
+        <li class="count-text-in-menu">New row</li>
+    {# TABLE VIEWER TOOLBAR #}
+    {% elseif tableName != null %}
+        <li>
+            <a class="selector-button btn-small" href={{ path('admin_database_list') }}>
+                <strong>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </strong>
+            </a>
+        </li>
+            <li> 
+                <a class="selector-button btn-small" href={{ path('admin_database_delete', {'table': tableName, 'page': '1', 'id': 'all'}) }}>
+                    <strong>
+                        <i class="fa fa-trash" aria-hidden="true"></i> 
+                    </strong>
+                </a>
+            </li>
+        {% if tableName != 'code_paste' and tableName != 'images' and tableName != 'chat_messages' and tableName != 'inbox_messages' and tableName != 'todos' %}
+            <li>    
+                {% if tableName != 'code_paste' and tableName != 'images' %}
+                    <a class="selector-button btn-small" href={{ path('admin_database_add', {'table': tableName, 'page': page}) }}>
+                        <i class="fa fa-plus" aria-hidden="true"></i> 
+                    </a>
+                {% endif %}
+            </li>
+        {% endif %}
+
+        {# REGISTER NEW USER BUTTON #}
+        {% if tableName == 'users' %}
+            <li>
+                <a class="selector-button btn-small" href={{ path('auth_register') }}>
+                    <strong>R</strong>
+                </a>
+            </li>        
+        {% endif %}
+        <li class="count-text-in-menu">{{ tableName }} = {{ tableDataCountAll }} rows</li>
+    {% endif %}
+</ul>

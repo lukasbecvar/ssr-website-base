@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<link rel="icon" href={{ asset('build/images/favicon.png') }} type="image/x-icon"/>
+    
+    {# REDIRECT TO ERROR IF JAVASCRIPT IS DISABLED #}
+    <noscript>
+        <meta http-equiv="refresh" content="0; URL='{{ path('error_by_code', {code: '426'}) }}'"/>
+    </noscript>
+
+    {# INCLUDE PWA CONFIG MANIFEST #}
+    {% if pwa_app_support == 'true' %}
+        <link rel="manifest" href={{ asset('pwa-config.json') }}>
+    {% endif %}
+
+    {# INCLUDE CSS ASSETS #} 
+    {{ encore_entry_link_tags('page-loading-css') }}
+    {{ encore_entry_link_tags('fontawesome-css') }}
+    {{ encore_entry_link_tags('scrollbar-css') }}
+    {{ encore_entry_link_tags('bootstrap-css') }}
+    {{ encore_entry_link_tags('admin-css') }}
+    
+    {# INIT COMPONENT ASSETS (if defined) #}
+    {% block component_assets %}{% endblock %}
+	<title>Admin | {% block title %}{% endblock %}</title>
+</head>
+{% set current_path = app.request is defined ? app.request.pathinfo : '' %}
+{% set is_dashboard_page = current_path starts with '/admin/dashboard' %}
+<body class="{% if not is_dashboard_page %}active{% endif %}" data-sidebar-default="{{ is_dashboard_page ? 'open' : 'closed' }}">
+<div id="loader-wrapper">
+    <div id="loader"></div>
+</div>
+<main class="admin-page" id="content"> 
+    <div class="wrapper">
+        <div class="section">
+            <div class="top-navbar">
+                <div class="hamburger">
+                    <span class="menu-button"><span class="menu-text">Menu</span><i class="fas fa-bars"></i></span>
+                    <a class="logout-link menu-button" href={{ path('auth_logout') }}>
+                        <i class="fas fa-sign-out-alt"></i>
+                    </a>
+                </div>
+            </div>
+            {# INCLUDE SIDEBAR NAVIGATION #}
+            {% include 'admin/element/sidebar.twig' %}
+
+            {# MAIN ADMIN COMPONENT WRAPPER #}
+            {% block component %}{% endblock %}
+
+            <script>
+                (function () {
+                    const body = document.body
+                    const hamburger = document.querySelector(".hamburger")
+                    const defaultState = body.dataset.sidebarDefault || "closed"
+
+                    if (!hamburger) {
+                        return
+                    }
+
+                    const toggleSidebar = () => {
+                        body.classList.toggle("active")
+                    }
+
+                    const syncSidebar = () => {
+                        hamburger.removeEventListener("click", toggleSidebar)
+                        hamburger.addEventListener("click", toggleSidebar)
+
+                        if (window.innerWidth <= 1024) {
+                            body.classList.add("active")
+                            return
+                        }
+
+                        if (defaultState === "open") {
+                            body.classList.remove("active")
+                        } else {
+                            body.classList.add("active")
+                        }
+                    }
+
+                    syncSidebar()
+                    window.addEventListener("resize", syncSidebar)
+                })()
+            </script>
+        </div>
+    </div>
+</main>
+{# INCLUDE JAVASCRIPT ASSETS #}
+{{ encore_entry_script_tags('update-visitor-status-js') }}
+{{ encore_entry_script_tags('page-loading-js') }}
+</body>
+</html>

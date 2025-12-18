@@ -1,0 +1,79 @@
+{% extends 'common/bases/auth-base.twig' %}
+
+{# ADMIN LOGIN COMPONENT #}
+{% block component %}
+<main class="login-page color-white">
+    <div class="login-page-content">
+
+        {# EMPTY USERS TABLE ALERT #}
+        {% if isUsersEmpty %}
+            <div class="admin-alert admin-alert--error login-page-alert" role="alert">
+                <span class="admin-alert-message">
+                    Users table is empty you can create first account
+                    <a href={{ path('auth_register') }}>here</a>.
+                </span>
+            </div>
+        {% endif %}
+
+        {# ERROR MESSAGE BOX #}
+        {% if errorMsg != null %}
+            {% include "common/alerts/error-alert.twig" %}
+        {% endif %}
+
+        <div class="login-card">
+            <div class="login-card-header">
+                <h1 class="login-card-title">Dashboard login</h1>
+                <p class="login-card-subtitle">Sign in to administration panel.</p>
+            </div>
+
+            {# LOGIN FORM #}
+            {{ form_start(loginForm, {'attr': {'class': 'auth-form'}}) }}
+                {% if loginForm.vars.errors|length %}
+                    <div class="auth-form-errors">
+                        <ul class="auth-error-list">
+                            {% for error in loginForm.vars.errors %}
+                                <li>{{ error.message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="auth-form-fields">
+                    {% set usernameErrors = loginForm.username.vars.errors %}
+                    <div class="auth-form-field{{ usernameErrors|length ? ' has-error' }}">
+                        {{ form_widget(loginForm.username, {'attr': {'autocomplete': 'username'}}) }}
+                        {% if usernameErrors|length %}
+                            <ul class="auth-field-errors">
+                                {% for error in usernameErrors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    {% set passwordErrors = loginForm.password.vars.errors %}
+                    <div class="auth-form-field{{ passwordErrors|length ? ' has-error' }}">
+                        {{ form_widget(loginForm.password, {'attr': {'autocomplete': 'current-password'}}) }}
+                        {% if passwordErrors|length %}
+                            <ul class="auth-field-errors">
+                                {% for error in passwordErrors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="auth-form-footer">
+                    <label class="auth-form-remember" for="{{ loginForm.remember.vars.id }}">
+                        {{ form_widget(loginForm.remember) }}
+                        <span>{{ loginForm.remember.vars.label }}</span>
+                    </label>
+                    <button type="submit" class="input-button">Sign in</button>
+                </div>
+
+                {{ form_rest(loginForm) }}
+            {{ form_end(loginForm, {'render_rest': false}) }}
+        </div>
+    </div>
+</main>
+{% endblock %}

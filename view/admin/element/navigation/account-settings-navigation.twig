@@ -1,0 +1,15 @@
+<ul class="breadcrumb database-breadcrumb">
+    {% if profilePicChangeForm != null or usernameChangeForm != null or passwordChangeForm != null %}
+        <li>
+            <a class="selector-button" href={{ path('admin_account_settings_table') }}>
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </a>
+        </li>
+    {% else %}
+        <li>
+            <a class="selector-button" href={{ path('admin_dashboard') }}>
+                <i class="fa fa-arrow-left" aria-hidden="true"></i>
+            </a>
+        </li>
+    {% endif %}
+</ul>

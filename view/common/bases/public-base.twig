@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang={{ 'config.lang'|trans }}>
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <link rel="icon" href={{ asset('build/images/favicon.png') }} type="image/x-icon"/>
+    {# SEO TAGS #}
+    <meta content="Basic page description" name="description">
+    <meta content="word1, word2, word3" name="keywords">
+    <meta property="og:description" content="PBasic page description"/>
+    <meta property="og:title" content="Basic website template"/>
+    <meta property="og:locale" content={{ 'config.lang'|trans }}/>    
+    <meta property="og:site_name" content="Basic website template"/>
+    <meta property="og:url" content="page_url"/>
+    <meta property="og:type" content="website"/>
+
+    {# INCLUDE PWA CONFIG MANIFEST #}
+    {% if pwa_app_support == 'true' %}
+        <link rel="manifest" href={{ asset('pwa-config.json') }}>
+    {% endif %}
+    
+    {# INCLUDE CSS ASSETS #}
+    {{ encore_entry_link_tags('bootstrap-icons-css') }}
+    {{ encore_entry_link_tags('scrollbar-css') }}
+    {{ encore_entry_link_tags('bootstrap-css') }}
+    {{ encore_entry_link_tags('boxicons-css') }}
+    {{ encore_entry_link_tags('public-css') }}
+	<title>Website title</title>
+</head>
+<body>
+    {# INCLUDE COMPONENT BLOCK #}
+    {% block body %}{% endblock %}
+
+    {# INCLUDE JAVASCRIPT ASSETS #}
+    {{ encore_entry_script_tags('update-visitor-status-js') }}
+    {{ encore_entry_script_tags('bootstrap-js') }}
+</body>
+</html>

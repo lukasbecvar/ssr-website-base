@@ -1,0 +1,21 @@
+<ul class="breadcrumb database-breadcrumb"> 
+    {# VIEW UNFILTERED LOGS #}
+    <li>
+        <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': 'logs', 'page': readerPage}) }}>
+            <strong><i class="fa fa-database" aria-hidden="true"></i></strong>
+        </a>
+    </li>  
+    {# SET ALL LOGS AS READ #}
+    <li>
+        <a class="selector-button btn-small" href={{ path('admin_log_readed') }}>
+            <strong><i class="fa fa-check" aria-hidden="true"></i></strong>
+        </a>
+    </li>
+    {# DELETE ALL LOGS #}
+    <li>
+        <a class="selector-button btn-small" href={{ path('admin_log_delete', {'page': 1}) }}>
+            <strong><i class="fa fa-trash" aria-hidden="true"></i></strong>
+        </a>
+    </li>    
+    <li class="count-text-in-menu">Logs reader</li>
+</ul>

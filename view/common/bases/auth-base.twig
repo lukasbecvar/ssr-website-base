@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="icon" href={{ asset('build/images/favicon.png') }} type="image/x-icon"/>
+	{# INCLUDE CSS ASSETS #} 
+    {{ encore_entry_link_tags('scrollbar-css') }}
+    {{ encore_entry_link_tags('bootstrap-css') }}
+	{{ encore_entry_link_tags('admin-css') }}
+	<title>Admin | Login</title>
+</head>
+<body>
+<main> 
+    <div class="wrapper">
+		{% block component %}{% endblock %}
+    </div>
+</main>
+{# INCLUDE JAVASCRIPT ASSETS #}
+{{ encore_entry_script_tags('update-visitor-status-js') }}
+</body>
+</html>

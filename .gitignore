@@ -1,0 +1,25 @@
+# config files
+.env.prod
+
+# docker env data
+/.docker/services/
+
+# cache files
+config/reference.php
+/public/bundles/
+/var/
+
+# composer files
+/vendor/
+composer.lock
+
+# node files
+/node_modules/
+/public/build/
+package-lock.json
+
+# phpunit
+.phpunit.result.cache
+
+# php codesniffer
+.phpcs-cache

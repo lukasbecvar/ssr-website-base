@@ -1,0 +1,70 @@
+# docker compose configuration defines local development stack
+
+# docker network config
+networks:
+    main:
+        driver: bridge
+
+services:
+    # composer service for managing php dependencies
+    composer:
+        image: composer:latest
+        container_name: website_composer
+        working_dir: /app
+        volumes:
+            - .:/app
+        networks:
+            - main
+        command: composer install --ignore-platform-reqs
+    
+    # node service for frontend assets
+    node:
+        image: node:latest
+        container_name: website_node
+        working_dir: /app
+        volumes:
+            - .:/app
+        networks:
+            - main
+        command: npm run watch
+
+    # database service
+    mysql:
+        image: mysql:8.0.43
+        container_name: website_mysql
+        restart: always
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+        volumes:
+            - ./.docker/configs/mysqld.conf:/etc/mysql/mysql.conf.d/mysqld.cnf
+            - ./.docker/services/mysql_database:/var/lib/mysql
+            - ./.docker/services/log:/var/log
+        mem_limit: 1g
+        ports:
+            - "3306:3306"
+        networks:
+            - main
+
+    # web server service
+    php:
+        build:
+            context: .
+            dockerfile: ./.docker/Dockerfile.dev
+        container_name: website_webserver
+        restart: always
+        depends_on:
+            - mysql
+        environment:
+            - DATABASE_DRIVER=pdo_mysql
+            - DATABASE_HOST=mysql
+            - DATABASE_PORT=3306
+        volumes:
+            - ./.docker/configs/apache-site.conf:/etc/apache2/sites-available/000-default.conf
+            - ./.docker/configs/php.ini:/usr/local/etc/php/php.ini:ro
+            - ./.docker/services/log:/var/log
+            - ./:/var/www
+        mem_limit: 1g
+        ports:
+            - "80:80"
+        networks:
+            - main

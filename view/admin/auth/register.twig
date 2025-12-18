@@ -1,0 +1,80 @@
+{% extends 'common/bases/auth-base.twig' %}
+
+{# ADMIN USER REGISTER COMPONENT #}
+{% block component %}
+<main class="register-page color-white">
+    <div class="login-page-content">
+
+        {# ERROR MESSAGE BOX #}
+        {% if errorMsg != null %}
+            {% include "common/alerts/error-alert.twig" %}
+        {% endif %}
+
+        <div class="login-card">
+            <div class="login-card-header">
+                <h1 class="login-card-title">Create administrator account</h1>
+                <p class="login-card-subtitle">
+                    Register administrator account to access administration panel.
+                </p>
+            </div>
+
+            {# REGISTRATION FORM #}
+            {{ form_start(registrationForm, {'attr': {'class': 'auth-form'}}) }}
+                {% if registrationForm.vars.errors|length %}
+                    <div class="auth-form-errors">
+                        <ul class="auth-error-list">
+                            {% for error in registrationForm.vars.errors %}
+                                <li>{{ error.message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                <div class="auth-form-fields">
+                    {% set usernameErrors = registrationForm.username.vars.errors %}
+                    <div class="auth-form-field{{ usernameErrors|length ? ' has-error' }}">
+                        {{ form_widget(registrationForm.username) }}
+                        {% if usernameErrors|length %}
+                            <ul class="auth-field-errors">
+                                {% for error in usernameErrors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    {% set passwordErrors = registrationForm.password.vars.errors %}
+                    <div class="auth-form-field{{ passwordErrors|length ? ' has-error' }}">
+                        {{ form_widget(registrationForm.password) }}
+                        {% if passwordErrors|length %}
+                            <ul class="auth-field-errors">
+                                {% for error in passwordErrors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+
+                    {% set rePasswordErrors = registrationForm['re-password'].vars.errors %}
+                    <div class="auth-form-field{{ rePasswordErrors|length ? ' has-error' }}">
+                        {{ form_widget(registrationForm['re-password']) }}
+                        {% if rePasswordErrors|length %}
+                            <ul class="auth-field-errors">
+                                {% for error in rePasswordErrors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="auth-form-footer auth-form-footer-single">
+                    <button type="submit" class="input-button">Create account</button>
+                </div>
+
+                {{ form_rest(registrationForm) }}
+            {{ form_end(registrationForm, {'render_rest': false}) }}
+        </div>
+    </div>
+</main>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'common/bases/admin-base.twig' %}
+
+{% block title %}
+    confirmation
+{% endblock %}
+
+{# VISITOR BAN FORM #}
+{% block component %}
+<div class="admin-panel">
+    {% if getUserRole() != 'Owner' and getUserRole() != 'Admin' %}
+        <h2 class="page-title">Sorry you dont have permission to this page</h2>
+    {% else %}
+        <div class="modal-overlay">
+            <div class="confirmation dark-table">
+                <p class="form-title">Are you sure you want to ban this visitor?</p>
+                {{ form_start(banForm) }}
+                    {{ form_widget(banForm.ban_reason, {'attr': {'placeholder': 'Reason'}}) }}
+                    {% if banForm.ban_reason.vars.errors|length %}
+                        <ul class="auth-field-errors">
+                            {% for error in banForm.ban_reason.vars.errors %}
+                                <li>{{ error.message }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <button type="submit" class="confirmation-button confirmation-button-confirm">Ban</button>
+                    <a class="confirmation-button confirmation-button-cancel" href={{ path('admin_visitor_manager', {'page': page}) }}>Cancel</a>
+                {{ form_end(banForm) }}
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,365 @@
+{% extends 'common/bases/admin-base.twig' %}
+
+{% block title %}
+    visitors
+{% endblock %}
+
+{# VISITORS MANAGER PAGE COMPONENT #}
+{% block component %}
+<div class="admin-panel">
+    {# SUB NAVIGATION #}
+    {% include "admin/element/navigation/visitor-manager-navigation.twig" %}
+
+    {# VISITOR IP INFO COMPONENT #}
+    {% if visitorInfoData != null %}
+        {# IP INFO CARD #}
+        <div class="card-phone card text-white m-3">
+            <div class="card-header">
+                IP info: <span class="text-warning">{{currentIp}}:</span> <a class="text-info" href={{ path('admin_log_list_whereIp', {'page': 1, 'ip': currentIp}) }}>view logs</a>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    {% for key, value in visitorInfoData %}
+                        <li class="border-bottom py-2">{{ key|capitalize }}: {{ value }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {# VISITOR METRICS COMPONENT #}
+    {% elseif visitorMetrics != null %}
+        {# VISITORS COUNT CHART #}
+        <div class="col-12 metrics-card metrics-chart">
+            <div class="card dashbord-card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="card-title mb-0">Visitors Chart</h5>
+                    <select id="time-period" class="custom-select" onchange="updateTimePeriod()">
+                        <option value="last_24_hours">Last 24 hours</option>
+                        <option value="last_week">Last week</option>
+                        <option value="last_month">Last month</option>
+                        <option value="last_year">Last year</option>
+                        <option value="all_time">All time</option>
+                    </select>
+                </div>
+                <div class="card-body">
+                    <div id="chart"></div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // update time period in url
+            function updateTimePeriod() {
+                const select = document.getElementById('time-period')
+                const selectedValue = select.value
+                window.location.href = `/admin/visitors/metrics?time_period=${selectedValue}`
+            }
+
+            // select selecton value from url
+            function setSelectedValue() {
+                const urlParams = new URLSearchParams(window.location.search)
+                const timePeriod = urlParams.get('time_period')
+                const select = document.getElementById('time-period')
+
+                // set selected value
+                if (timePeriod) {
+                    select.value = timePeriod
+                } else {
+                    select.value = 'last_week'
+                }
+            }
+
+            // init select value
+            window.onload = setSelectedValue
+        </script>
+
+        {# METRICS BOXES #}
+        <div class="text-white metrics-box-container">
+            <div class="row no-gutters metrics-row">
+                {# VISITORS COUNTRY LIST #}
+                <div class="col-12 col-md-6 col-xl-3 metrics-card"> 
+                    <div class="metrics-table-card">
+                        <div class="metrics-table-card-header">
+                            <span class="metrics-table-card-title">Top countries</span>
+                            <span class="metrics-table-card-meta">{{ visitorMetrics.visitorsCountry|length }} total</span>
+                        </div>
+                        <div class="metrics-table-card-body">
+                            {% if visitorMetrics.visitorsCountry is not empty %}
+                                <div class="table-responsive">
+                                    <table class="table table-dark text-nowrap table-hover custom-header metrics-table-card-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Country</th>
+                                                <th scope="col" class="text-end pe-2">Visitors</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for key, row in visitorMetrics.visitorsCountry %}
+                                                <tr>
+                                                    <td class="metrics-table-card-label">{{ key|e }}</td>
+                                                    <td class="metrics-table-card-value text-primary">{{ row|e }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p class="metrics-table-card-empty">No visitor country data yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>  
+
+                {# VISITORS CITIES LIST #}
+                <div class="col-12 col-md-6 col-xl-3 metrics-card"> 
+                    <div class="metrics-table-card">
+                        <div class="metrics-table-card-header">
+                            <span class="metrics-table-card-title">Top cities</span>
+                            <span class="metrics-table-card-meta">{{ visitorMetrics.visitorsCity|length }} tracked</span>
+                        </div>
+                        <div class="metrics-table-card-body">
+                            {% if visitorMetrics.visitorsCity is not empty %}
+                                <div class="table-responsive">
+                                    <table class="table table-dark text-nowrap table-hover custom-header metrics-table-card-table">
+                                        <thead class="metrics-table-header">
+                                            <tr>
+                                                <th scope="col">City</th>
+                                                <th scope="col" class="text-end pe-2">Visitors</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for key, row in visitorMetrics.visitorsCity %}
+                                                <tr>
+                                                    <td class="metrics-table-card-label">{{ key|e }}</td>
+                                                    <td class="metrics-table-card-value text-primary">{{ row|e }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p class="metrics-table-card-empty">No visitor city data yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div> 
+
+                {# USED BROWSERS LIST #}
+                <div class="col-12 col-md-6 col-xl-3 metrics-card"> 
+                    <div class="metrics-table-card">
+                        <div class="metrics-table-card-header">
+                            <span class="metrics-table-card-title">Top browsers</span>
+                            <span class="metrics-table-card-meta">{{ visitorMetrics.visitorsBrowsers|length }} types</span>
+                        </div>
+                        <div class="metrics-table-card-body">
+                            {% if visitorMetrics.visitorsBrowsers is not empty %}
+                                <div class="table-responsive">
+                                    <table class="table table-dark text-nowrap table-hover custom-header metrics-table-card-table">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col">Browser</th>
+                                                <th scope="col" class="text-end pe-2">Visitors</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for key, row in visitorMetrics.visitorsBrowsers %}
+                                                <tr>
+                                                    <td class="metrics-table-card-label">{{ key|e }}</td>
+                                                    <td class="metrics-table-card-value text-primary">{{ row|e }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p class="metrics-table-card-empty">No visitor browser data yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {# VISITORS REFERERS #}
+                <div class="col-12 col-md-6 col-xl-3 metrics-card"> 
+                    <div class="metrics-table-card">
+                        <div class="metrics-table-card-header">
+                            <span class="metrics-table-card-title">Top referers</span>
+                            <span class="metrics-table-card-meta">{{ visitorMetrics.visitorsReferers|length }} sources</span>
+                        </div>
+                        <div class="metrics-table-card-body">
+                            {% if visitorMetrics.visitorsReferers is not empty %}
+                                <div class="table-responsive">
+                                    <table class="table table-dark text-nowrap table-hover custom-header metrics-table-card-table">
+                                        <thead class="metrics-table-header">
+                                            <tr>
+                                                <th scope="col">Referer</th>
+                                                <th scope="col" class="text-end pe-2">Visitors</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for key, row in visitorMetrics.visitorsReferers %}
+                                                <tr>
+                                                    <td class="metrics-table-card-label">{{ key|e }}</td>
+                                                    <td class="metrics-table-card-value text-primary">{{ row|e }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% else %}
+                                <p class="metrics-table-card-empty">No referer data yet.</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# INCLUDE VISITORS METRICS CHART SCRIPT #}
+        <script>
+            window.visitorMetrics = {{ visitorMetrics.visitorsCount|json_encode|raw }}
+        </script>
+        {{ encore_entry_script_tags('visitors-metrics-js') }}
+    {% else %}
+        <div class="table-responsive center">
+            <table class="table table-dark text-nowrap table-hover custom-header">
+                <thead>
+                    <tr>  
+                        <th scope='col'>
+                            <a href={{ path('admin_visitor_manager', {'page': page, 'filter': filter, 'sort': 'id', 'order': (order == 'desc') ? 'asc' : 'desc'}) }}>
+                                #
+                                {% if sort == 'id' %}
+                                    {% if order == 'desc' %}
+                                        <i class="fa fa-arrow-down"></i>
+                                    {% else %}
+                                        <i class="fa fa-arrow-up"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th scope='col'>
+                            <a href={{ path('admin_visitor_manager', {'page': page, 'filter': filter, 'sort': 'last_visit', 'order': (order == 'desc') ? 'asc' : 'desc'}) }}>
+                                Visit(last)
+                                {% if sort == 'last_visit' %}
+                                    {% if order == 'desc' %}
+                                        <i class="fa fa-arrow-down"></i>
+                                    {% else %}
+                                        <i class="fa fa-arrow-up"></i>
+                                    {% endif %}
+                                {% endif %}
+                            </a>
+                        </th>
+                        <th scope='col'>First site</th>
+                        <th scope='col'>Browser</th>
+                        <th scope='col'>OS</th>
+                        <th scope='col'>Location</th>
+                        <th scope='col'>Address</th>
+                        <th scope='col'>Referer</th>
+                        <th scope-='col'>Status</th>
+                        <th scope='col'>Banned</th>
+                        <th scope='col'>BAN</th>
+                        <th scope='col'>X</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in visitorsData %}
+                        <tr id="{{ row.id|e }}">
+                            {# <===== ID =====> #}
+                            <th scope='row'>{{ row.id|e }}</th>
+                            {# <===== LAST-VISIT-TIME =====> #}
+                            <th scope='row'>{{ row.lastVisit|date('Y-m-d H:i:s')|e }}</th>
+                            {# <===== FIRST-VISIT-SITE =====> #}
+                            <th scope='row'>{{ row.firstVisitSite|e }}</th>
+                            {# <===== BROWSER =====> #}
+                            {% if row.browser == 'Unknown' %}
+                                <th scope='row' class='text-red'>{{ row.browser|e }}</th>
+                            {% else %}
+                                <th scope='row'>{{ row.browser|e }}</th>
+                            {% endif %}
+                            {# <===== OS =====> #}
+                            {% if row.os == 'Unknown OS' %}
+                                <th scope='row' lass='text-red'>{{ row.os|e }}</th>
+                            {% else %}
+                                <th scope='row'>{{ row.os }}</th>
+                            {% endif %}
+                            {# <===== LOCATION =====> #}
+                            {% if row.country|slice(0, 2)|lower == 'cz' %}
+                                <th scope='row' class='text-warning'>{{ row.city|e }} - {{ row.country|e }}</th>
+                            {% else %}
+                                {% if row.city == 'Unknown' %}
+                                    <th scope='row' class='text-red'>{{ row.city|e }} - {{ row.country|e }}</th>
+                                {% else %}
+                                    <th scope='row'>{{ row.city|e }} - {{ row.country|e }}</th>
+                                {% endif %}
+                            {% endif %}
+                            {# <===== IP-ADDRESS =====> #}
+                            {% if row.ipAddress == currentIp %}
+                                <th scope='row'class='text-warning'>
+                                    <a href={{ path('admin_visitor_ipinfo', {'ip': row.ipAddress|e}) }} class="log-reader-link text-warning">{{ row.ipAddress|e }}</a>
+                                </th>
+                            {% else %}
+                                <th scope='row'>
+                                    <a href={{ path('admin_visitor_ipinfo', {'ip': row.ipAddress|e}) }} class="log-reader-link">{{ row.ipAddress|e }}</a>
+                                </th>
+                            {% endif %}
+                            {# <===== REFERER =====> #}
+                            {% if row.referer == 'Unknown' %}
+                                <th scope='row' class='text-red'>{{ row.referer|e }}</th>
+                            {% else %}
+                                <th scope='row'>{{ row.referer|e }}</th>
+                            {% endif %}
+                            {# <===== ONLINE-STATUS =====> #}
+                            {% if row.id in onlineVisitors %}
+                                <th scope='row' class='text-success'>online</th>
+                            {% else %}
+                                <th scope='row' class='text-red'>offline</th>
+                            {% endif %}     
+                            {# <===== BANNED-STATUS =====> #}
+                            {% if row.bannedStatus %}
+                                <th scope='row' class='text-red'>yes</th>
+                            {% else %}
+                                <th scope='row' class='text-success'>no</th>
+                            {% endif %}                        
+                            {# <===== BUTTONS =====> #}
+                            <th>
+                                {% if row.bannedStatus == 'yes' %}
+                                    <a class="db-delete-link text-warning" href={{ path('admin_visitor_unban', {'page': page, 'id': row.id|e}) }}>UNBAN</a>
+                                {% else %}
+                                    <a class="db-delete-link text-warning" href={{ path('admin_visitor_ban', {'page': page, 'id': row.id|e}) }}>BAN</a>
+                                {% endif %}
+                            </th>
+                            <th>
+                                <a class="db-delete-link" href={{ path('admin_database_delete', {'table': 'visitors', 'page': page, 'id': row.id|e, 'referer': 'visitor_manager'}) }}>X</a>
+                            </th>
+                        </tr>
+                    {% endfor %} 
+                </tbody>
+            </table>
+        </div>
+        <div class="page-button-box mt-3 mb-3">
+            {% if page != 1 %}
+                <a class="back-page-button" href={{ path('admin_visitor_manager', {'page': page - 1, 'filter': filter, 'sort': sort, 'order': order}) }}>Back</a>
+            {% endif %}
+            {% if visitorsCount > page * visitorsLimit %}
+                <a class="back-page-button" href={{ path('admin_visitor_manager', {'page': page + 1, 'filter': filter, 'sort': sort, 'order': order}) }}>Next</a>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+
+{# LINE SELECTOR HIGHLIGHT SCRIPT #}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var hash = window.location.hash
+        if (hash && hash.startsWith('#')) {
+            var id = hash.substring(1)
+            var row = document.getElementById(id)
+
+            if (row) {
+                var thElements = row.getElementsByTagName('th')
+                for (var j = 0; j < thElements.length; j++) {
+                    thElements[j].classList.add('highlighter')
+                }
+            }
+        }
+    })
+</script>
+{% endblock %}

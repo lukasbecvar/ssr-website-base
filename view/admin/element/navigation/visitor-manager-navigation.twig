@@ -1,0 +1,57 @@
+<ul class="breadcrumb database-breadcrumb">
+    {# BACK TO VISITORS MANAGER #}
+    {% if filter != 1 or visitorMetrics != null %}
+        <li>
+            <a class="selector-button btn-small" href={{ path('admin_visitor_manager', {'page': page}) }}>
+                <strong><i class="fa fa-arrow-left" aria-hidden="true"></i></strong>
+            </a>
+        </li>  
+    {% endif %}
+    
+    {# VIEW UNFILTERED VISITORS #}
+    <li>
+        <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': 'visitors', 'page': page }) }}>
+            <strong><i class="fa fa-database" aria-hidden="true"></i></strong>
+        </a>
+    </li>  
+
+    {# DELETE ALL VISITORS #}
+    <li>
+        <a class="selector-button btn-small" href={{ path('admin_visitor_delete', {'page': page}) }}>
+            <strong><i class="fa fa-trash" aria-hidden="true"></i></strong>
+        </a>
+    </li>
+    
+    {# EXPORT VISITORS LIST #}
+    <li>
+        <a class="selector-button btn-small" href={{ path('admin_visitor_manager_download') }}>
+            <strong><i class="fa fa-download" aria-hidden="true"></i></strong>
+        </a>
+    </li>
+
+    {# ENABLE ONLINE FILTER #}
+    {% if filter == 1 %}
+        <li>
+            <a class="selector-button btn-small" href={{ path('admin_visitor_manager', {'page': 1, 'filter': 'online'}) }}>
+                <strong><i class="fa fa-plug" aria-hidden="true"></i></strong>
+            </a>
+        </li>
+    {% endif %}
+
+    {# LINK TO VISITORS METRICS #}
+    {% if visitorMetrics == null %}
+        <li>
+            <a class="selector-button btn-small" href={{ path('admin_visitor_manager_metrics') }}>
+                <strong><i class="fa fa-chart-bar" aria-hidden="true"></i></strong>
+            </a>
+        </li>
+    {% endif %}
+
+    {# STATS COUNTER #}
+    {% if onlineVisitors != null %}
+        <li class="count-text-in-menu">
+            Online visitors: <strong>{{ onlineVisitors|length }}</strong>,
+            Banned visitors: <strong>{{ bannedCount }}</strong>
+        </li>
+    {% endif %}
+</ul>

@@ -1,0 +1,69 @@
+config.lang: "en"
+
+# common error messages
+error.url.check.message: "Please check the address bar or contact your administrator"
+# error 400
+error.400.title: "Error: Bad request"
+error.400.message: "Request error"
+# error 401
+error.401.title: "Error: Unauthorized"
+error.401.message: "You do not have permission to access this page"
+# error 403
+error.403.title: "Error: Forbidden"
+error.403.message: "You do not have permission to access this page"
+# error 404
+error.404.title: "Error: Page not found"
+error.404.message: "Error this page was not found"
+# error 426
+error.426.title: "Error: Upgrade protocol"
+error.426.message: "Your browser does not support the HTTPS protocol, or javascript is disabled"
+error.426.submessage: "Please try to use the HTTPS protocol to access this page"
+# error 429
+error.429.title: "Error: Too Many Requests"
+error.429.message: "Too Many Requests"
+error.429.submessage: "Please wait and try again later"
+# error 500
+error.500.title: "Error: Internal Server Error"
+error.500.message: "The server encountered an unexpected condition that prevented it from fulfilling the request"
+# error unknown
+error.unknown.title: "Error: unknown error"
+error.unknown.message: "Unknown error, please contact the service administrator"
+# error maintenance
+error.maintenance.title: "Error: page is unavailable"
+error.maintenance.message: "The service is temporarily unavailable due to maintenance"
+# error banned
+error.banned.title: "You are banned"
+error.banned.message: "You are permanently banned on this site"
+error.banned.message.reason: "You are permanently banned on this site for reason"
+error.banned.unban.email: "Please direct unban requests to"
+
+# contact
+contact.title: "Contact me"
+contact.social.sites.title: "Social sites"
+contact.email.me.title: "Mail me"
+contact.form.name.input: "Your name"
+contact.form.email.input: "Your email"
+contact.from.message.input: "Message"
+contact.from.website.input: "Website"
+contact.form.submit.button: "Submit message"
+contact.error.username.empty: "Please enter your username"
+contact.error.email.empty: "Please enter your email"
+contact.error.message.empty: "Please enter your message"
+contact.error.characters.limit.reached: "Maximal message lenght is 2000 characters"
+contact.error.ko.message: "Your message was not sent due to an error, please try again later, or check your message inputs"
+contact.error.blocked.message: "Your message has been blocked"
+contact.error.limit.reached.message: "error you have 5 unreaded messages, please wait for the response to the first messags"
+contact.success.message: "Your message has been sent."
+
+# navigation bar
+public.nav.brand: "My Basic Site"
+public.nav.home: "Home"
+public.nav.contact: "Contact"
+
+# home page
+public.home.title: "Welcome to the basic template"
+public.home.lead: "This is a very simple public homepage built with Symfony and Bootstrap. Use it as a starting point and customize it as you like."
+public.home.button.contact: "Go to contact page"
+
+# contact page
+contact.page.intro: "This is a simple example contact form. Replace the text and fields with your real content."

@@ -1,0 +1,16 @@
+{
+    "name": "website",
+    "short_name": "website template",
+    "description": "basic website template",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#2e2e2e",
+    "theme_color": "#2e2e2e",
+    "icons": [
+        {
+            "src": "/build/images/favicon.png",
+            "sizes": "300x300",
+            "type": "image/png"
+        }
+    ]
+}

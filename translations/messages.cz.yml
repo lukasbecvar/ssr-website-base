@@ -1,0 +1,69 @@
+config.lang: "cs"
+
+# common error messages
+error.url.check.message: "Prosím zkontrolujte adresní řádek nebo kontaktujte svého správce"
+# error 400
+error.400.title: "Chyba: Špatný požadavek"
+error.400.message: "Chyba požadavku"
+# error 401
+error.401.title: "Chyba: Přístup odepřen"
+error.401.message: "Nemáte oprávnění k přístupu na tuto stránku"
+# error 403
+error.403.title: "Chyba: Vstup zakázán"
+error.403.message: "Nemáte oprávnění k přístupu na tuto stránku"
+# error 404
+error.404.title: "Chyba: Stránka nenalezena"
+error.404.message: "Chyba, tato stránka nebyla nalezena"
+# error 426
+error.426.title: "Chyba protokolu"
+error.426.message: "Váš prohlížeč nepodporuje protokol HTTPS, nebo je zakázán javascript"
+error.426.submessage: "Zkuste použít protokol HTTPS pro přístup k této stránce"
+# error 429
+error.429.title: "Chyba: Příliš mnoho požadků"
+error.429.message: "Příliš mnoho požadavků"
+error.429.submessage: "Počkejte a zkuste to znovu později"
+# chyba 500
+error.500.title: "Chyba: Interní serverová chyba"
+error.500.message: "Server narazil na neočekávanou chybu, která mu brání ve splnění požadavku"
+# unknown chyba
+error.unknown.title: "Chyba: neznámá chyba"
+error.unknown.message: "Neznámá chyba, kontaktujte prosím správce služby"
+# maintenance error
+error.maintenance.title: "Chyba: stránka není k dispozici"
+error.maintenance.message: "Služba je dočasně nedostupná z důvodu údržby"
+# banned
+error.banned.title: "Jste zablokován"
+error.banned.message: "Jste na této stránce trvale zablokován"
+error.banned.message.reason: "Jste na této stránce trvale zablokován z důvodu"
+error.banned.unban.email: "Žádost o odblokování směřujte na"
+
+# contact
+contact.title: "Kontaktujte mě"
+contact.social.sites.title: "Sociální sítě"
+contact.email.me.title: "Napište mi e-mail"
+contact.form.name.input: "Vaše jméno"
+contact.form.email.input: "Váš e-mail"
+contact.from.message.input: "Zpráva"
+contact.from.website.input: "Webová stránka"
+contact.form.submit.button: "Odeslat zprávu"
+contact.error.username.empty: "Prosím, zadejte své uživatelské jméno"
+contact.error.email.empty: "Prosím, zadejte svůj e-mail"
+contact.error.message.empty: "Prosím, zadejte svou zprávu"
+contact.error.characters.limit.reached: "Maximální délka zprávy je 2000 znaků"
+contact.error.ko.message: "Vaše zpráva nebyla odeslána kvůli chybě. Zkuste to později nebo zkontrolujte své údaje"
+contact.error.blocked.message: "Vaše zpráva byla zablokována"
+contact.error.limit.reached.message: "Chyba: Máte 5 nepřečtených zpráv. Počkejte na odpověď na první zprávy."
+contact.success.message: "Vaše zpráva byla odeslána."
+
+# navigation bar
+public.nav.brand: "Můj základní web"
+public.nav.home: "Domů"
+public.nav.contact: "Kontakt"
+
+# home page
+public.home.title: "Vítejte v základní šabloně"
+public.home.lead: "Toto je velmi jednoduchá veřejná úvodní stránka postavená na Symfony a Bootstrapu. Použijte ji jako výchozí bod a upravte si ji podle sebe."
+public.home.button.contact: "Přejít na kontaktní stránku"
+
+# contact page
+contact.page.intro: "Toto je jednoduchý ukázkový kontaktní formulář. Nahraďte text i pole vlastními údaji."

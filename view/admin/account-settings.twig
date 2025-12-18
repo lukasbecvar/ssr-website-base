@@ -1,0 +1,208 @@
+{% extends 'common/bases/admin-base.twig' %}
+
+{% block title %}
+    settings
+{% endblock %}
+
+{# ACCOUNT SETTINGS PAGE COMPONENT #}
+{% block component %}
+{% include "admin/element/navigation/account-settings-navigation.twig" %}
+<div class="admin-panel settings-panel">
+    {# ERROR MESSAGE BOX #}
+    {% if errorMsg != null %}
+        {% include "common/alerts/error-alert.twig" %}
+    {% endif %}
+
+    {# PROFILE PIC CHANGE FORM #}
+    {% if profilePicChangeForm != null %}
+        <div class="card dashbord-card settings-form-card disable-phone-radius">
+            <div class="card-header">Change profile image</div>
+            <div class="card-body">
+                {{ form_start(profilePicChangeForm, {'attr': {'class': 'settings-form settings-form--pic-upload'}}) }}
+                    
+                    {# hidden file input #}
+                    {{ form_widget(profilePicChangeForm['profile-pic']) }}
+
+                    {# image preview container #}
+                    <div class="pic-upload-preview" id="pic-preview-container" style="display: none;">
+                        <button type="button" class="pic-upload-remove" id="pic-remove-btn">&times;</button>
+                        <img id="pic-preview" src="#" alt="New profile picture preview">
+                    </div>
+
+                    {# custom upload trigger / dropzone #}
+                    <label for="{{ profilePicChangeForm['profile-pic'].vars.id }}" class="pic-upload-dropzone" id="pic-dropzone">
+                        <span>Click to choose a file or drag it here</span>
+                    </label>
+
+                    <button class="input-button" type="submit">Save picture</button>
+                {{ form_end(profilePicChangeForm) }}
+
+                <script>
+                    const picInput = document.getElementById('{{ profilePicChangeForm['profile-pic'].vars.id }}')
+                    const previewContainer = document.getElementById('pic-preview-container')
+                    const removeBtn = document.getElementById('pic-remove-btn')
+                    const picPreview = document.getElementById('pic-preview')
+                    const dropzone = document.getElementById('pic-dropzone')
+
+                    if (picInput && previewContainer && picPreview && removeBtn && dropzone) {
+                        
+                        // when a file is selected
+                        picInput.addEventListener('change', function(event) {
+                            const file = event.target.files[0]
+                            if (file) {
+                                const reader = new FileReader()
+                                reader.onload = function(e) {
+                                    picPreview.src = e.target.result
+                                    previewContainer.style.display = 'block'
+                                    dropzone.style.display = 'none'
+                                }
+                                reader.readAsDataURL(file)
+                            }
+                        })
+
+                        // when the remove button is clicked
+                        removeBtn.addEventListener('click', function() {
+                            picInput.value = '' // Clear the file input
+                            picPreview.src = '#'
+                            previewContainer.style.display = 'none'
+                            dropzone.style.display = 'flex'
+                        })
+                    }
+                </script>
+            </div>
+        </div>
+
+    {# USERNAME CHANGE FORM #}
+    {% elseif usernameChangeForm != null %}
+        <div class="card dashbord-card settings-form-card">
+            <div class="card-header">Change username</div>
+            <div class="card-body">
+                {{ form_start(usernameChangeForm, {'attr': {'class': 'settings-form auth-form'}}) }}
+                    {# ERROR MESSAGE BOX #}
+                    {% if usernameChangeForm.vars.errors|length %}
+                        <div class="auth-form-errors">
+                            <ul class="auth-error-list">
+                                {% for error in usernameChangeForm.vars.errors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    {# FIELDS #}
+                    <div class="auth-form-fields">
+                        {% set usernameErrors = usernameChangeForm.username.vars.errors %}
+                        <div class="auth-form-field{{ usernameErrors|length ? ' has-error' }}">
+                            {{ form_label(usernameChangeForm.username, 'New username') }}
+                            {{ form_widget(usernameChangeForm.username) }}
+                            {% if usernameErrors|length %}
+                                <ul class="auth-field-errors">
+                                    {% for error in usernameErrors %}
+                                        <li>{{ error.message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <button class="input-button" type="submit">Change username</button>
+                {{ form_end(usernameChangeForm) }}
+            </div>
+        </div>
+
+    {# PASSWORD CHANGE FORM #}
+    {% elseif passwordChangeForm != null %}
+        <div class="card dashbord-card settings-form-card disable-phone-radius">
+            <div class="card-header">Change password</div>
+            <div class="card-body">
+                {{ form_start(passwordChangeForm, {'attr': {'class': 'settings-form auth-form'}}) }}
+                    {# ERROR MESSAGE BOX #}
+                    {% if passwordChangeForm.vars.errors|length %}
+                        <div class="auth-form-errors">
+                            <ul class="auth-error-list">
+                                {% for error in passwordChangeForm.vars.errors %}
+                                    <li>{{ error.message }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    <div class="auth-form-fields">
+                        {# FIELDS #}
+                        {% set passwordErrors = passwordChangeForm.password.vars.errors %}
+                        <div class="auth-form-field{{ passwordErrors|length ? ' has-error' }}">
+                            {{ form_label(passwordChangeForm.password, 'New password') }}
+                            {{ form_widget(passwordChangeForm.password) }}
+                            {% if passwordErrors|length %}
+                                <ul class="auth-field-errors">
+                                    {% for error in passwordErrors %}
+                                        <li>{{ error.message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+
+                        {# Repassword Field #}
+                        {% set repasswordErrors = passwordChangeForm.repassword.vars.errors %}
+                        <div class="auth-form-field{{ repasswordErrors|length ? ' has-error' }}">
+                            {{ form_label(passwordChangeForm.repassword, 'Repeat new password') }}
+                            {{ form_widget(passwordChangeForm.repassword) }}
+                            {% if repasswordErrors|length %}
+                                <ul class="auth-field-errors">
+                                    {% for error in repasswordErrors %}
+                                        <li>{{ error.message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <button class="input-button" type="submit">Change password</button>
+                {{ form_end(passwordChangeForm) }}
+            </div>
+        </div>
+
+    {# ACCOUNT SETTINGS OVERVIEW #}
+    {% else %}
+        <div class="card dashbord-card settings-card">
+            <div class="card-header">Account settings</div>
+            <div class="card-body">
+                <ul class="settings-list">
+                    <li class="settings-item settings-item--profile">
+                        <div class="settings-item-avatar">
+                            {% if getUserPic() == 'non-pic' %}
+                                <img src={{ asset('/build/images/default-profile.jpg') }} alt="profile_picture">
+                            {% else %}
+                                <img src="data:image/jpeg;base64,{{ getUserPic() }}" alt="profile_picture">
+                            {% endif %}
+                        </div>
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Profile Picture</span>
+                            <span class="settings-item-description">Update your avatar.</span>
+                        </div>
+                        <div class="settings-item-action">
+                            <a class="settings-item-link" href={{ path('admin_account_settings_pic_change') }}>Change</a>
+                        </div>
+                    </li>
+                    <li class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Username</span>
+                            <span class="settings-item-value">{{ getUsername()|e }}</span>
+                        </div>
+                        <div class="settings-item-action">
+                            <a class="settings-item-link" href={{ path('admin_account_settings_username_change') }}>Change</a>
+                        </div>
+                    </li>
+                    <li class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Password</span>
+                            <span class="settings-item-value">**********</span>
+                        </div>
+                        <div class="settings-item-action">
+                            <a class="settings-item-link" href={{ path('admin_account_settings_password_change') }}>Change</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

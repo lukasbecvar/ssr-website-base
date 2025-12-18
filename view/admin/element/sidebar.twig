@@ -1,0 +1,68 @@
+<div class="sidebar">
+    <div class="profile mt-2">
+		{# PROFILE IMAGE SECTION #}
+        {% if getUserPic() == 'non-pic' %}
+			<img src={{ asset('/build/images/default-profile.jpg') }} alt="profile_picture">
+		{% else %}
+			<img src="data:image/jpeg;base64,{{ getUserPic() }}" alt="profile_picture">
+		{% endif %}
+		
+		{# USERNAME SECTION #}
+		<h3>{{ getUsername()|e }}</h3>
+
+		{# USER ROLE SECTION #}
+        <span class="role-line">
+			{% if getUserRole() == 'Owner' or getUserRole() == 'Admin' %}
+				<span class="text-red">{{ getUserRole()|e }}</span>
+			{% elseif getUserRole() == 'User' %}
+				<span class="green-text">{{ getUserRole()|e }}</span>
+			{% else %}
+				{{ getUserRole()|e }}
+			{% endif %}
+		</span>
+    </div>
+    <ul>
+        <li>
+            <a class="s-menu-button" target="_blank" href="/">
+                <span class="icon"><i class="fas fa-globe ml-1"></i></span>
+                <span class="item">Main site</span>
+            </a>
+        </li>
+        <li>
+            <a class="s-menu-button" href={{ path('admin_dashboard') }}>
+				<span class="icon"><i class="fas fa-desktop"></i></span>
+				<span class="item">Dashboard</span>
+			</a>
+		</li>
+        <li>
+		    <a class="s-menu-button" href={{ path('admin_database_list') }}>
+				<span class="icon"><i class="fas fa-database ml-1"></i></span>
+				<span class="item">Database</span>
+			</a>
+		</li>
+        <li>
+			<a class="s-menu-button" href={{ path('admin_log_list', {'page': 1}) }}>
+			    <span class="icon"><i class="fas fa-file ml-1"></i></span>
+			    <span class="item">Logs</span>
+	    	</a>
+		</li>
+		<li>
+			<a class="s-menu-button" href={{ path('admin_visitor_manager', {'page': 1}) }}>
+			    <span class="icon"><i class="fas fa-user ml-1"></i></span>
+			    <span class="item">Visitors manager</span>
+	    	</a>
+		</li>
+        <li>
+			<a class="s-menu-button" href={{ path('admin_inbox', {'page': 1}) }}>
+				<span class="icon"><i class="fas fa-envelope"></i></span>
+				<span class="item">Inbox</span>
+			</a>
+		</li>		
+		<li>
+			<a class="s-menu-button" href={{ path('admin_account_settings_table') }}>
+	    		<span class="icon"><i class="fas fa-cog"></i></span>
+				<span class="item">Account settings</span>
+			</a>
+		</li>
+	</ul>
+</div>
