@@ -2,6 +2,8 @@
 
 namespace App\Util;
 
+use RuntimeException;
+
 /**
  * Class SecurityUtil
  *
@@ -59,69 +61,71 @@ class SecurityUtil
      * Encrypt a string using AES encryption
      *
      * @param string $plainText The plain text to encrypt
-     * @param string $method The encryption method (default: AES-128-CBC)
      * @param string|null $key The encryption key (default: APP_SECRET)
      *
      * @return string The base64-encoded encrypted string
      */
-    public function encryptAes(string $plainText, string $method = 'AES-128-CBC', ?string $key = null): string
+    public function encryptAes(string $plainText, ?string $key = null): string
     {
-        // get default key
-        if ($key == null) {
+        $cipher = 'aes-256-gcm';
+
+        // default key
+        if ($key === null) {
             $key = $_ENV['APP_SECRET'];
         }
 
-        // derive a fixed-size key using PBKDF2 with SHA-256
-        $derivedKey = hash_pbkdf2("sha256", $key, "", 10000, 32);
+        // generate random salt (128-bit)
+        $salt = random_bytes(16);
 
-        // generate a random Initialization Vector (IV) for added security
-        $iv = openssl_random_pseudo_bytes(16);
+        // derive 256-bit key
+        $derivedKey = hash_pbkdf2(algo: 'sha256', password: $key, salt: $salt, iterations: 200_000, length: 32, binary: true);
+        $iv = random_bytes(12);
+        $tag = '';
 
-        // encrypt the plain text using AES encryption with the derived key and IV
-        $encryptedData = openssl_encrypt($plainText, $method, $derivedKey, 0, $iv);
+        // encrypt data
+        $cipherText = openssl_encrypt(data: $plainText, cipher_algo: $cipher, passphrase: $derivedKey, options: OPENSSL_RAW_DATA, iv: $iv, tag: $tag);
 
-        // IV and encrypted data, then base64 encode the result
-        $result = $iv . $encryptedData;
+        // check if encryption was successful
+        if ($cipherText === false) {
+            throw new RuntimeException('Encryption failed');
+        }
 
-        return base64_encode($result);
+        // format: SALT | IV | TAG | CIPHERTEXT
+        return base64_encode($salt . $iv . $tag . $cipherText);
     }
 
     /**
      * Decrypt an AES-encrypted string
      *
      * @param string $encryptedData The base64-encoded encrypted string
-     * @param string $method The encryption method (default: AES-128-CBC)
      * @param string|null $key The encryption key (default: APP_SECRET)
      *
      * @return string|null The decrypted string or null on error
      */
-    public function decryptAes(string $encryptedData, string $method = 'AES-128-CBC', ?string $key = null): ?string
+    public function decryptAes(string $encryptedData, ?string $key = null): ?string
     {
-        // get default key
-        if ($key == null) {
+        $cipher = 'aes-256-gcm';
+
+        // default key
+        if ($key === null) {
             $key = $_ENV['APP_SECRET'];
         }
 
-        // derive a fixed-size key using PBKDF2 with SHA-256
-        $derivedKey = hash_pbkdf2("sha256", $key, "", 10000, 32);
-
-        // decode the base64-encoded encrypted data
-        $decodedData = base64_decode($encryptedData);
-
-        // extract the Initialization Vector (IV) from the decoded data
-        $iv = substr($decodedData, 0, 16);
-
-        // extract the encrypted data (remaining bytes) from the decoded data
-        $encryptedData = substr($decodedData, 16);
-
-        // decrypt the data using AES decryption with the derived key and IV
-        $decryptedData = openssl_decrypt($encryptedData, $method, $derivedKey, 0, $iv);
-
-        // check if decryption was successful
-        if ($decryptedData === false) {
-            $decryptedData = null;
+        $raw = base64_decode($encryptedData, true);
+        if ($raw === false || strlen($raw) < 44) {
+            return null;
         }
 
-        return $decryptedData;
+        // extract payload parts
+        $salt = substr($raw, 0, 16);
+        $iv = substr($raw, 16, 12);
+        $tag = substr($raw, 28, 16);
+        $cipherText = substr($raw, 44);
+
+        // decrypt data
+        $derivedKey = hash_pbkdf2(algo: 'sha256', password: $key, salt: $salt, iterations: 200_000, length: 32, binary: true);
+        $plainText = openssl_decrypt(data: $cipherText, cipher_algo: $cipher, passphrase: $derivedKey, options: OPENSSL_RAW_DATA, iv: $iv, tag: $tag);
+
+        return $plainText === false ? null : $plainText;
     }
 }
