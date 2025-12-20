@@ -8,31 +8,23 @@ use App\Util\SecurityUtil;
 /**
  * Class CookieUtil
  *
- * CookieUtil provides cookie management
+ * Util for manage browser cookies
  *
  * @package App\Util
  */
 class CookieUtil
 {
+    private AppUtil $appUtil;
     private SecurityUtil $securityUtil;
 
-    public function __construct(SecurityUtil $securityUtil)
+    public function __construct(AppUtil $appUtil, SecurityUtil $securityUtil)
     {
+        $this->appUtil = $appUtil;
         $this->securityUtil = $securityUtil;
     }
 
     /**
-     * Check if the specified cookie is set
-     *
-     * @param string $name The name of the cookie
-     */
-    public function isCookieSet(string $name): bool
-    {
-        return isset($_COOKIE[$name]);
-    }
-
-    /**
-     * Set a cookie with the specified name, value, and expiration
+     * Set cookie with specified name, value, and expiration
      *
      * @param string $name The name of the cookie
      * @param string $value The value to store in the cookie
@@ -43,14 +35,33 @@ class CookieUtil
     public function set(string $name, string $value, int $expiration): void
     {
         if (!headers_sent()) {
+            // encrypt cookie value
             $value = $this->securityUtil->encryptAes($value);
             $value = base64_encode($value);
-            setcookie($name, $value, $expiration, '/', httponly: true);
+
+            // set cookie
+            setcookie($name, $value, [
+                'path'     => '/',
+                'httponly' => true,
+                'samesite' => 'Lax',
+                'expires'  => $expiration,
+                'secure'   => $this->appUtil->isSSLOnly()
+            ]);
         }
     }
 
     /**
-     * Get the value of the specified cookie
+     * Check if specified cookie is set
+     *
+     * @param string $name The name of the cookie
+     */
+    public function isCookieSet(string $name): bool
+    {
+        return isset($_COOKIE[$name]);
+    }
+
+    /**
+     * Get value of the specified cookie
      *
      * @param string $name The name of the cookie
      *
@@ -58,8 +69,12 @@ class CookieUtil
      */
     public function get(string $name): ?string
     {
+        // get value from cookie
         $value = base64_decode($_COOKIE[$name]);
-        return $this->securityUtil->decryptAes($value);
+
+        // decrypt value
+        $value = $this->securityUtil->decryptAes($value);
+        return $value;
     }
 
     /**
