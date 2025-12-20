@@ -25,6 +25,9 @@ This template is essentially the skeleton of the [becvar-site](https://github.co
 ## Development environment
 The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the docker-start script.
 
+## Authentication
+Authentication uses a completely custom user system with a username and password, managed by the application user manager. Only the first user can use the registration form to create an admin user. Login uses standard PHP session and cookie for the 'remember me' feature.
+
 ## Admin Suite Integration (Optional)
 Admin Suite is an open-source admin panel for managing services and Linux servers [admin-suite-page](https://admin-suite.site/). You can use Admin Suite to manage your website and track metrics and logs.
 ### External Log Integration
