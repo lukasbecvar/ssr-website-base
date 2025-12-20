@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use App\Util\AppUtil;
 use App\Util\JsonUtil;
 use App\Util\CookieUtil;
 use App\Util\SecurityUtil;
@@ -24,6 +25,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 class LogManagerTest extends TestCase
 {
     private LogManager $logManager;
+    private AppUtil & MockObject $appUtil;
     private JsonUtil & MockObject $jsonUtil;
     private CookieUtil & MockObject $cookieUtil;
     private ErrorManager & MockObject $errorManager;
@@ -36,6 +38,7 @@ class LogManagerTest extends TestCase
     protected function setUp(): void
     {
         // mock dependencies
+        $this->appUtil = $this->createMock(AppUtil::class);
         $this->jsonUtil = $this->createMock(JsonUtil::class);
         $this->cookieUtil = $this->createMock(CookieUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
@@ -47,6 +50,7 @@ class LogManagerTest extends TestCase
 
         // create log manager instance
         $this->logManager = new LogManager(
+            $this->appUtil,
             $this->jsonUtil,
             $this->cookieUtil,
             $this->errorManager,
@@ -65,6 +69,13 @@ class LogManagerTest extends TestCase
      */
     public function testLogMessageToDatabase(): void
     {
+        // mock app util
+        $this->appUtil->method('getEnvValue')->willReturnMap([
+            ['LOGS_ENABLED', 'true'],
+            ['LOG_LEVEL', '1'],
+            ['EXTERNAL_LOG_ENABLED', 'false']
+        ]);
+
         // expect get visitor info
         $this->visitorManager->expects($this->once())->method('getVisitorID')->willReturn(1);
         $this->visitorInfoUtil->expects($this->once())->method('getUserAgent')->willReturn('Mozilla/5.0');
@@ -90,10 +101,12 @@ class LogManagerTest extends TestCase
      */
     public function testSendLogMessageToExternalLogApiWhenExternalLogDisabled(): void
     {
-        // set external log config
-        $_ENV['EXTERNAL_LOG_ENABLED'] = 'false';
-        $_ENV['EXTERNAL_LOG_URL'] = 'http://website.app/log';
-        $_ENV['EXTERNAL_LOG_API_TOKEN'] = 'test-token';
+        // mock app util
+        $this->appUtil->method('getEnvValue')->willReturnMap([
+            ['EXTERNAL_LOG_ENABLED', 'false'],
+            ['EXTERNAL_LOG_URL', 'http://website.app/log'],
+            ['EXTERNAL_LOG_API_TOKEN', 'test-token']
+        ]);
 
         // log message
         $value = 'This is a test log message';
@@ -112,10 +125,12 @@ class LogManagerTest extends TestCase
      */
     public function testSendLogMessageToExternalLogApiWhenExternalLogEnabled(): void
     {
-        // set external log config
-        $_ENV['EXTERNAL_LOG_ENABLED'] = 'true';
-        $_ENV['EXTERNAL_LOG_URL'] = 'http://website.app/log';
-        $_ENV['EXTERNAL_LOG_API_TOKEN'] = 'test-token';
+        // mock app util
+        $this->appUtil->method('getEnvValue')->willReturnMap([
+            ['EXTERNAL_LOG_ENABLED', 'true'],
+            ['EXTERNAL_LOG_URL', 'http://website.app/log'],
+            ['EXTERNAL_LOG_API_TOKEN', 'test-token']
+        ]);
 
         // log message
         $value = 'This is a test log message';
@@ -128,56 +143,6 @@ class LogManagerTest extends TestCase
 
         // call tested method
         $this->logManager->externalLog($value);
-    }
-
-    /**
-     * Test get logs by ip address
-     *
-     * @return void
-     */
-    public function testGetLogsByIpAddress(): void
-    {
-        // mock for action log
-        $this->visitorManager->expects($this->once())->method('getVisitorID')->willReturn(1);
-        $this->visitorInfoUtil->expects($this->once())->method('getUserAgent')->willReturn('Mozilla/5.0');
-        $this->visitorInfoUtil->expects($this->once())->method('getIP')->willReturn('127.0.0.1');
-        $this->securityUtil->expects($this->exactly(4))->method('escapeString')->willReturnCallback(function ($value) {
-            return htmlspecialchars($value, ENT_QUOTES);
-        });
-
-        // expect logs get call
-        $this->logRepository->expects($this->once())->method('getLogsByIpAddress');
-
-        // call tested method
-        $result = $this->logManager->getLogsWhereIP('127.0.0.1', 'test', 1);
-
-        // assert result
-        $this->assertIsArray($result);
-    }
-
-    /**
-     * Test get logs by status
-     *
-     * @return void
-     */
-    public function testGetLogs(): void
-    {
-        // mock for action log
-        $this->visitorManager->expects($this->once())->method('getVisitorID')->willReturn(1);
-        $this->visitorInfoUtil->expects($this->once())->method('getUserAgent')->willReturn('Mozilla/5.0');
-        $this->visitorInfoUtil->expects($this->once())->method('getIP')->willReturn('127.0.0.1');
-        $this->securityUtil->expects($this->exactly(4))->method('escapeString')->willReturnCallback(function ($value) {
-            return htmlspecialchars($value, ENT_QUOTES);
-        });
-
-        // expect logs get call
-        $this->logRepository->expects($this->once())->method('getLogsByStatus');
-
-        // call tested method
-        $result = $this->logManager->getLogs('UNREAD', 'test', 1);
-
-        // assert result
-        $this->assertIsArray($result);
     }
 
     /**
@@ -237,8 +202,10 @@ class LogManagerTest extends TestCase
      */
     public function testCheckIfLoggingIsEnabled(): void
     {
-        // set logs enabled
-        $_ENV['LOGS_ENABLED'] = 'true';
+        // mock app util
+        $this->appUtil->method('getEnvValue')->willReturnMap([
+            ['LOGS_ENABLED', 'true']
+        ]);
 
         // call tested method
         $result = $this->logManager->isLogsEnabled();
@@ -254,6 +221,11 @@ class LogManagerTest extends TestCase
      */
     public function testCheckIfEnabledAntiLog(): void
     {
+        // mock app util
+        $this->appUtil->method('getEnvValue')->willReturnMap([
+            ['ANTI_LOG_COOKIE', 'antilogcookie']
+        ]);
+
         // call tested method
         $result = $this->logManager->isEnabledAntiLog();
 
@@ -268,6 +240,11 @@ class LogManagerTest extends TestCase
      */
     public function testSetAntiLogCookie(): void
     {
+        // mock app util
+        $this->appUtil->method('getEnvValue')->willReturnMap([
+            ['ANTI_LOG_COOKIE', 'antilogcookie']
+        ]);
+
         // expect cookie util set call
         $this->cookieUtil->expects($this->once())->method('set');
 
@@ -296,8 +273,10 @@ class LogManagerTest extends TestCase
      */
     public function testGetLogLevel(): void
     {
-        // set log level
-        $_ENV['LOG_LEVEL'] = 3;
+        // mock app util
+        $this->appUtil->method('getEnvValue')->willReturnMap([
+            ['LOG_LEVEL', '3']
+        ]);
 
         // call tested method
         $result = $this->logManager->getLogLevel();

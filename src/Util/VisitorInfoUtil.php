@@ -246,23 +246,15 @@ class VisitorInfoUtil
      *
      * @param string $ipAddress The IP address to look up
      *
-     * @return object|null The decoded JSON response from the geolocation API, or null if an error occurs
+     * @return array<string, mixed>|null The decoded JSON response from the geolocation API, or null if an error occurs
      */
-    public function getIpInfo(string $ipAddress): ?object
+    public function getIpInfo(string $ipAddress): ?array
     {
-        // create stream context with timeout of 1 second
-        $context = stream_context_create(array(
-            'http' => array(
-                'timeout' => 3
-            )
-        ));
+        $ipInfoUrl = $this->appUtil->getEnvValue('GEOLOCATION_API_URL');
 
         try {
-            // get response
-            $response = file_get_contents($_ENV['GEOLOCATION_API_URL'] . '/json/' . $ipAddress, false, $context);
-
-            // decode response & return data
-            return json_decode($response);
+            // get response from api
+            return $this->jsonUtil->getJson($ipInfoUrl . '/json/' . $ipAddress);
         } catch (Exception $e) {
             $this->logger->error('error to get geolocation data: ' . $e->getMessage());
             return null;
@@ -288,15 +280,15 @@ class VisitorInfoUtil
             $data = $this->getIpInfo($ipAddress);
 
             // check if country code seted
-            if (isset($data->countryCode)) {
-                $country = $data->countryCode;
+            if (isset($data['countryCode'])) {
+                $country = $data['countryCode'];
             } else {
                 $country = 'Unknown';
             }
 
             // check if city seted
-            if (isset($data->city)) {
-                $city = $data->city;
+            if (isset($data['city'])) {
+                $city = $data['city'];
             } else {
                 $city = 'Unknown';
             }

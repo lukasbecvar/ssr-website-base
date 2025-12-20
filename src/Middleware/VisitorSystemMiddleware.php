@@ -99,7 +99,7 @@ class VisitorSystemMiddleware
                 // render banned page
                 die($this->twig->render('errors/error-banned.twig', [
                     'message' => $reason,
-                    'contactEmail' => $_ENV['CONTACT_EMAIL']
+                    'contactEmail' => $this->appUtil->getEnvValue('CONTACT_EMAIL')
                 ]));
             } else {
                 // update exist visitor

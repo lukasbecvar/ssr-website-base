@@ -5,6 +5,7 @@ namespace App\Manager;
 use DateTime;
 use Exception;
 use App\Entity\Log;
+use App\Util\AppUtil;
 use App\Util\JsonUtil;
 use App\Util\CookieUtil;
 use App\Util\SecurityUtil;
@@ -22,6 +23,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class LogManager
 {
+    private AppUtil $appUtil;
     private JsonUtil $jsonUtil;
     private CookieUtil $cookieUtil;
     private ErrorManager $errorManager;
@@ -32,6 +34,7 @@ class LogManager
     private EntityManagerInterface $entityManager;
 
     public function __construct(
+        AppUtil $appUtil,
         JsonUtil $jsonUtil,
         CookieUtil $cookieUtil,
         ErrorManager $errorManager,
@@ -41,6 +44,7 @@ class LogManager
         VisitorInfoUtil $visitorInfoUtil,
         EntityManagerInterface $entityManager
     ) {
+        $this->appUtil = $appUtil;
         $this->jsonUtil = $jsonUtil;
         $this->cookieUtil = $cookieUtil;
         $this->errorManager = $errorManager;
@@ -139,13 +143,13 @@ class LogManager
      */
     public function externalLog(string $value): void
     {
-        if (!($_ENV['EXTERNAL_LOG_ENABLED'] == 'true')) {
+        if (!($this->appUtil->getEnvValue('EXTERNAL_LOG_ENABLED') == 'true')) {
             return;
         }
 
         // get external log config
-        $externalLogUrl = $_ENV['EXTERNAL_LOG_URL'];
-        $externalLogToken = $_ENV['EXTERNAL_LOG_API_TOKEN'];
+        $externalLogUrl = $this->appUtil->getEnvValue('EXTERNAL_LOG_URL');
+        $externalLogToken = $this->appUtil->getEnvValue('EXTERNAL_LOG_API_TOKEN');
 
         // make request to admin-suite log api
         $this->jsonUtil->getJson(
@@ -166,7 +170,7 @@ class LogManager
      */
     public function getLogsWhereIP(string $ipAddress, string $username, int $page): ?array
     {
-        $per_page = $_ENV['ITEMS_PER_PAGE'];
+        $per_page = (int) $this->appUtil->getEnvValue('ITEMS_PER_PAGE');
 
         // calculate offset
         $offset = ($page - 1) * $per_page;
@@ -205,7 +209,7 @@ class LogManager
      */
     public function getLogs(string $status, string $username, int $page): ?array
     {
-        $perPage = $_ENV['ITEMS_PER_PAGE'];
+        $perPage = (int) $this->appUtil->getEnvValue('ITEMS_PER_PAGE');
 
         // calculate offset
         $offset = ($page - 1) * $perPage;
@@ -297,7 +301,7 @@ class LogManager
     public function isLogsEnabled(): bool
     {
         // check if logs enabled
-        if ($_ENV['LOGS_ENABLED'] == 'true') {
+        if ($this->appUtil->getEnvValue('LOGS_ENABLED') == 'true') {
             return true;
         } else {
             return false;
@@ -317,7 +321,7 @@ class LogManager
             $token = $this->cookieUtil->get('anti-log-cookie');
 
             // check if token is valid
-            if ($token == $_ENV['ANTI_LOG_COOKIE']) {
+            if ($token == $this->appUtil->getEnvValue('ANTI_LOG_COOKIE')) {
                 return true;
             } else {
                 return false;
@@ -336,7 +340,7 @@ class LogManager
     {
         $this->cookieUtil->set(
             name: 'anti-log-cookie',
-            value: $_ENV['ANTI_LOG_COOKIE'],
+            value: $this->appUtil->getEnvValue('ANTI_LOG_COOKIE'),
             expiration: time() + (60 * 60 * 24 * 7 * 365)
         );
     }
@@ -358,6 +362,6 @@ class LogManager
      */
     public function getLogLevel(): int
     {
-        return $_ENV['LOG_LEVEL'];
+        return (int) $this->appUtil->getEnvValue('LOG_LEVEL');
     }
 }

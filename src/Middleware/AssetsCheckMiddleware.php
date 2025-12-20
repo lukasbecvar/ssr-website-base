@@ -2,6 +2,7 @@
 
 namespace App\Middleware;
 
+use App\Util\AppUtil;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
@@ -14,6 +15,13 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
  */
 class AssetsCheckMiddleware
 {
+    private AppUtil $appUtil;
+
+    public function __construct(AppUtil $appUtil)
+    {
+        $this->appUtil = $appUtil;
+    }
+
     /**
      * Check if assets are builded
      *
@@ -25,7 +33,7 @@ class AssetsCheckMiddleware
     {
         if (!file_exists(__DIR__ . '/../../public/build/')) {
             $response = new Response(
-                'Error: build resources not found, please contact service administrator & report this bug on email: ' . $_ENV['CONTACT_EMAIL'],
+                'Error: build resources not found, please contact service administrator & report this bug on email: ' . $this->appUtil->getEnvValue('CONTACT_EMAIL'),
                 Response::HTTP_INTERNAL_SERVER_ERROR
             );
             $event->setResponse($response);

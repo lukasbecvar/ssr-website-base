@@ -55,7 +55,7 @@ class InboxController extends AbstractController
             'page' => $page,
             'inboxData' => $messages,
             'messageCount' => count($messages),
-            'messageLimit' => $_ENV['ITEMS_PER_PAGE']
+            'messageLimit' => $this->appUtil->getEnvValue('ITEMS_PER_PAGE')
         ]);
     }
 

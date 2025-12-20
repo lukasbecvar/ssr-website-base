@@ -63,8 +63,8 @@ class LogReaderController extends AbstractController
             'logsData' => $logs,
             'readerPage' => $page,
             'logsCount' => count($logs),
-            'limitValue' => $_ENV['ITEMS_PER_PAGE'],
             'loginLogsCount' => $this->logManager->getLoginLogsCount(),
+            'limitValue' => $this->appUtil->getEnvValue('ITEMS_PER_PAGE'),
             'unreeadedCount' => $this->logManager->getLogsCount('unreaded'),
             'logsAllCount' => $this->databaseManager->countTableData('logs'),
             'visitorData' => $this->databaseManager->getTableData('visitors', false)
@@ -97,8 +97,8 @@ class LogReaderController extends AbstractController
             'readerPage' => $page,
             'whereIp' => $ipAddress,
             'logsCount' => count($logs),
-            'limitValue' => $_ENV['ITEMS_PER_PAGE'],
             'loginLogsCount' => $this->logManager->getLoginLogsCount(),
+            'limitValue' => $this->appUtil->getEnvValue('ITEMS_PER_PAGE'),
             'unreeadedCount' => $this->logManager->getLogsCount('unreaded'),
             'logsAllCount' => $this->databaseManager->countTableData('logs'),
             'visitorData' => $this->databaseManager->getTableData('visitors', false)

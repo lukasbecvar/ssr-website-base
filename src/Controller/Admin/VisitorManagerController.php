@@ -72,9 +72,9 @@ class VisitorManagerController extends AbstractController
             'filter' => $filter,
             'visitorMetrics' => null,
             'visitorInfoData' => null,
-            'visitorsLimit' => $_ENV['ITEMS_PER_PAGE'],
             'currentIp' => $this->visitorInfoUtil->getIP(),
             'bannedCount' => $this->banManager->getBannedCount(),
+            'visitorsLimit' => $this->appUtil->getEnvValue('ITEMS_PER_PAGE'),
             'onlineVisitors' => $this->visitorManager->getOnlineVisitorIDs(),
             'visitorsCount' => $this->visitorManager->getVisitorsCount($filter),
             'visitorsData' => $this->visitorManager->getVisitors($page, $filter, $sort, $order)

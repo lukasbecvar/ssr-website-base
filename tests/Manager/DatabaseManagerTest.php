@@ -3,6 +3,7 @@
 namespace App\Tests\Manager;
 
 use Exception;
+use App\Util\AppUtil;
 use Doctrine\DBAL\Result;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
@@ -28,6 +29,7 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
  */
 class DatabaseManagerTest extends TestCase
 {
+    private AppUtil & MockObject $appUtil;
     private DatabaseManager $databaseManager;
     private LogManager & MockObject $logManager;
     private Connection & MockObject $connection;
@@ -38,6 +40,7 @@ class DatabaseManagerTest extends TestCase
     protected function setUp(): void
     {
         // mock dependencies
+        $this->appUtil = $this->createMock(AppUtil::class);
         $this->logManager = $this->createMock(LogManager::class);
         $this->connection = $this->createMock(Connection::class);
         $this->authManager = $this->createMock(AuthManager::class);
@@ -46,6 +49,7 @@ class DatabaseManagerTest extends TestCase
 
         // create database manager instance
         $this->databaseManager = new DatabaseManager(
+            $this->appUtil,
             $this->logManager,
             $this->connection,
             $this->authManager,

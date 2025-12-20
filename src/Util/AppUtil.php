@@ -130,7 +130,7 @@ class AppUtil
      */
     public function isMaintenance(): bool
     {
-        return $_ENV['MAINTENANCE_MODE'] === 'true';
+        return $this->getEnvValue('MAINTENANCE_MODE') === 'true';
     }
 
     /**
@@ -140,7 +140,7 @@ class AppUtil
      */
     public function isSSLOnly(): bool
     {
-        return $_ENV['SSL_ONLY'] === 'true';
+        return $this->getEnvValue('SSL_ONLY') === 'true';
     }
 
     /**
@@ -150,7 +150,7 @@ class AppUtil
      */
     public function isDevMode(): bool
     {
-        if ($_ENV['APP_ENV'] == 'dev' || $_ENV['APP_ENV'] == 'test') {
+        if ($this->getEnvValue('APP_ENV') == 'dev' || $this->getEnvValue('APP_ENV') == 'test') {
             return true;
         }
 

@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use Exception;
+use App\Util\AppUtil;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class DatabaseManager
 {
+    private AppUtil $appUtil;
     private LogManager $logManager;
     private Connection $connection;
     private AuthManager $authManager;
@@ -23,12 +25,14 @@ class DatabaseManager
     private EntityManagerInterface $entityManager;
 
     public function __construct(
+        AppUtil $appUtil,
         LogManager $logManager,
         Connection $connection,
         AuthManager $authManager,
         ErrorManager $errorManager,
         EntityManagerInterface $entityManager
     ) {
+        $this->appUtil = $appUtil;
         $this->logManager = $logManager;
         $this->connection = $connection;
         $this->authManager = $authManager;
@@ -146,7 +150,7 @@ class DatabaseManager
     public function getTableDataByPage(string $tableName, int $page = 1, bool $log = true, bool $raw = false): array
     {
         $data = [];
-        $itemsPerPage = $_ENV['ITEMS_PER_PAGE'];
+        $itemsPerPage = (int) $this->appUtil->getEnvValue('ITEMS_PER_PAGE');
 
         // escape name from sql query
         $tableName = $this->connection->getDatabasePlatform()->quoteSingleIdentifier($tableName);

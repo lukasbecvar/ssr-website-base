@@ -3,6 +3,7 @@
 namespace App\Form;
 
 use App\Entity\User;
+use App\Util\AppUtil;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -22,6 +23,13 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
  */
 class LoginFormType extends AbstractType
 {
+    private AppUtil $appUtil;
+
+    public function __construct(AppUtil $appUtil)
+    {
+        $this->appUtil = $appUtil;
+    }
+
     /**
      * Build user login form
      *
@@ -33,7 +41,7 @@ class LoginFormType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         // set default value (for dev env)
-        $defaultValue = $_ENV['APP_ENV'] === 'dev' ? 'test' : null;
+        $defaultValue = $this->appUtil->getEnvValue('APP_ENV') === 'dev' ? 'test' : null;
 
         $builder
             ->add('username', TextType::class, [

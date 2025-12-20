@@ -209,6 +209,14 @@ class VisitorInfoUtilTest extends TestCase
      */
     public function testGetIpInfo(): void
     {
+        // mock app util
+        $this->appUtilMock->method('getEnvValue')->willReturnMap([
+            ['GEOLOCATION_API_URL', 'http://ip-api.com']
+        ]);
+
+        // mock json util
+        $this->jsonUtilMock->method('getJson')->willReturn(['status' => 'success']);
+
         // assert result
         $this->assertNotNull($this->visitorInfoUtil->getIpInfo('8.8.8.8'));
     }

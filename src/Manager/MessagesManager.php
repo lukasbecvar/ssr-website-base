@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use DateTime;
 use Exception;
+use App\Util\AppUtil;
 use App\Entity\Message;
 use App\Util\SecurityUtil;
 use App\Repository\MessageRepository;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 */
 class MessagesManager
 {
+    private AppUtil $appUtil;
     private SecurityUtil $securityUtil;
     private ErrorManager $errorManager;
     private VisitorManager $visitorManager;
@@ -26,12 +28,14 @@ class MessagesManager
     private EntityManagerInterface $entityManager;
 
     public function __construct(
+        AppUtil $appUtil,
         SecurityUtil $securityUtil,
         ErrorManager $errorManager,
         VisitorManager $visitorManager,
         MessageRepository $messageRepository,
         EntityManagerInterface $entityManager
     ) {
+        $this->appUtil = $appUtil;
         $this->securityUtil = $securityUtil;
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
@@ -120,7 +124,7 @@ class MessagesManager
      */
     public function getMessages(string $status, int $page): ?array
     {
-        $limit = $_ENV['ITEMS_PER_PAGE'];
+        $limit = (int) $this->appUtil->getEnvValue('ITEMS_PER_PAGE');
 
         // calculate offset
         $offset = ($page - 1) * $limit;

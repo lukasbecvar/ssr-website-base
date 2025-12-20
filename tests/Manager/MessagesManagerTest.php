@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use App\Util\AppUtil;
 use Doctrine\ORM\Query;
 use App\Entity\Message;
 use App\Util\SecurityUtil;
@@ -23,6 +24,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class MessagesManagerTest extends TestCase
 {
+    private AppUtil & MockObject $appUtil;
     private MessagesManager $messagesManager;
     private SecurityUtil & MockObject $securityUtil;
     private ErrorManager & MockObject $errorManager;
@@ -33,6 +35,7 @@ class MessagesManagerTest extends TestCase
     protected function setUp(): void
     {
         // mock dependencies
+        $this->appUtil = $this->createMock(AppUtil::class);
         $this->securityUtil = $this->createMock(SecurityUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
         $this->visitorManager = $this->createMock(VisitorManager::class);
@@ -41,6 +44,7 @@ class MessagesManagerTest extends TestCase
 
         // create message manager instance
         $this->messagesManager = new MessagesManager(
+            $this->appUtil,
             $this->securityUtil,
             $this->errorManager,
             $this->visitorManager,
@@ -110,6 +114,11 @@ class MessagesManagerTest extends TestCase
      */
     public function testGetMessagesSuccess(): void
     {
+        // mock app util
+        $this->appUtil->method('getEnvValue')->willReturnMap([
+            ['ITEMS_PER_PAGE', '10']
+        ]);
+
         // set testing data
         $status = 'open';
         $page = 1;
@@ -158,6 +167,11 @@ class MessagesManagerTest extends TestCase
      */
     public function testGetMessagesWhenDecryptionFails(): void
     {
+        // mock app util
+        $this->appUtil->method('getEnvValue')->willReturnMap([
+            ['ITEMS_PER_PAGE', '10']
+        ]);
+
         // set testing data
         $status = 'open';
         $page = 1;

@@ -2,6 +2,7 @@
 
 namespace App\Tests\Manager;
 
+use App\Util\AppUtil;
 use App\Util\CacheUtil;
 use App\Entity\Visitor;
 use App\Util\VisitorInfoUtil;
@@ -21,6 +22,7 @@ use PHPUnit\Framework\MockObject\MockObject;
  */
 class VisitorManagerTest extends TestCase
 {
+    private AppUtil & MockObject $appUtil;
     private VisitorManager $visitorManager;
     private CacheUtil & MockObject $cacheUtil;
     private ErrorManager & MockObject $errorManager;
@@ -31,6 +33,7 @@ class VisitorManagerTest extends TestCase
     protected function setUp(): void
     {
         // mock dependencies
+        $this->appUtil = $this->createMock(AppUtil::class);
         $this->cacheUtil = $this->createMock(CacheUtil::class);
         $this->errorManager = $this->createMock(ErrorManager::class);
         $this->visitorInfoUtil = $this->createMock(VisitorInfoUtil::class);
@@ -39,6 +42,7 @@ class VisitorManagerTest extends TestCase
 
         // create visitor manager instance
         $this->visitorManager = new VisitorManager(
+            $this->appUtil,
             $this->cacheUtil,
             $this->errorManager,
             $this->visitorInfoUtil,

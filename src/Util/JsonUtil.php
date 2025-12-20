@@ -14,11 +14,13 @@ use Psr\Log\LoggerInterface;
  */
 class JsonUtil
 {
-    private LoggerInterface $logger;
+    private AppUtil $appUtil;
+    private LoggerInterface $errorLogger;
 
-    public function __construct(LoggerInterface $logger)
+    public function __construct(AppUtil $appUtil, LoggerInterface $errorLogger)
     {
-        $this->logger = $logger;
+        $this->appUtil = $appUtil;
+        $this->errorLogger = $errorLogger;
     }
 
     /**
@@ -59,10 +61,10 @@ class JsonUtil
             $errorMsg = 'Error retrieving JSON data: ' . $e->getMessage();
 
             // secure api token
-            $errorMsg = str_replace($_ENV['EXTERNAL_LOG_API_TOKEN'], '********', $errorMsg);
+            $errorMsg = str_replace($this->appUtil->getEnvValue('EXTERNAL_LOG_API_TOKEN'), '********', $errorMsg);
 
             // log error
-            $this->logger->error($errorMsg);
+            $this->errorLogger->error($errorMsg);
 
             // return null
             return null;

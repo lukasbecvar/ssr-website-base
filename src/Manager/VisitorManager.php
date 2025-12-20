@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use Exception;
+use App\Util\AppUtil;
 use App\Entity\Visitor;
 use App\Util\CacheUtil;
 use App\Util\VisitorInfoUtil;
@@ -19,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class VisitorManager
 {
+    private AppUtil $appUtil;
     private CacheUtil $cacheUtil;
     private ErrorManager $errorManager;
     private VisitorInfoUtil $visitorInfoUtil;
@@ -26,12 +28,14 @@ class VisitorManager
     private EntityManagerInterface $entityManager;
 
     public function __construct(
+        AppUtil $appUtil,
         CacheUtil $cacheUtil,
         ErrorManager $errorManager,
         VisitorInfoUtil $visitorInfoUtil,
         VisitorRepository $visitorRepository,
         EntityManagerInterface $entityManager
     ) {
+        $this->appUtil = $appUtil;
         $this->cacheUtil = $cacheUtil;
         $this->errorManager = $errorManager;
         $this->entityManager = $entityManager;
@@ -118,7 +122,7 @@ class VisitorManager
      */
     public function getVisitors(int $page, string $filter = '1', string $sort = 'last_visit', string $order = 'desc'): ?array
     {
-        $perPage = $_ENV['ITEMS_PER_PAGE'];
+        $perPage = (int) $this->appUtil->getEnvValue('ITEMS_PER_PAGE');
 
         // get online visitors list
         $onlineVisitors = $this->getOnlineVisitorIDs();

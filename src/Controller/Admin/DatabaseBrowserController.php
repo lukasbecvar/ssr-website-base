@@ -74,7 +74,7 @@ class DatabaseBrowserController extends AbstractController
 
             // filter properties
             'page' => $page,
-            'limit' => $_ENV['ITEMS_PER_PAGE']
+            'limit' => $this->appUtil->getEnvValue('ITEMS_PER_PAGE')
         ]);
     }
 
