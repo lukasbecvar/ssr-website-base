@@ -2,7 +2,7 @@
 This is a basic website template for creating websites with Symfony and Bootstrap.
 
 ## Description
-This template is essentially the skeleton of the becvar-site application, with just the public part removed. The admin system includes its own user system, visitor tracking, contact inbox, and logs, and is ready for further expansion. The public part is prepared for integrating a new design and content.
+This template is essentially the skeleton of the [becvar-site](https://github.com/lukasbecvar/becvar-site) application, with just the public part removed. The admin system includes its own user system, visitor tracking, contact inbox, and logs, and is ready for further expansion. The public part is prepared for integrating a new design and content.
 
 ## Preview
 ### Public page (contact form)
@@ -25,8 +25,12 @@ This template is essentially the skeleton of the becvar-site application, with j
 ## Development environment
 The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the docker-start script.
 
-## Deployment
-The new version is deployed automatically using GitHub Actions when a new release is created.
+## Admin Suite Integration (Optional)
+Admin Suite is an open-source admin panel for managing services and Linux servers [admin-suite-page](https://admin-suite.site/). You can use Admin Suite to manage your website and track metrics and logs.
+### External Log Integration
+External Log allows you to send logs to a remote service. Enable it in your `.env` file by setting `EXTERNAL_LOG_ENABLED=true` and configuring `EXTERNAL_LOG_API_TOKEN` and `EXTERNAL_LOG_URL`. More information about External Log can be found [here](https://github.com/lukasbecvar/admin-suite?tab=readme-ov-file#logging).
+### Metrics Exporter Integration
+Metrics Exporter allows you to get metrics from your website. Enable it in your `.env` file by setting `METRICS_EXPORTER_ENABLED=true` and configuring `METRICS_EXPORTER_ALLOWED_IP`. More information about Metrics Exporter can be found [here](https://github.com/lukasbecvar/admin-suite?tab=readme-ov-file#metrics-collector-for-http-services).
 
 ## Requirements
 - Apache / Nginx PHP compatible web server
