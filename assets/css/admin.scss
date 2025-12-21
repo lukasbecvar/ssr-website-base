@@ -446,15 +446,28 @@ body.active .wrapper .section .top-navbar {
 
 .login-page, .register-page {
 	display: flex;
-	overflow-y: auto;
-	overflow-x: hidden;
+	overflow: hidden;
 	color: #f8fafc;
 	min-height: 100vh;
 	padding: 48px 16px;
 	position: relative;
 	align-items: flex-start;
 	justify-content: center;
-	background-color: #070b12;
+	background: linear-gradient(135deg, #0d1222, #1a1a3d, #0d1222, #3d1a3d);
+	background-size: 400% 400%;
+	animation: animated-gradient 25s ease infinite;
+}
+
+@keyframes animated-gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 .login-page-content {
