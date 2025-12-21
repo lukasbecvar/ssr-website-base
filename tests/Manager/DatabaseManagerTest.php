@@ -65,12 +65,11 @@ class DatabaseManagerTest extends TestCase
      */
     public function testGetTables(): void
     {
-        // mock schema manager
-        $schemaManagerMock = $this->createMock(AbstractSchemaManager::class);
-        $schemaManagerMock->method('listTableNames')->willReturn(['users', 'messages']);
-
-        // mock connection
-        $this->connection->method('createSchemaManager')->willReturn($schemaManagerMock);
+        // mock schema
+        $this->connection->method('fetchFirstColumn')->with('SHOW TABLES')->willReturn([
+            'users',
+            'messages'
+        ]);
 
         // call tested method
         $result = $this->databaseManager->getTables();

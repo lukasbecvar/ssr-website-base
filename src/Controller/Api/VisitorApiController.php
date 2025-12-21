@@ -72,7 +72,7 @@ class VisitorApiController extends AbstractController
             // log error
             $this->logManager->log(
                 name: 'system-error',
-                value: 'error to update visitor status: ' . $e->getMessage()
+                message: 'error to update visitor status: ' . $e->getMessage()
             );
 
             // return error

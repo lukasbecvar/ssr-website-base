@@ -78,7 +78,7 @@ class LoginController extends AbstractController
                     // invalid password error
                     $this->logManager->log(
                         name: 'authenticator',
-                        value: 'trying to login with: ' . $username . ':' . $password . ' password is wrong'
+                        message: 'trying to login with: ' . $username . ':' . $password . ' password is wrong'
                     );
                     $errorMsg = 'Incorrect username or password.';
                 }
@@ -86,7 +86,7 @@ class LoginController extends AbstractController
                 // user not exist error
                 $this->logManager->log(
                     name: 'authenticator',
-                    value: 'trying to login with: ' . $username . ':' . $password . ' user not exist'
+                    message: 'trying to login with: ' . $username . ':' . $password . ' user not exist'
                 );
                 $errorMsg = 'Incorrect username or password.';
             }

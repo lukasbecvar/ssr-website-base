@@ -60,7 +60,7 @@ class BanManager
             // log ban event
             $this->logManager->log(
                 name: 'ban-system',
-                value: 'visitor with ip: ' . $ipAddress . ' banned for reason: ' . $reason . ' by ' . $this->authManager->getUsername()
+                message: 'visitor with ip: ' . $ipAddress . ' banned for reason: ' . $reason . ' by ' . $this->authManager->getUsername()
             );
 
             try {
@@ -103,7 +103,7 @@ class BanManager
             // log ban event
             $this->logManager->log(
                 name: 'ban-system',
-                value: 'visitor with ip: ' . $ipAddress . ' unbanned by ' . $this->authManager->getUsername()
+                message: 'visitor with ip: ' . $ipAddress . ' unbanned by ' . $this->authManager->getUsername()
             );
 
             try {

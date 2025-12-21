@@ -113,7 +113,7 @@ class ContactController extends AbstractController
                 if ($this->messagesManager->getMessageCountByIpAddress($ipAddress) >= 5) {
                     $this->logManager->log(
                         name: 'message-sender',
-                        value: 'visitor: ' . $visitorId . ' trying send new message but he has open messages'
+                        message: 'visitor: ' . $visitorId . ' trying send new message but he has open messages'
                     );
 
                     // redirect back to from & handle limit reached error status

@@ -59,15 +59,15 @@ class LogManager
      * Save event log to database
      *
      * @param string $name The name of the log
-     * @param string $value The value (message) of the log
+     * @param string $message The log message
      * @param bool $bypassAntilog Bypass the anti-log cookie
      *
      * @return void
      */
-    public function log(string $name, string $value, bool $bypassAntilog = false): void
+    public function log(string $name, string $message, bool $bypassAntilog = false): void
     {
         // check if log can be saved
-        if (str_contains($value, 'Connection refused')) {
+        if (str_contains($message, 'Connection refused')) {
             return;
         }
 
@@ -76,9 +76,9 @@ class LogManager
             // get log level
             $level = $this->getLogLevel();
 
-            // value character shortifiy
-            if (mb_strlen($value) >= 512) {
-                $value = mb_substr($value, 0, 512) . '...';
+            // message character shortifiy
+            if (mb_strlen($message) >= 512) {
+                $message = mb_substr($message, 0, 512) . '...';
             }
 
             // disable database log for level 1 & 2
@@ -102,7 +102,7 @@ class LogManager
 
             // xss escape inputs
             $name = $this->securityUtil->escapeString($name);
-            $value = $this->securityUtil->escapeString($value);
+            $message = $this->securityUtil->escapeString($message);
             $browser = $this->securityUtil->escapeString($browser);
             $ipAddress = $this->securityUtil->escapeString($ipAddress);
 
@@ -111,7 +111,7 @@ class LogManager
 
             // set log entity values
             $LogEntity->setName($name)
-                ->setValue($value)
+                ->setValue($message)
                 ->setTime(new DateTime())
                 ->setIpAddress($ipAddress)
                 ->setBrowser($browser)
@@ -124,7 +124,7 @@ class LogManager
                 $this->entityManager->flush();
 
                 // send log to external log
-                $this->externalLog($value);
+                $this->externalLog($message);
             } catch (Exception $e) {
                 $this->errorManager->handleError(
                     msg: 'log-error: ' . $e->getMessage(),
@@ -137,11 +137,11 @@ class LogManager
     /**
      * Send log to external monitoring system (admin-suite)
      *
-     * @param string $value The value (message) of the log
+     * @param string $message The log message
      *
      * @return void
      */
-    public function externalLog(string $value): void
+    public function externalLog(string $message): void
     {
         if (!($this->appUtil->getEnvValue('EXTERNAL_LOG_ENABLED') == 'true')) {
             return;
@@ -153,7 +153,7 @@ class LogManager
 
         // make request to admin-suite log api
         $this->jsonUtil->getJson(
-            target: $externalLogUrl . '?name=' . urlencode('website-app: log') . '&message=' . urlencode('website-app: ' . $value) . '&level=4',
+            target: $externalLogUrl . '?name=' . urlencode('website-app: log') . '&message=' . urlencode('website-app: ' . $message) . '&level=4',
             apiKey: $externalLogToken,
             method: 'POST'
         );

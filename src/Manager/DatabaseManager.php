@@ -47,29 +47,23 @@ class DatabaseManager
      */
     public function getTables(): ?array
     {
-        $tablesList = [];
-        $tables = null;
-
         try {
-            // get tables list
-            $schemaManager = $this->connection->createSchemaManager();
-            $tables = $schemaManager->listTableNames();
+            // fetch table names directly from database
+            $tables = $this->connection->fetchFirstColumn('SHOW TABLES');
+
+            // log table list view event
+            $this->logManager->log(
+                name: 'database',
+                message: $this->authManager->getUsername() . ' viewed database list'
+            );
+
+            return $tables;
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 msg: 'error to get tables list: ' . $e->getMessage(),
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
-
-        // log table list view event
-        $this->logManager->log('database', $this->authManager->getUsername() . ' viewed database list');
-
-        // create tables list
-        foreach ($tables as $table) {
-            array_push($tablesList, $table);
-        }
-
-        return $tablesList;
     }
 
     /**
@@ -130,7 +124,7 @@ class DatabaseManager
         if ($log) {
             $this->logManager->log(
                 name: 'database',
-                value: $this->authManager->getUsername() . ' viewed database table: ' . $tableName
+                message: $this->authManager->getUsername() . ' viewed database table: ' . $tableName
             );
         }
 
@@ -173,7 +167,7 @@ class DatabaseManager
         if ($log) {
             $this->logManager->log(
                 name: 'database',
-                value: $this->authManager->getUsername() . ' viewed database table: ' . $tableName
+                message: $this->authManager->getUsername() . ' viewed database table: ' . $tableName
             );
         }
 
@@ -265,7 +259,7 @@ class DatabaseManager
         // log row add event
         $this->logManager->log(
             name: 'database',
-            value: $this->authManager->getUsername() . ' inserted new row to table: ' . $tableName
+            message: $this->authManager->getUsername() . ' inserted new row to table: ' . $tableName
         );
     }
 
@@ -294,7 +288,7 @@ class DatabaseManager
         // log row delete event
         $this->logManager->log(
             name: 'database',
-            value: $this->authManager->getUsername() . ' deleted row: ' . $id . ', table: ' . $tableName
+            message: $this->authManager->getUsername() . ' deleted row: ' . $id . ', table: ' . $tableName
         );
     }
 
@@ -328,7 +322,7 @@ class DatabaseManager
         // log row update event
         $this->logManager->log(
             name: 'database',
-            value: $this->authManager->getUsername() . ': edited ' . $row . ' -> ' . $value . ', in table: ' . $tableName
+            message: $this->authManager->getUsername() . ': edited ' . $row . ' -> ' . $value . ', in table: ' . $tableName
         );
     }
 
@@ -397,7 +391,7 @@ class DatabaseManager
             // log truncate table event
             $this->logManager->log(
                 name: 'database',
-                value: 'truncated table: ' . $tableName . ' in database:' . $dbName
+                message: 'truncated table: ' . $tableName . ' in database:' . $dbName
             );
         } catch (Exception $e) {
             $this->errorManager->handleError(
