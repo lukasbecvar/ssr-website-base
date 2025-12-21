@@ -5,11 +5,7 @@ This is a basic website template for creating websites with Symfony and Bootstra
 This template is essentially the skeleton of the [becvar-site](https://github.com/lukasbecvar/becvar-site) application, with just the public part removed. The admin system includes its own user system, visitor tracking, contact inbox, and logs, and is ready for further expansion. The public part is prepared for integrating a new design and content.
 
 ## Preview
-### Public page (contact form)
-![public page](.github/assets/public-preview.png)
-
-### Admin page (dashboard)
-![admin page](.github/assets/admin-preview.png)
+![system preview](.github/assets/preview.gif)
 
 ## Installation (with mysql/apache)
 - install app [Requirements](#requirements)
