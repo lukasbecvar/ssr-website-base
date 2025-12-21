@@ -12,17 +12,33 @@
 
     {# VISITOR IP INFO COMPONENT #}
     {% if visitorInfoData != null %}
-        {# IP INFO CARD #}
-        <div class="card-phone card text-white m-3">
-            <div class="card-header">
-                IP info: <span class="text-warning">{{currentIp}}:</span> <a class="text-info" href={{ path('admin_log_list_whereIp', {'page': 1, 'ip': currentIp}) }}>view logs</a>
+        {# IP INFO CARD (IMPROVED DESIGN) #}
+        <div class="card bg-dark text-white m-3 shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fa fa-info-circle me-2"></i>IP Information: <span class="text-warning font-monospace">{{ currentIp }}</span>
+                </h5>
+                <a class="btn btn-sm btn-outline-info" href={{ path('admin_log_list_whereIp', {'page': 1, 'ip': currentIp}) }}>
+                    <i class="fa fa-history me-1"></i> View Logs
+                </a>
             </div>
             <div class="card-body">
-                <ul class="list-unstyled">
+                <div class="container-fluid pb-3">
                     {% for key, value in visitorInfoData %}
-                        <li class="border-bottom py-2">{{ key|capitalize }}: {{ value }}</li>
+                        <div class="row py-2 border-bottom border-secondary align-items-center">
+                            <div class="col-sm-4 col-md-3">
+                                <strong class="text-white-50">{{ key|capitalize|replace({'_': ' '}) }}</strong>
+                            </div>
+                            <div class="col-sm-8 col-md-9">
+                                {% if value == 'Unknown' or value == '' or value is null %}
+                                    <span class="text-muted font-italic">{{ value is empty or value is null ? 'N/A' : value }}</span>
+                                {% else %}
+                                    <span class="font-monospace">{{ value }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
                     {% endfor %}
-                </ul>
+                </div>
             </div>
         </div>
     {# VISITOR METRICS COMPONENT #}
