@@ -1,9 +1,11 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom mb-4">
     <div class="container">
         <a class="navbar-brand fw-semibold" href={{ path('public_home') }}>{{ 'public.nav.brand'|trans }}</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#publicNavbar"
+
+        {# MENU TOGGLE BUTTON (MOBILE) #}
+        <button class="navbar-toggler navbar-toggler-custom" type="button" data-bs-toggle="collapse" data-bs-target="#publicNavbar"
                 aria-controls="publicNavbar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+            <span class="text-white me-2">Menu</span> <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="publicNavbar">

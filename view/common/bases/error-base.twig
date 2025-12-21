@@ -6,10 +6,12 @@
     <title>{% block title %}{% endblock %}</title>
 	<link rel="icon" href={{ asset('build/images/favicon.png') }} type="image/x-icon"/>
     {# INCLUDE CSS ASSETS #}
-    {{ encore_entry_link_tags('error-page-css') }}
+    {{ encore_entry_link_tags('bootstrap-css') }}
     {{ encore_entry_link_tags('scrollbar-css') }}
+    {{ encore_entry_link_tags('error-page-css') }}
 </head>
 <body>
     {% block body %}{% endblock %}
+    <a href={{ path('public_home') }} class="error-home-btn">Go to Homepage</a>
 </body>
 </html>
