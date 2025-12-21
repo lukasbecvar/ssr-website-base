@@ -52,7 +52,7 @@ contact.error.message.empty: "Please enter your message"
 contact.error.characters.limit.reached: "Maximal message lenght is 2000 characters"
 contact.error.ko.message: "Your message was not sent due to an error, please try again later, or check your message inputs"
 contact.error.blocked.message: "Your message has been blocked"
-contact.error.limit.reached.message: "error you have 5 unreaded messages, please wait for the response to the first messags"
+contact.error.limit.reached.message: "Error you have 5 unreaded messages, please wait for the response to the first messags"
 contact.success.message: "Your message has been sent."
 
 # navigation bar
