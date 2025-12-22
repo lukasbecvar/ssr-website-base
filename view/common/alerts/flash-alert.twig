@@ -1,0 +1,6 @@
+{% for message in app.flashes('success') %}
+    <div class="admin-alert admin-alert-error admin-alert-base" role="alert">
+        <span class="admin-alert-badge">Error</span>
+        <span class="admin-alert-message">{{ message|e }}</span>
+    </div>
+{% endfor %}

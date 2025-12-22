@@ -240,4 +240,39 @@ class AccountSettingsController extends AbstractController
             'errorMsg' => $errorMsg
         ]);
     }
+
+    /**
+     * Handle reset authentication token (hard logout from all devices)
+     *
+     * @return Response The account settings table view
+     */
+    #[Route('/admin/account/settings/reset-token', methods: ['POST'], name: 'admin_account_settings_reset_token')]
+    public function accountSettingsResetToken(): Response
+    {
+        // get current username
+        $username = $this->authManager->getUsername();
+
+        // regenerate user token
+        $resetState = $this->authManager->regenerateUserToken($username);
+
+        // check if reset is success
+        if ($resetState['status']) {
+            // force logout current user (session will be invalid)
+            $this->authManager->logout();
+
+            // add success flash message
+            $this->addFlash('success', 'Authentication token has been reset.');
+
+            // redirect to login page with token reset indicator
+            return $this->redirectToRoute('auth_login');
+        } else {
+            // render error message
+            return $this->render('admin/account-settings.twig', [
+                'profilePicChangeForm' => null,
+                'usernameChangeForm' => null,
+                'passwordChangeForm' => null,
+                'errorMsg' => 'Failed to reset authentication token: ' . $resetState['message']
+            ]);
+        }
+    }
 }

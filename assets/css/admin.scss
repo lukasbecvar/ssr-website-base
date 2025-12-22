@@ -148,14 +148,18 @@ th {
 	line-height: 1.65;
 }
 
-.admin-alert--error {
+.admin-alert-error {
 	color: #ffe4e6;
 	border-color: rgba(248, 113, 113, 0.32);
 	box-shadow: 0 24px 44px rgba(248, 113, 113, 0.22);
 	background: linear-gradient(135deg, rgba(90, 44, 52, 0.9) 0%, rgba(48, 31, 36, 0.86) 100%);
 }
 
-.admin-alert--error .admin-alert-badge {
+.admin-alert-error .admin-alert-base {
+	background-color: linear-gradient(165deg, rgba(30, 35, 48, 0.9) 0%, rgba(20, 24, 34, 0.88) 100%) !important;
+}
+
+.admin-alert-error .admin-alert-badge {
 	color: #ffe4e6;
 	background: rgba(248, 113, 113, 0.2);
 	border: 1px solid rgba(248, 113, 113, 0.32);
@@ -1982,6 +1986,18 @@ body.active .wrapper .section .top-navbar {
     color: #f1f5f9;
     background: rgba(51, 65, 85, 0.8);
     border-color: rgba(122, 132, 144, 0.5);
+}
+
+.settings-item-link-danger {
+    color: #f87171 !important;
+    background: rgba(239, 68, 68, 0.2) !important;
+    border-color: rgba(239, 68, 68, 0.4) !important;
+}
+
+.settings-item-link-danger:hover {
+    color: #ffffff !important;
+    background: rgba(239, 68, 68, 0.4) !important;
+    border-color: rgba(239, 68, 68, 0.6) !important;
 }
 
 .settings-form-card {

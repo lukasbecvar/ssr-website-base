@@ -484,6 +484,52 @@ class AuthManager
     }
 
     /**
+     * Regenerate auth token for specific user
+     *
+     * This method regenerates token for a specific user, forcing logout from all devices
+     *
+     * @param string $username The username to regenerate token for
+     *
+     * @return array<bool|null|string> Regenerate status and message
+     */
+    public function regenerateUserToken(string $username): array
+    {
+        $state = [
+            'status' => true,
+            'message' => null
+        ];
+
+        // get user by username
+        $user = $this->userRepository->findOneBy(['username' => $username]);
+
+        // check if user exists
+        if ($user === null) {
+            return [
+                'status' => false,
+                'message' => 'User not found'
+            ];
+        }
+
+        // generate new token
+        $newToken = $this->generateUserToken();
+
+        // set new token
+        $user->setToken($newToken);
+
+        try {
+            // flush data to database
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            $state = [
+                'status' => false,
+                'message' => $e->getMessage()
+            ];
+        }
+
+        return $state;
+    }
+
+    /**
      * Get list of all online users
      *
      * @return array<User> The online users list

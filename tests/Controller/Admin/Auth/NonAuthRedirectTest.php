@@ -65,7 +65,8 @@ class NonAuthRedirectTest extends WebTestCase
             ['method' => 'GET', 'url' => '/admin/account/settings'],
             ['method' => 'GET', 'url' => '/admin/account/settings/pic'],
             ['method' => 'GET', 'url' => '/admin/account/settings/username'],
-            ['method' => 'GET', 'url' => '/admin/account/settings/password']
+            ['method' => 'GET', 'url' => '/admin/account/settings/password'],
+            ['method' => 'POST', 'url' => '/admin/account/settings/reset-token']
         ]
     ];
 

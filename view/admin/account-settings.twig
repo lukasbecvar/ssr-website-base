@@ -200,6 +200,18 @@
                             <a class="settings-item-link" href={{ path('admin_account_settings_password_change') }}>Change</a>
                         </div>
                     </li>
+                    <li class="settings-item">
+                        <div class="settings-item-info">
+                            <span class="settings-item-label">Authentication Token</span>
+                            <span class="settings-item-description">Reset token to logout from all devices</span>
+                        </div>
+                        <div class="settings-item-action">
+                            <form method="POST" action={{ path('admin_account_settings_reset_token') }} onsubmit="return confirm('Are you sure you want to reset your authentication token? You will be logged out from all devices.')">
+                                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                <button type="submit" class="settings-item-link settings-item-link-danger">Reset Token</button>
+                            </form>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

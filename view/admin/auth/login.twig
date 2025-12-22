@@ -7,7 +7,7 @@
 
         {# EMPTY USERS TABLE ALERT #}
         {% if isUsersEmpty %}
-            <div class="admin-alert admin-alert--error login-page-alert" role="alert">
+            <div class="admin-alert admin-alert-error login-page-alert" role="alert">
                 <span class="admin-alert-message">
                     Users table is empty you can create first account
                     <a href={{ path('auth_register') }}>here</a>.
@@ -19,6 +19,9 @@
         {% if errorMsg != null %}
             {% include "common/alerts/error-alert.twig" %}
         {% endif %}
+
+        {# SUCCESS MESSAGE BOX #}
+        {% include "common/alerts/flash-alert.twig" %}
 
         <div class="login-card">
             <div class="login-card-header">
