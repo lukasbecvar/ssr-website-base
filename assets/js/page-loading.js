@@ -10,6 +10,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.addEventListener("click", function (event) {
         const target = event.target.closest("a")
         if (target && target.href) {
+            // skip loading for mailto links
+            if (target.href.startsWith("mailto:")) {
+                return
+            }
             event.preventDefault()
             loader.style.display = "flex"
             setTimeout(() => {

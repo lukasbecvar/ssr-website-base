@@ -37,6 +37,9 @@ error.banned.message: "Jste na této stránce trvale zablokován"
 error.banned.message.reason: "Jste na této stránce trvale zablokován z důvodu"
 error.banned.unban.email: "Žádost o odblokování směřujte na"
 
+# inbox
+inbox.email.reply.subject: "Odpověď na vaši zprávu"
+
 # contact
 contact.title: "Kontaktujte mě"
 contact.social.sites.title: "Sociální sítě"

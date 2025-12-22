@@ -37,6 +37,9 @@ error.banned.message: "You are permanently banned on this site"
 error.banned.message.reason: "You are permanently banned on this site for reason"
 error.banned.unban.email: "Please direct unban requests to"
 
+# inbox
+inbox.email.reply.subject: "Reply to your message"
+
 # contact
 contact.title: "Contact me"
 contact.social.sites.title: "Social sites"
