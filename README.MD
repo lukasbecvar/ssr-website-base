@@ -7,7 +7,7 @@ This template is essentially the skeleton of the [becvar-site](https://github.co
 ## Preview
 ![system preview](.github/assets/preview.gif)
 
-## Installation (with mysql/apache)
+## Bare-metal installation (with mysql/apache)
 - install app [Requirements](#requirements)
 - Clone the repository to your /www directory
 - configure apache config like [apache-site.conf](./docker/configs/apache-site.conf)
@@ -20,6 +20,12 @@ This template is essentially the skeleton of the [becvar-site](https://github.co
 
 ## Development environment
 The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the docker-start script.
+
+## Production Build
+You can build the production version of the website using the [Dockerfile](.docker/Dockerfile.prod). The build is managed automatically with a GitHub Action: [docker-publisher](.github/workflows/docker-publisher.yml), but you can also use the production Dockerfile directly if you want.
+
+## Styling
+The admin system styling is based on Bootstrap and Font Awesome, but you can add any other styling libraries, like Tailwind, and include them in the [public-base](view/common/bases/public-base.twig) view.
 
 ## Translations
 Translations are managed by [Symfony-translations](https://symfony.com/doc/current/translation.html). Translation select is based on ip geolocation using [ip-api.com](https://ip-api.com). If you want to add a new language, you need to create a new translation file in the `translations` directory. The file name should be the language code (e.g. `messages.en.yml`).
