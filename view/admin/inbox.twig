@@ -16,7 +16,9 @@
                     <div class='inbox-message'>
                         <div class="inbox-message-header">
                             <div class="inbox-message-info">
-                                <div class="inbox-message-name">{{ message.name|e }}</div>
+                                {% set result = message.visitor_id / messageLimit %}
+                                {% set visitorPage = result | round(0, 'ceil') %}
+                                <a href={{ path('admin_visitor_manager', {'page': visitorPage}) }}#{{ message.visitor_id|e }} class="inbox-message-name">{{ message.name|e }}</a>
                                 <div class="inbox-message-meta">
                                     <span class="inbox-message-time">
                                         <i class="bi bi-clock"></i> {{ message.time|date('Y-m-d H:i:s')|e }}

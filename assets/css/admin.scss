@@ -456,6 +456,13 @@ body.active .wrapper .section .top-navbar {
 	font-weight: 600;
 	color: #fdfefe !important;
 	margin-bottom: 0.5rem;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.inbox-message-name:hover {
+	color: #8fc2ff !important;
+	text-decoration: none;
 }
 
 .inbox-message-meta {
