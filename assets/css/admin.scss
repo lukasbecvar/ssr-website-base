@@ -1792,12 +1792,29 @@ body.active .wrapper .section .top-navbar {
 .metrics-table-card-table td, .metrics-table-card-table th {
 	padding-left: 10px;
 	padding-right: 10px;
-	background-color: #1b222a;
+	background-color: transparent !important;
 	border-color: rgba(122, 132, 144, 0.18) !important;
 }
 
-.metrics-table-card-table tbody tr:hover {
-	background-color: rgb(237, 7, 7) !important;
+.table.table-dark.metrics-table-card-table tbody tr>* {
+	--bs-table-bg: transparent !important;
+	--bs-table-color: #e2e8f0 !important;
+}
+
+.table.table-dark.metrics-table-card-table thead th {
+	background-color: rgba(30, 34, 43, 0.92) !important;
+	color: #f8fafc !important;
+	border-color: rgba(122, 132, 144, 0.32) !important;
+	padding: 12px 10px !important;
+	font-weight: 600 !important;
+	text-transform: uppercase !important;
+	letter-spacing: 0.5px !important;
+	font-size: 13px !important;
+}
+
+.table.table-dark.metrics-table-card-table tbody tr:hover>* {
+    --bs-table-hover-bg: rgba(59, 130, 246, 0.15) !important;
+    --bs-table-hover-color: #f8fafc !important;
 }
 
 .metrics-table-card-table tbody tr:last-child td {
