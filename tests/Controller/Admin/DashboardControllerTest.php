@@ -44,7 +44,7 @@ class DashboardControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('.card-title', 'Logs');
         $this->assertSelectorTextContains('body', 'Messages');
         $this->assertSelectorTextContains('body', 'Visitors');
-        $this->assertSelectorExists('a[class="logout-link menu-button"]');
+        $this->assertSelectorExists('button[class="logout-link menu-button"]');
         $this->assertSelectorExists('span[class="menu-text"]');
         $this->assertSelectorExists('div[class="sidebar"]');
         $this->assertSelectorExists('a[class="s-menu-button"]');

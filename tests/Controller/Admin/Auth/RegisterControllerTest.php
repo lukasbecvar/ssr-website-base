@@ -78,6 +78,7 @@ class RegisterControllerTest extends CustomTestCase
         // submit register form
         $this->client->request('POST', '/register', [
             'register_form' => [
+                'csrf_token' => $this->getCsrfToken($this->client, 'register_form'),
                 'username' => '',
                 'password' => '',
                 're-password' => ''
@@ -104,6 +105,7 @@ class RegisterControllerTest extends CustomTestCase
         // submit register form
         $this->client->request('POST', '/register', [
             'register_form' => [
+                'csrf_token' => $this->getCsrfToken($this->client, 'register_form'),
                 'username' => 'a',
                 'password' => 'a',
                 're-password' => 'a'
@@ -130,6 +132,7 @@ class RegisterControllerTest extends CustomTestCase
         // submit register form
         $this->client->request('POST', '/register', [
             'register_form' => [
+                'csrf_token' => $this->getCsrfToken($this->client, 'register_form'),
                 'username' => 'awfeewfawfeewfawfeewfawfeewfawfeewfawfeewfawfeewawfeewfawfeewfawfeewfawfeewfawfeewfawfeewfawfeew',
                 'password' => 'awfeewfawfeewfawfeewfawfeewfawfeewfawfeewfawfeewawfeewfawfeewfawfeewfawfeewfawfeewfawfeewfawfeew',
                 're-password' => 'awfeewfawfeewfawfeewfawfeewfawfeewfawfeewfawfeewawfeewfawfeewfawfeewfawfeewfawfeewfawfeewfawfeew'
@@ -156,6 +159,7 @@ class RegisterControllerTest extends CustomTestCase
         // submit register form
         $this->client->request('POST', '/register', [
             'register_form' => [
+                'csrf_token' => $this->getCsrfToken($this->client, 'register_form'),
                 'username' => 'testing_username',
                 'password' => 'testing_password_1',
                 're-password' => 'testing_password_2'
@@ -180,6 +184,7 @@ class RegisterControllerTest extends CustomTestCase
         // submit register form
         $this->client->request('POST', '/register', [
             'register_form' => [
+                'csrf_token' => $this->getCsrfToken($this->client, 'register_form'),
                 'username' => ByteString::fromRandom(16)->toString(),
                 'password' => 'testing_password_1',
                 're-password' => 'testing_password_1'

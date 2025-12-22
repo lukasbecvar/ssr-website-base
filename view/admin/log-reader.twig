@@ -80,7 +80,10 @@
                                     <a class="db-delete-link text-warning" href="/admin/visitors?page={{ visitorPage }}#{{ row.visitorId|e }}">VISIT</a>
                                 </th>
                                 <th>
-                                    <a class="db-delete-link" href={{ path('admin_database_delete', {'table': 'logs', 'page': readerPage, 'id': row.id|e, 'referer': 'log_reader'}) }}>X</a>
+                                    <form method="POST" action={{ path('admin_database_delete', {'table': 'logs', 'page': readerPage, 'id': row.id|e, 'referer': 'log_reader'}) }} style="display:inline;">
+                                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                        <button type="submit" class="db-delete-link" style="background:none; border:none; padding:0; cursor:pointer;">X</button>
+                                    </form>
                                 </th>
                             </tr>
                         {% endfor %} 

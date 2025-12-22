@@ -10,7 +10,12 @@
     <div class="modal-overlay">
         <div class="confirmation dark-table">
             <p class="form-title">Are you sure you want to delete all logs?</p>
-            <a class="confirmation-button confirmation-button-confirm" href={{ path('admin_database_delete', {'table': 'logs', 'page': '1', 'id': 'all', 'referer': 'log_reader'}) }}>Yes</a>
+            <form method="POST" action={{ path('admin_database_delete', {'table': 'logs', 'page': '1', 'id': 'all', 'referer': 'log_reader'}) }} style="display:inline;">
+                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                <button type="submit" class="confirmation-button confirmation-button-confirm">
+                    Yes
+                </button>
+            </form>
             <a class="confirmation-button confirmation-button-cancel" href={{ path('admin_log_list', {'page': page}) }}>No</a>
         </div>
     </div>

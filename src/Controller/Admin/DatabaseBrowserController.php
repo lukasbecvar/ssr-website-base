@@ -4,6 +4,7 @@ namespace App\Controller\Admin;
 
 use App\Util\AppUtil;
 use App\Manager\DatabaseManager;
+use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -85,6 +86,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The row editor view
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/admin/database/edit', methods: ['GET', 'POST'], name: 'admin_database_edit')]
     public function rowEdit(Request $request): Response
     {
@@ -161,6 +163,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The new row form view
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/admin/database/add', methods: ['GET', 'POST'], name: 'admin_database_add')]
     public function rowAdd(Request $request): Response
     {
@@ -235,7 +238,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The redirect to browser
      */
-    #[Route('/admin/database/delete', methods: ['GET'], name: 'admin_database_delete')]
+    #[Route('/admin/database/delete', methods: ['POST'], name: 'admin_database_delete')]
     public function rowDelete(Request $request): Response
     {
         // get query parameters

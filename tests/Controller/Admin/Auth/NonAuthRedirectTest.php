@@ -10,7 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 /**
  * Class NonAuthRedirectTest
  *
- * Test redirect non authenticated users to login page for admin page routes
+ * Test for redirect non-authenticated users to login page for admin page routes
  *
  * @package App\Tests\Controller\Auth
  */
@@ -26,44 +26,46 @@ class NonAuthRedirectTest extends WebTestCase
     /**
      * Auth required routes list
      *
-     * @return array<array<string>>
+     * @return array<array<string,string>>
      */
     private const ROUTES = [
         'admin' => [
-            '/admin',
-            'register',
-            '/admin/dashboard'
+            ['method' => 'GET', 'url' => '/admin'],
+            ['method' => 'GET', 'url' => '/register'],
+            ['method' => 'GET', 'url' => '/admin/dashboard']
         ],
         'database_browser' => [
-            '/admin/database',
-            '/admin/database/add',
-            '/admin/database/edit',
-            '/admin/database/table',
-            '/admin/database/delete'
+            ['method' => 'GET', 'url' => '/admin/database'],
+            ['method' => 'GET', 'url' => '/admin/database/add'],
+            ['method' => 'GET', 'url' => '/admin/database/edit'],
+            ['method' => 'GET', 'url' => '/admin/database/table'],
+            ['method' => 'POST', 'url' => '/admin/database/delete']
         ],
         'admin_inbox' => [
-            '/admin/inbox',
-            '/admin/inbox/close'
+            ['method' => 'GET', 'url' => '/admin/inbox'],
+            ['method' => 'POST', 'url' => '/admin/inbox/close']
         ],
         'admin_logs' => [
-            '/admin/logs',
-            '/admin/logs/delete',
-            '/admin/logs/whereip',
-            '/admin/logs/readed/all'
+            ['method' => 'GET', 'url' => '/admin/logs'],
+            ['method' => 'GET', 'url' => '/admin/logs/delete'],
+            ['method' => 'GET', 'url' => '/admin/logs/whereip'],
+            ['method' => 'POST', 'url' => '/admin/logs/readed/all']
         ],
         'admin_visitors' => [
-            '/admin/visitors',
-            '/admin/visitors/ban',
-            '/admin/visitors/unban',
-            '/admin/visitors/delete',
-            '/admin/visitors/metrics',
-            '/admin/visitors/download'
+            ['method' => 'GET', 'url' => '/admin/visitors'],
+            ['method' => 'GET', 'url' => '/admin/visitors'],
+            ['method' => 'GET', 'url' => '/admin/visitors'],
+            ['method' => 'POST', 'url' => '/admin/visitors/ban'],
+            ['method' => 'POST', 'url' => '/admin/visitors/unban'],
+            ['method' => 'GET', 'url' => '/admin/visitors/delete'],
+            ['method' => 'GET', 'url' => '/admin/visitors/metrics'],
+            ['method' => 'GET', 'url' => '/admin/visitors/download']
         ],
         'account_settings' => [
-            '/admin/account/settings',
-            '/admin/account/settings/pic',
-            '/admin/account/settings/username',
-            '/admin/account/settings/password'
+            ['method' => 'GET', 'url' => '/admin/account/settings'],
+            ['method' => 'GET', 'url' => '/admin/account/settings/pic'],
+            ['method' => 'GET', 'url' => '/admin/account/settings/username'],
+            ['method' => 'GET', 'url' => '/admin/account/settings/password']
         ]
     ];
 
@@ -77,26 +79,27 @@ class NonAuthRedirectTest extends WebTestCase
         $urls = [];
         foreach (self::ROUTES as $category => $routes) {
             foreach ($routes as $route) {
-                $urls[] = [$route];
+                $urls[] = [$route['method'], $route['url']];
             }
         }
         return $urls;
     }
 
     /**
-     * Test non authenticated requests to admin routes redirect to login page
+     * Test requests to admin routes that require authentication
      *
+     * @param string $method The HTTP method
      * @param string $url The admin route URL
      *
      * @return void
      */
     #[DataProvider('provideAdminUrls')]
-    public function testNonAuthenticatedRequestsToAdminRoutesRedirectToLogin(string $url): void
+    public function testNonAuthRedirect(string $method, string $url): void
     {
-        $this->client->request('GET', $url);
+        $this->client->request($method, $url);
 
         // assert response
-        $this->assertResponseRedirects('/login');
+        $this->assertTrue($this->client->getResponse()->isRedirect('/login'));
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 }

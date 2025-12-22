@@ -7,6 +7,7 @@ use App\Util\CacheUtil;
 use App\Manager\LogManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\VisitorManager;
+use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -42,6 +43,7 @@ class VisitorApiController extends AbstractController
      *
      * @return Response The update status response
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/api/visitor/update/activity', methods: ['GET', 'POST'], name: 'api_visitor_status')]
     public function updateStatus(): Response
     {

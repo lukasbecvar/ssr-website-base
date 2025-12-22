@@ -66,7 +66,7 @@ class InboxController extends AbstractController
      *
      * @return Response The redirect back to inbox
      */
-    #[Route('/admin/inbox/close', methods: ['GET'], name: 'admin_inbox_close')]
+    #[Route('/admin/inbox/close', methods: ['POST'], name: 'admin_inbox_close')]
     public function close(Request $request): Response
     {
         // get query parameters

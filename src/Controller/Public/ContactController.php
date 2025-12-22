@@ -9,6 +9,7 @@ use App\Util\VisitorInfoUtil;
 use App\Form\ContactFormType;
 use App\Manager\VisitorManager;
 use App\Manager\MessagesManager;
+use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -50,6 +51,7 @@ class ContactController extends AbstractController
      *
      * @return Response The contact page view response
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/contact', methods: ['GET', 'POST'], name: 'public_contact')]
     public function contactPage(Request $request): Response
     {

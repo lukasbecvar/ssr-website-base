@@ -57,12 +57,16 @@ class LogReaderController extends AbstractController
         // get logs data
         $logs = $this->logManager->getLogs('unreaded', $this->authManager->getUsername(), $page);
 
+        // check if antilog is enabled
+        $antiLogStatus = $this->logManager->isEnabledAntiLog();
+
         // render log reader view
         return $this->render('admin/log-reader.twig', [
             'whereIp' => null,
             'logsData' => $logs,
             'readerPage' => $page,
             'logsCount' => count($logs),
+            'antiLogStatus' => $antiLogStatus,
             'loginLogsCount' => $this->logManager->getLoginLogsCount(),
             'limitValue' => $this->appUtil->getEnvValue('ITEMS_PER_PAGE'),
             'unreeadedCount' => $this->logManager->getLogsCount('unreaded'),
@@ -91,12 +95,16 @@ class LogReaderController extends AbstractController
         // get logs data
         $logs = $this->logManager->getLogsWhereIP($ipAddress, $this->authManager->getUsername(), $page);
 
+        // check if antilog is enabled
+        $antiLogStatus = $this->logManager->isEnabledAntiLog();
+
         // render log reader view
         return $this->render('admin/log-reader.twig', [
             'logsData' => $logs,
             'readerPage' => $page,
             'whereIp' => $ipAddress,
             'logsCount' => count($logs),
+            'antiLogStatus' => $antiLogStatus,
             'loginLogsCount' => $this->logManager->getLoginLogsCount(),
             'limitValue' => $this->appUtil->getEnvValue('ITEMS_PER_PAGE'),
             'unreeadedCount' => $this->logManager->getLogsCount('unreaded'),
@@ -129,7 +137,7 @@ class LogReaderController extends AbstractController
      *
      * @return Response The redirect back to dashboard
      */
-    #[Route('/admin/logs/readed/all', methods: ['GET'], name: 'admin_log_readed')]
+    #[Route('/admin/logs/readed/all', methods: ['POST'], name: 'admin_log_readed')]
     public function setReadedAllLogs(): Response
     {
         // set all logs status to readed

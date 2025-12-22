@@ -5,6 +5,7 @@ namespace App\Controller\Admin\Auth;
 use App\Entity\User;
 use App\Manager\AuthManager;
 use App\Form\RegisterFormType;
+use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -35,6 +36,7 @@ class RegisterController extends AbstractController
      *
      * @return Response The registration page view or registration redirect
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/register', methods: ['GET', 'POST'], name: 'auth_register')]
     public function register(Request $request): Response
     {

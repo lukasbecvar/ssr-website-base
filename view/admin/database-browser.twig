@@ -116,7 +116,10 @@
                                                     </th>
                                                 {% endif %}
                                                 <th>
-                                                    <a class="db-delete-link" href={{ path('admin_database_delete', {'table': tableName|e, 'page': page, 'id': row.id|e}) }}>X</a>
+                                                    <form method="POST" action={{ path('admin_database_delete', {'table': tableName|e, 'page': page, 'id': row.id|e}) }} style="display:inline;">
+                                                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                                        <button type="submit" class="db-delete-link" style="background:none; border:none; padding:0; cursor:pointer;">X</button>
+                                                    </form>
                                                 </th>
                                             </tr>
                                         {% endfor %} 

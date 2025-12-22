@@ -32,7 +32,7 @@ class LogoutController extends AbstractController
      *
      * @return Response Redirect to login page
      */
-    #[Route('/logout', methods: ['GET'], name: 'auth_logout')]
+    #[Route('/logout', methods: ['POST'], name: 'auth_logout')]
     public function logout(): Response
     {
         // check if user is logged in

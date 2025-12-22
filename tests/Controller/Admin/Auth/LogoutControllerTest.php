@@ -29,7 +29,9 @@ class LogoutControllerTest extends CustomTestCase
      */
     public function testUserLogoutRedirectToLoginPage(): void
     {
-        $this->client->request('GET', '/logout');
+        $this->client->request('POST', '/logout', [
+            'csrf_token' => $this->getCsrfToken($this->client)
+        ]);
 
         // assert response
         $this->assertResponseRedirects('/login');

@@ -7,6 +7,7 @@ use App\Entity\User;
 use App\Util\SecurityUtil;
 use App\Manager\AuthManager;
 use App\Manager\ErrorManager;
+use App\Annotation\CsrfProtection;
 use App\Form\PasswordChangeFormType;
 use App\Form\UsernameChangeFormType;
 use App\Form\ProfilePicChangeFormType;
@@ -67,6 +68,7 @@ class AccountSettingsController extends AbstractController
      *
      * @return Response The picture change view
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/admin/account/settings/pic', methods: ['GET', 'POST'], name: 'admin_account_settings_pic_change')]
     public function accountSettingsPicChange(Request $request): Response
     {
@@ -131,6 +133,7 @@ class AccountSettingsController extends AbstractController
      *
      * @return Response The username change view
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/admin/account/settings/username', methods: ['GET', 'POST'], name: 'admin_account_settings_username_change')]
     public function accountSettingsUsernameChange(Request $request): Response
     {
@@ -183,6 +186,7 @@ class AccountSettingsController extends AbstractController
      *
      * @return Response The password change view
      */
+    #[CsrfProtection(enabled: false)]
     #[Route('/admin/account/settings/password', methods: ['GET', 'POST'], name: 'admin_account_settings_password_change')]
     public function accountSettingsPasswordChange(Request $request): Response
     {

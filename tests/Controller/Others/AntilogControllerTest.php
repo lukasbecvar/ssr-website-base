@@ -32,10 +32,12 @@ class AntilogControllerTest extends CustomTestCase
      */
     public function testEnableAntiLog(): void
     {
-        $this->client->request('GET', '/antilog/5369362536');
+        $this->client->request('POST', '/antilog/5369362536', [
+            'csrf_token' => $this->getCsrfToken($this->client)
+        ]);
 
         // assert response
-        $this->assertResponseRedirects('/admin/dashboard');
+        $this->assertResponseRedirects('/admin/logs');
         $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
     }
 }

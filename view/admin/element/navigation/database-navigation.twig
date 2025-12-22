@@ -29,11 +29,14 @@
             </a>
         </li>
             <li> 
-                <a class="selector-button btn-small" href={{ path('admin_database_delete', {'table': tableName, 'page': '1', 'id': 'all'}) }} title="Delete all rows">
-                    <strong>
-                        <i class="fa fa-trash" aria-hidden="true"></i> 
-                    </strong>
-                </a>
+                <form method="POST" action={{ path('admin_database_delete', {'table': tableName, 'page': '1', 'id': 'all'}) }} style="display:inline;" title="Delete all rows">
+                    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                    <button type="submit" class="selector-button btn-small">
+                        <strong>
+                            <i class="fa fa-trash" aria-hidden="true"></i>
+                        </strong>
+                    </button>
+                </form>
             </li>
         {% if tableName != 'code_paste' and tableName != 'images' and tableName != 'chat_messages' and tableName != 'inbox_messages' and tableName != 'todos' %}
             <li>    
