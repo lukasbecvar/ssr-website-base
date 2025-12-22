@@ -21,6 +21,9 @@ This template is essentially the skeleton of the [becvar-site](https://github.co
 ## Development environment
 The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the docker-start script.
 
+## Translations
+Translations are managed by [Symfony-translations](https://symfony.com/doc/current/translation.html). Translation select is based on ip geolocation using [ip-api.com](https://ip-api.com). If you want to add a new language, you need to create a new translation file in the `translations` directory. The file name should be the language code (e.g. `messages.en.yml`).
+
 ## Authentication
 Authentication uses a completely custom user system with a username and password, managed by the application user manager. Only the first user can use the registration form to create an admin user. Login uses standard PHP session and cookie for the 'remember me' feature.
 
