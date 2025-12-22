@@ -1,5 +1,5 @@
-## Basic website template
-This is a basic website template for creating websites with Symfony and Bootstrap.
+## Server-Side-Rendering website base
+This is a basic website template for creating a server-side-rendered websites with Symfony and Bootstrap. It includes a simple admin system with user management, visitor tracking, contact inbox, and logs management.
 
 ## Description
 This template is essentially the skeleton of the [becvar-site](https://github.com/lukasbecvar/becvar-site) application, with just the public part removed. The admin system includes its own user system, visitor tracking, contact inbox, and logs, and is ready for further expansion. The public part is prepared for integrating a new design and content.
