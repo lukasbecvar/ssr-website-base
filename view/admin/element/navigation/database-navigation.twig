@@ -2,7 +2,7 @@
     {# ROW EDITOR BACK BUTTON #}
     {% if editorTable != null %}
         <li>
-            <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': editorTable, 'page': editorPage}) }}>
+            <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': editorTable, 'page': editorPage}) }} title="Back to table">
                 <strong>
                     <i class="fa fa-arrow-left" aria-hidden="true"></i>
                 </strong>
@@ -12,7 +12,7 @@
     {# ROW ADD BACK BUTTON #}
     {% elseif newRowTable != null %}
         <li>
-            <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': newRowTable, 'page': newRowPage}) }}>
+            <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': newRowTable, 'page': newRowPage}) }} title="Back to table">
                 <strong>
                     <i class="fa fa-arrow-left" aria-hidden="true"></i>
                 </strong>
@@ -22,14 +22,14 @@
     {# TABLE VIEWER TOOLBAR #}
     {% elseif tableName != null %}
         <li>
-            <a class="selector-button btn-small" href={{ path('admin_database_list') }}>
+            <a class="selector-button btn-small" href={{ path('admin_database_list') }} title="Back to table list">
                 <strong>
                     <i class="fa fa-arrow-left" aria-hidden="true"></i>
                 </strong>
             </a>
         </li>
             <li> 
-                <a class="selector-button btn-small" href={{ path('admin_database_delete', {'table': tableName, 'page': '1', 'id': 'all'}) }}>
+                <a class="selector-button btn-small" href={{ path('admin_database_delete', {'table': tableName, 'page': '1', 'id': 'all'}) }} title="Delete all rows">
                     <strong>
                         <i class="fa fa-trash" aria-hidden="true"></i> 
                     </strong>
@@ -38,7 +38,7 @@
         {% if tableName != 'code_paste' and tableName != 'images' and tableName != 'chat_messages' and tableName != 'inbox_messages' and tableName != 'todos' %}
             <li>    
                 {% if tableName != 'code_paste' and tableName != 'images' %}
-                    <a class="selector-button btn-small" href={{ path('admin_database_add', {'table': tableName, 'page': page}) }}>
+                    <a class="selector-button btn-small" href={{ path('admin_database_add', {'table': tableName, 'page': page}) }} title="Add new row">
                         <i class="fa fa-plus" aria-hidden="true"></i> 
                     </a>
                 {% endif %}
@@ -48,7 +48,7 @@
         {# REGISTER NEW USER BUTTON #}
         {% if tableName == 'users' %}
             <li>
-                <a class="selector-button btn-small" href={{ path('auth_register') }}>
+                <a class="selector-button btn-small" href={{ path('auth_register') }} title="Register new user">
                     <strong>R</strong>
                 </a>
             </li>        

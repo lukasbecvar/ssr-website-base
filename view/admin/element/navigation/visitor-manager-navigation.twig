@@ -2,7 +2,7 @@
     {# BACK TO VISITORS MANAGER #}
     {% if filter != 1 or visitorMetrics != null %}
         <li>
-            <a class="selector-button btn-small" href={{ path('admin_visitor_manager', {'page': page}) }}>
+            <a class="selector-button btn-small" href={{ path('admin_visitor_manager', {'page': page}) }} title="Back to visitors manager">
                 <strong><i class="fa fa-arrow-left" aria-hidden="true"></i></strong>
             </a>
         </li>  
@@ -10,21 +10,21 @@
     
     {# VIEW UNFILTERED VISITORS #}
     <li>
-        <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': 'visitors', 'page': page }) }}>
+        <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': 'visitors', 'page': page }) }} title="View unfiltered visitors">
             <strong><i class="fa fa-database" aria-hidden="true"></i></strong>
         </a>
     </li>  
 
     {# DELETE ALL VISITORS #}
     <li>
-        <a class="selector-button btn-small" href={{ path('admin_visitor_delete', {'page': page}) }}>
+        <a class="selector-button btn-small" href={{ path('admin_visitor_delete', {'page': page}) }} title="Delete all visitors">
             <strong><i class="fa fa-trash" aria-hidden="true"></i></strong>
         </a>
     </li>
     
     {# EXPORT VISITORS LIST #}
     <li>
-        <a class="selector-button btn-small" href={{ path('admin_visitor_manager_download') }}>
+        <a class="selector-button btn-small" href={{ path('admin_visitor_manager_download') }} title="Export visitors list">
             <strong><i class="fa fa-download" aria-hidden="true"></i></strong>
         </a>
     </li>
@@ -32,7 +32,7 @@
     {# ENABLE ONLINE FILTER #}
     {% if filter == 1 %}
         <li>
-            <a class="selector-button btn-small" href={{ path('admin_visitor_manager', {'page': 1, 'filter': 'online'}) }}>
+            <a class="selector-button btn-small" href={{ path('admin_visitor_manager', {'page': 1, 'filter': 'online'}) }} title="Enable online filter">
                 <strong><i class="fa fa-plug" aria-hidden="true"></i></strong>
             </a>
         </li>
@@ -41,7 +41,7 @@
     {# LINK TO VISITORS METRICS #}
     {% if visitorMetrics == null %}
         <li>
-            <a class="selector-button btn-small" href={{ path('admin_visitor_manager_metrics') }}>
+            <a class="selector-button btn-small" href={{ path('admin_visitor_manager_metrics') }} title="Link to visitors metrics">
                 <strong><i class="fa fa-chart-bar" aria-hidden="true"></i></strong>
             </a>
         </li>

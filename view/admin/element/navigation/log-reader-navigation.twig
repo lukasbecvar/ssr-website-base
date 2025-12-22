@@ -1,19 +1,19 @@
 <ul class="breadcrumb database-breadcrumb"> 
     {# VIEW UNFILTERED LOGS #}
     <li>
-        <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': 'logs', 'page': readerPage}) }}>
+        <a class="selector-button btn-small" href={{ path('admin_database_browser', {'table': 'logs', 'page': readerPage}) }} title="View unfiltered logs">
             <strong><i class="fa fa-database" aria-hidden="true"></i></strong>
         </a>
     </li>  
     {# SET ALL LOGS AS READ #}
     <li>
-        <a class="selector-button btn-small" href={{ path('admin_log_readed') }}>
+        <a class="selector-button btn-small" href={{ path('admin_log_readed') }} title="Set all logs as readed">
             <strong><i class="fa fa-check" aria-hidden="true"></i></strong>
         </a>
     </li>
     {# DELETE ALL LOGS #}
     <li>
-        <a class="selector-button btn-small" href={{ path('admin_log_delete', {'page': 1}) }}>
+        <a class="selector-button btn-small" href={{ path('admin_log_delete', {'page': 1}) }} title="Delete all logs">
             <strong><i class="fa fa-trash" aria-hidden="true"></i></strong>
         </a>
     </li>    
