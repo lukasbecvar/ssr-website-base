@@ -445,17 +445,19 @@ class DatabaseManager
             ]
         ];
 
-        try {
-            // ensure foreign key columns are nullable
-            if (isset($foreignKeys[$tableName])) {
-                foreach ($foreignKeys[$tableName] as $refTable => $refColumn) {
-                    $this->connection->executeStatement("
-                        ALTER TABLE {$refTable} MODIFY {$refColumn} INT NULL
-                    ");
-                }
+        // ensure foreign key columns are nullable (Must be done BEFORE transaction because DDL causes implicit commit)
+        if (isset($foreignKeys[$tableName])) {
+            foreach ($foreignKeys[$tableName] as $refTable => $refColumn) {
+                // this will autocommit any open transaction
+                $this->connection->executeStatement("ALTER TABLE {$refTable} MODIFY {$refColumn} INT NULL");
             }
+        }
 
-            // disable foreign key checks and perform deletion (no transaction)
+        // start transaction to ensure atomicity
+        $this->connection->beginTransaction();
+
+        try {
+            // disable foreign key checks and perform deletion
             $this->connection->executeStatement('SET FOREIGN_KEY_CHECKS = 0');
 
             if ($id == 'all') {
@@ -499,19 +501,15 @@ class DatabaseManager
                 $this->connection->executeStatement($sql, $params);
             }
 
-            // re-enable foreign key checks
-            $this->connection->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
+            // commit transaction
+            $this->connection->commit();
         } catch (Exception $e) {
-            // ensure foreign key checks are re-enabled even on error
-            try {
-                $this->connection->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
-            } catch (Exception $innerE) {
-                $this->errorManager->handleError(
-                    msg: 'error to re-enable foreign key checks: ' . $innerE->getMessage(),
-                    code: Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
+            // rollback changes on error
+            $this->connection->rollBack();
             throw $e;
+        } finally {
+            // always re-enable foreign key checks
+            $this->connection->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
         }
 
         // log row delete event
