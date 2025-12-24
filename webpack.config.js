@@ -17,7 +17,12 @@ Encore
     .addEntry('bootstrap-icons-css', './node_modules/bootstrap-icons/font/bootstrap-icons.css')
     
     // register js assets
+    .addEntry('dashboard-js', './assets/js/dashboard.js')
     .addEntry('page-loading-js', './assets/js/page-loading.js')
+    .addEntry('admin-sidebar-js', './assets/js/admin-sidebar.js')
+    .addEntry('visitors-manager-js', './assets/js/visitors-manager.js')
+    .addEntry('account-settings-js', './assets/js/account-settings.js')
+    .addEntry('database-browser-js', './assets/js/database-browser.js')
     .addEntry('visitors-metrics-js', './assets/js/visitors-metrics.js')
     .addEntry('boxicons-css', './node_modules/boxicons/css/boxicons.css')
     .addEntry('update-visitor-status-js', './assets/js/update-visitor-status.js')

@@ -18,7 +18,7 @@
         <div class="card dashbord-card settings-form-card disable-phone-radius">
             <div class="card-header">Change profile image</div>
             <div class="card-body">
-                {{ form_start(profilePicChangeForm, {'attr': {'class': 'settings-form settings-form--pic-upload'}}) }}
+                {{ form_start(profilePicChangeForm, {'attr': {'class': 'settings-form settings-form--pic-upload', 'data-input-id': profilePicChangeForm['profile-pic'].vars.id}}) }}
                     
                     {# hidden file input #}
                     {{ form_widget(profilePicChangeForm['profile-pic']) }}
@@ -36,39 +36,6 @@
 
                     <button class="input-button" type="submit">Save picture</button>
                 {{ form_end(profilePicChangeForm) }}
-
-                <script>
-                    const picInput = document.getElementById('{{ profilePicChangeForm['profile-pic'].vars.id }}')
-                    const previewContainer = document.getElementById('pic-preview-container')
-                    const removeBtn = document.getElementById('pic-remove-btn')
-                    const picPreview = document.getElementById('pic-preview')
-                    const dropzone = document.getElementById('pic-dropzone')
-
-                    if (picInput && previewContainer && picPreview && removeBtn && dropzone) {
-                        
-                        // when a file is selected
-                        picInput.addEventListener('change', function(event) {
-                            const file = event.target.files[0]
-                            if (file) {
-                                const reader = new FileReader()
-                                reader.onload = function(e) {
-                                    picPreview.src = e.target.result
-                                    previewContainer.style.display = 'block'
-                                    dropzone.style.display = 'none'
-                                }
-                                reader.readAsDataURL(file)
-                            }
-                        })
-
-                        // when the remove button is clicked
-                        removeBtn.addEventListener('click', function() {
-                            picInput.value = '' // Clear the file input
-                            picPreview.src = '#'
-                            previewContainer.style.display = 'none'
-                            dropzone.style.display = 'flex'
-                        })
-                    }
-                </script>
             </div>
         </div>
 
@@ -217,4 +184,7 @@
         </div>
     {% endif %}
 </div>
+
+{# INCLUDE ACCOUNT SETTINGS PAGE FUNCTIONALITY #}
+{{ encore_entry_script_tags('account-settings-js') }}
 {% endblock %}

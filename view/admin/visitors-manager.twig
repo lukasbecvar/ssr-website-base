@@ -62,32 +62,6 @@
             </div>
         </div>
 
-        <script>
-            // update time period in url
-            function updateTimePeriod() {
-                const select = document.getElementById('time-period')
-                const selectedValue = select.value
-                window.location.href = `/admin/visitors/metrics?time_period=${selectedValue}`
-            }
-
-            // select selecton value from url
-            function setSelectedValue() {
-                const urlParams = new URLSearchParams(window.location.search)
-                const timePeriod = urlParams.get('time_period')
-                const select = document.getElementById('time-period')
-
-                // set selected value
-                if (timePeriod) {
-                    select.value = timePeriod
-                } else {
-                    select.value = 'last_week'
-                }
-            }
-
-            // init select value
-            window.onload = setSelectedValue
-        </script>
-
         {# METRICS BOXES #}
         <div class="text-white metrics-box-container">
             <div class="row no-gutters metrics-row">
@@ -370,21 +344,6 @@
     {% endif %}
 </div>
 
-{# LINE SELECTOR HIGHLIGHT SCRIPT #}
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var hash = window.location.hash
-        if (hash && hash.startsWith('#')) {
-            var id = hash.substring(1)
-            var row = document.getElementById(id)
-
-            if (row) {
-                var thElements = row.getElementsByTagName('th')
-                for (var j = 0; j < thElements.length; j++) {
-                    thElements[j].classList.add('highlighter')
-                }
-            }
-        }
-    })
-</script>
+{# LINE SELECTOR HIGHLIGHT FUNCTIONALITY #}
+{{ encore_entry_script_tags('visitors-manager-js') }}
 {% endblock %}

@@ -241,31 +241,8 @@
     {% endif %}
 </div>
 
-{# FOREIGN KEY HIGHLIGHTING AND SCROLLING #}
+{# FOREIGN KEY HIGHLIGHTING AND SCROLLING FUNCTIONALITY #}
 {% if tableName != null %}
-<script>
-    document.addEventListener('DOMContentLoaded', function()
-    {
-        // check if we have a hash in the URL (coming from foreign key link)
-        if (window.location.hash) {
-            const targetId = window.location.hash.substring(1) // remove #
-            
-            // look for target row
-            const targetRow = document.getElementById(targetId)
-            if (targetRow) {
-                if (targetRow) {
-                    var thElements = targetRow.getElementsByTagName('th')
-                    for (var j = 0; j < thElements.length; j++) {
-                        thElements[j].classList.add('highlighter')
-                    }
-                }
-                // scroll to target row
-                targetRow.scrollIntoView({
-                    block: 'center'
-                })
-            }
-        }
-    })
-</script>
+    {{ encore_entry_script_tags('database-browser-js') }}
 {% endif %}
 {% endblock %}
