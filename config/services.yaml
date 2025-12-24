@@ -30,6 +30,11 @@ services:
     App\Twig\LinkifyExtension:
         tags:
             - { name: 'twig.extension' }
+    
+    # database helper extension
+    App\Twig\DatabaseHelperExtension:
+        tags:
+            - { name: 'twig.extension' }
 
     # app middlewares
     # --------------------------------------------------------------------------------- #

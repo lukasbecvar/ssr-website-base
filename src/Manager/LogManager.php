@@ -98,7 +98,7 @@ class LogManager
             $ipAddress = $this->visitorInfoUtil->getIP();
 
             // get visitor id
-            $visitorId = $this->visitorManager->getVisitorID($ipAddress);
+            $visitor = $this->visitorManager->getVisitorRepository($ipAddress);
 
             // xss escape inputs
             $name = $this->securityUtil->escapeString($name);
@@ -116,7 +116,7 @@ class LogManager
                 ->setIpAddress($ipAddress)
                 ->setBrowser($browser)
                 ->setStatus('unreaded')
-                ->setVisitorId($visitorId);
+                ->setVisitor($visitor);
 
             try {
                 // insert log entity to database

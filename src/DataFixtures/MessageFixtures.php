@@ -4,9 +4,11 @@ namespace App\DataFixtures;
 
 use DateTime;
 use App\Entity\Message;
+use App\Entity\Visitor;
 use App\Util\SecurityUtil;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 /**
  * Class MessageFixtures
@@ -15,13 +17,20 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
  *
  * @package App\DataFixtures
  */
-class MessageFixtures extends Fixture
+class MessageFixtures extends Fixture implements DependentFixtureInterface
 {
     private SecurityUtil $securityUtil;
 
     public function __construct(SecurityUtil $securityUtil)
     {
         $this->securityUtil = $securityUtil;
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            VisitorFixtures::class,
+        ];
     }
 
     /**
@@ -52,7 +61,7 @@ class MessageFixtures extends Fixture
                 ->setTime(new DateTime('2023-02-12 12:00:00'))
                 ->setIpAddress('172.18.0.1')
                 ->setStatus('open')
-                ->setVisitorID(1);
+                ->setVisitor($manager->getRepository(Visitor::class)->find(1));
 
             // persist message object
             $manager->persist($message);

@@ -52,18 +52,21 @@ class User
     #[ORM\Column(type: Types::TEXT)]
     private ?string $profile_pic = null;
 
-    #[ORM\Column(length: 255)]
-    #[ORM\JoinColumn(name: "visitors", referencedColumnName: "id")]
-    private ?int $visitor_id = null;
+    #[ORM\ManyToOne(targetEntity: Visitor::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(name: "visitor_id", referencedColumnName: "id", nullable: true)]
+    private ?Visitor $visitor = null;
 
     /**
-     * Get the user id
+     * Get visitor ID safely
      *
-     * @return int|null The user id
+     * @return int The visitor ID (0 if null)
      */
-    public function getId(): ?int
+    public function getVisitorIdSafe(): int
     {
-        return $this->id;
+        if ($this->visitor) {
+            return $this->visitor->getIdSafe();
+        }
+        return 0;
     }
 
     /**
@@ -259,25 +262,25 @@ class User
     }
 
     /**
-     * Get the user visitor id
+     * Get the user visitor
      *
-     * @return int|null The user visitor id
+     * @return Visitor|null The user visitor
      */
-    public function getVisitorId(): ?int
+    public function getVisitor(): ?Visitor
     {
-        return $this->visitor_id;
+        return $this->visitor;
     }
 
     /**
-     * Set the user visitor id
+     * Set the user visitor
      *
-     * @param int $visitor_id The user visitor id
+     * @param Visitor|null $visitor The user visitor
      *
      * @return static The user object
      */
-    public function setVisitorId(int $visitor_id): static
+    public function setVisitor(?Visitor $visitor): static
     {
-        $this->visitor_id = $visitor_id;
+        $this->visitor = $visitor;
 
         return $this;
     }

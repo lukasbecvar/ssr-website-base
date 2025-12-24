@@ -6,6 +6,8 @@ use DateTimeInterface;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use App\Repository\VisitorRepository;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Class Visitor
@@ -66,13 +68,62 @@ class Visitor
     private ?string $email = null;
 
     /**
-     * Get visitor id
+     * @var Collection<int, User> The users collection
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'visitor')]
+    private Collection $users;
+
+    /**
+     * @var Collection<int, Message> The messages collection
+     */
+    #[ORM\OneToMany(targetEntity: Message::class, mappedBy: 'visitor')]
+    private Collection $messages;
+
+    /**
+     * @var Collection<int, Log> The logs collection
+     */
+    #[ORM\OneToMany(targetEntity: Log::class, mappedBy: 'visitor')]
+    private Collection $logs;
+
+    public function __construct()
+    {
+        $this->logs = new ArrayCollection();
+        $this->users = new ArrayCollection();
+        $this->messages = new ArrayCollection();
+    }
+
+    /**
+     * Get the visitor ID
      *
-     * @return int|null
+     * @return int|null The visitor ID
      */
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * Get the visitor ID safely (returns 0 if null)
+     *
+     * @return int The visitor ID (0 if null)
+     */
+    public function getIdSafe(): int
+    {
+        return $this->id ?? 0;
+    }
+
+    /**
+     * Set the visitor ID
+     *
+     * @param int $id The visitor ID
+     *
+     * @return static The visitor object
+     */
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -383,6 +434,141 @@ class Visitor
     public function setEmail(string $email): static
     {
         $this->email = $email;
+
+        return $this;
+    }
+
+    /**
+     * Get users
+     *
+     * @return Collection<int, User> The users collection
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    /**
+     * Add user
+     *
+     * @param User $user The user entity object
+     *
+     * @return static
+     */
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setVisitor($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove user
+     *
+     * @param User $user The user entity object
+     *
+     * @return static
+     */
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            if ($user->getVisitor() === $this) {
+                $user->setVisitor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get messages
+     *
+     * @return Collection<int, Message> The messages collection
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    /**
+     * Add message
+     *
+     * @param Message $message The message entity object
+     *
+     * @return static
+     */
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setVisitor($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove message
+     *
+     * @param Message $message The message entity object
+     *
+     * @return static
+     */
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            if ($message->getVisitor() === $this) {
+                $message->setVisitor(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Get logs
+     *
+     * @return Collection<int, Log> The logs collection
+     */
+    public function getLogs(): Collection
+    {
+        return $this->logs;
+    }
+
+    /**
+     * Add log
+     *
+     * @param Log $log The log entity object
+     *
+     * @return static
+     */
+    public function addLog(Log $log): static
+    {
+        if (!$this->logs->contains($log)) {
+            $this->logs->add($log);
+            $log->setVisitor($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove log
+     *
+     * @param Log $log The log entity object
+     *
+     * @return static
+     */
+    public function removeLog(Log $log): static
+    {
+        if ($this->logs->removeElement($log)) {
+            if ($log->getVisitor() === $this) {
+                $log->setVisitor(null);
+            }
+        }
 
         return $this;
     }

@@ -94,11 +94,19 @@ class AccountSettingsController extends AbstractController
                 // get image content
                 $fileContents = file_get_contents($image);
 
-                // encode image to base64
-                $imageCode = base64_encode($fileContents);
+                if ($fileContents === false) {
+                    $errorMsg = 'Failed to read image file';
+                } else {
+                    // encode image to base64
+                    $imageCode = base64_encode($fileContents);
 
-                // update profile picture
-                $userRepo->setProfilePic($imageCode);
+                    // update profile picture
+                    if ($userRepo !== null) {
+                        $userRepo->setProfilePic($imageCode);
+                    } else {
+                        $errorMsg = 'User not found';
+                    }
+                }
 
                 try {
                     // flush user data to database

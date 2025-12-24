@@ -6,6 +6,7 @@ use DateTime;
 use Exception;
 use App\Util\AppUtil;
 use App\Entity\Message;
+use App\Entity\Visitor;
 use App\Util\SecurityUtil;
 use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -44,17 +45,15 @@ class MessagesManager
     }
 
     /**
-     * Saves new message to the database
-     *
      * @param string $name The name of the sender
-     * @param string $email The email address of the sender
+     * @param string $email The email of the sender
      * @param string $messageInput The message input
      * @param string $ipAddress The IP address of the sender
-     * @param int $visitorId The ID of the visitor associated with the sender
+     * @param Visitor $visitor The visitor associated with the sender
      *
      * @return void
      */
-    public function saveMessage(string $name, string $email, string $messageInput, string $ipAddress, int $visitorId): void
+    public function saveMessage(string $name, string $email, string $messageInput, string $ipAddress, Visitor $visitor): void
     {
         $message = new Message();
 
@@ -71,7 +70,7 @@ class MessagesManager
             ->setTime(new DateTime())
             ->setIpAddress($ipAddress)
             ->setStatus('open')
-            ->setVisitorID($visitorId);
+            ->setVisitor($visitor);
 
         try {
             // insert new message to database
@@ -115,12 +114,12 @@ class MessagesManager
     }
 
     /**
-     * Get messages based on status and pagination
+     * Get messages by status
      *
-     * @param string $status The status of the messages
-     * @param int $page The page number
+     * @param string $status The status of messages to retrieve
+     * @param int $page The page number for pagination (default: 1)
      *
-     * @return array<array<int|string>>|null An array of messages if successful, or null if an error occurs
+     * @return list<array<string, mixed>>|null The list of messages filtered by status
      */
     public function getMessages(string $status, int $page): ?array
     {
@@ -155,8 +154,14 @@ class MessagesManager
                     'time' => $inboxMessage->getTime(),
                     'ip_address' => $inboxMessage->getIpAddress(),
                     'status' => $inboxMessage->getStatus(),
-                    'visitor_id' => $inboxMessage->getVisitorId()
                 ];
+
+                // add visitor only if it exists
+                if ($inboxMessage->getVisitor()) {
+                    $message['visitor'] = [
+                        'id' => $inboxMessage->getVisitor()->getId()
+                    ];
+                }
 
                 // add message to final list
                 array_push($messages, $message);

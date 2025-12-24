@@ -74,11 +74,15 @@
                                     <th scope='row'>{{ row.ipAddress|e }}</th>
                                     <th scope='row'>{{ row.browser|e }}</th>
                                 {% endif %}
-                                <th>
-                                    {% set result = row.visitorId / limitValue %}
-                                    {% set visitorPage = result | round(0, 'ceil') %}
-                                    <a class="db-delete-link text-warning" href="/admin/visitors?page={{ visitorPage }}#{{ row.visitorId|e }}">VISIT</a>
-                                </th>
+                                    <th>
+                                        {% if row.visitor is defined and row.visitor is not null %}
+                                            {% set result = row.visitor.id / limitValue %}
+                                            {% set visitorPage = result | round(0, 'ceil') %}
+                                            <a class="db-delete-link text-warning" href="{{ path('admin_visitor_manager', {'page': visitorPage}) }}#{{ row.visitor.id|e }}">VISIT</a>
+                                        {% else %}
+                                            <span>UNKNOWN</span>
+                                        {% endif %}
+                                    </th>
                                 <th>
                                     <form method="POST" action={{ path('admin_database_delete', {'table': 'logs', 'page': readerPage, 'id': row.id|e, 'referer': 'log_reader'}) }} style="display:inline;">
                                         <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>

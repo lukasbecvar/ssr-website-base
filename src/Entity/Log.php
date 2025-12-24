@@ -44,9 +44,9 @@ class Log
     #[ORM\Column(length: 255)]
     private ?string $status = null;
 
-    #[ORM\Column]
-    #[ORM\JoinColumn(name: "visitors", referencedColumnName: "id")]
-    private ?int $visitor_id = null;
+    #[ORM\ManyToOne(targetEntity: Visitor::class, inversedBy: 'logs')]
+    #[ORM\JoinColumn(name: "visitor_id", referencedColumnName: "id", nullable: true)]
+    private ?Visitor $visitor = null;
 
     /**
      * Get the log id
@@ -203,26 +203,39 @@ class Log
     }
 
     /**
-     * Get the visitor id
+     * Get the visitor
      *
-     * @return int|null The visitor id
+     * @return Visitor|null The visitor
      */
-    public function getVisitorId(): ?int
+    public function getVisitor(): ?Visitor
     {
-        return $this->visitor_id;
+        return $this->visitor;
     }
 
     /**
-     * Set the visitor id
+     * Set the visitor
      *
-     * @param int $visitor_id The visitor id
+     * @param Visitor|null $visitor The visitor
      *
      * @return static The log object
      */
-    public function setVisitorId(int $visitor_id): static
+    public function setVisitor(?Visitor $visitor): static
     {
-        $this->visitor_id = $visitor_id;
+        $this->visitor = $visitor;
 
         return $this;
+    }
+
+    /**
+     * Get visitor ID safely
+     *
+     * @return int The visitor ID (0 if null)
+     */
+    public function getVisitorIdSafe(): int
+    {
+        if ($this->visitor) {
+            return $this->visitor->getIdSafe();
+        }
+        return 0;
     }
 }

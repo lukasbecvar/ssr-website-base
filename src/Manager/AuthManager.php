@@ -161,19 +161,19 @@ class AuthManager
         // get current visitor ip address
         $ipAddress = $this->visitorInfoUtil->getIP();
 
-        // get visitor id
-        $visitorId = $this->visitorManager->getVisitorRepository($ipAddress)->getID();
-
         // get user data
         $user = $this->getUserRepository(['token' => $this->getUserToken()]);
+
+        // get visitor repository
+        $visitor = $this->visitorManager->getVisitorRepository($ipAddress);
 
         // check if user repo found
         if ($user != null) {
             // update last login time
             $user->setLastLoginTime(new DateTime());
 
-            // update visitor id
-            $user->setVisitorId($visitorId);
+            // update visitor
+            $user->setVisitor($visitor);
 
             try {
                 // flush updated user data to database
@@ -206,8 +206,8 @@ class AuthManager
         // generate token
         $token = ByteString::fromRandom(32)->toString();
 
-        // get visitor id
-        $visitorId = $this->visitorManager->getVisitorID($ipAddress);
+        // get visitor repository
+        $visitor = $this->visitorManager->getVisitorRepository($ipAddress);
 
         // password hash
         $hashedPassword = $this->securityUtil->generateHash($password);
@@ -224,7 +224,7 @@ class AuthManager
             ->setRegistedTime(new DateTime())
             ->setLastLoginTime(null)
             ->setProfilePic($imageBase64)
-            ->setVisitorId($visitorId);
+            ->setVisitor($visitor);
 
         try {
             // insert new user to database
@@ -545,6 +545,6 @@ class AuthManager
         }
 
         // get users associated with online visitor IDs
-        return $this->userRepository->findBy(['visitor_id' => $onlineVisitorIds]);
+        return $this->userRepository->findBy(['visitor' => $onlineVisitorIds]);
     }
 }

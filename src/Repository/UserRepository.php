@@ -46,7 +46,9 @@ class UserRepository extends ServiceEntityRepository
     public function getAllUsersWithVisitorId(): array
     {
         // build query
-        $queryBuilder = $this->createQueryBuilder('u')->select('u.username, u.role, u.visitor_id');
+        $queryBuilder = $this->createQueryBuilder('u')
+            ->select('u.username, u.role', 'IDENTITY(u.visitor) as visitor_id')
+            ->leftJoin('u.visitor', 'v');
         $query = $queryBuilder->getQuery();
 
         // return data array

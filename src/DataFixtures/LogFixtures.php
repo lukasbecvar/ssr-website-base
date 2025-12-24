@@ -4,8 +4,10 @@ namespace App\DataFixtures;
 
 use DateTime;
 use App\Entity\Log;
+use App\Entity\Visitor;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 /**
  * Class LogFixtures
@@ -14,8 +16,15 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
  *
  * @package App\DataFixtures
  */
-class LogFixtures extends Fixture
+class LogFixtures extends Fixture implements DependentFixtureInterface
 {
+    public function getDependencies(): array
+    {
+        return [
+            VisitorFixtures::class
+        ];
+    }
+
     /**
      * Load log fixtures into the database
      *
@@ -166,7 +175,7 @@ class LogFixtures extends Fixture
                 ->setIpAddress($logData['ip_address'])
                 ->setBrowser($logData['browser'])
                 ->setStatus($logData['status'])
-                ->setVisitorId($logData['visitor_id']);
+                ->setVisitor($manager->getRepository(Visitor::class)->find($logData['visitor_id']));
 
             // persist the log object
             $manager->persist($log);

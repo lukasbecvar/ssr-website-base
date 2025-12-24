@@ -4,10 +4,12 @@ namespace App\DataFixtures;
 
 use DateTime;
 use App\Entity\User;
+use App\Entity\Visitor;
 use App\Util\SecurityUtil;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\String\ByteString;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 
 /**
  * Class UserFixtures
@@ -16,13 +18,20 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
  *
  * @package App\DataFixtures
  */
-class UserFixtures extends Fixture
+class UserFixtures extends Fixture implements DependentFixtureInterface
 {
     private SecurityUtil $securityUtil;
 
     public function __construct(SecurityUtil $securityUtil)
     {
         $this->securityUtil = $securityUtil;
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            VisitorFixtures::class,
+        ];
     }
 
     /**
@@ -44,7 +53,7 @@ class UserFixtures extends Fixture
             ->setRegistedTime(new DateTime('2023-03-22 12:00:00'))
             ->setLastLoginTime(null)
             ->setProfilePic('non-pic')
-            ->setVisitorId(1);
+            ->setVisitor($manager->getRepository(Visitor::class)->find(1));
 
         // persist test user object
         $manager->persist($testUser);
@@ -65,7 +74,7 @@ class UserFixtures extends Fixture
                 ->setRegistedTime(new DateTime('23-06-14 13:55:41'))
                 ->setLastLoginTime(null)
                 ->setProfilePic('profile_pic')
-                ->setVisitorId($i);
+                ->setVisitor($manager->getRepository(Visitor::class)->find($i));
 
             // persist user entity
             $manager->persist($user);

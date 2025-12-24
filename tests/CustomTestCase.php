@@ -4,6 +4,7 @@ namespace App\Tests;
 
 use DateTime;
 use App\Entity\User;
+use App\Entity\Visitor;
 use App\Manager\AuthManager;
 use Symfony\Component\BrowserKit\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,7 +42,10 @@ class CustomTestCase extends WebTestCase
         $user->setRegistedTime(new DateTime());
         $user->setLastLoginTime(null);
         $user->setProfilePic('image');
-        $user->setVisitorId(1);
+
+        // mock visitor for testing purposes
+        $visitor = $this->createMock(Visitor::class);
+        $user->setVisitor($visitor);
 
         // create a mock of AuthManager
         $authManager = $this->createMock(AuthManager::class);

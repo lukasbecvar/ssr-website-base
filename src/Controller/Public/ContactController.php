@@ -108,21 +108,21 @@ class ContactController extends AbstractController
             } elseif (isset($honeypot)) {
                 $errorMsg = 'contact.error.blocked.message';
             } else {
-                // get others data
-                $visitorId = $this->visitorManager->getVisitorID($ipAddress);
+                // get visitor
+                $visitor = $this->visitorManager->getVisitorRepository($ipAddress);
 
                 // check if user have unclosed messages
                 if ($this->messagesManager->getMessageCountByIpAddress($ipAddress) >= 5) {
                     $this->logManager->log(
                         name: 'message-sender',
-                        message: 'visitor: ' . $visitorId . ' trying send new message but he has open messages'
+                        message: 'visitor: ' . $visitor->getId() . ' trying send new message but he has open messages'
                     );
 
                     // redirect back to from & handle limit reached error status
                     return $this->redirectToRoute('public_contact', ['status' => 'reached']);
                 } else {
                     // save message to database
-                    $this->messagesManager->saveMessage($name, $email, $messageInput, $ipAddress, $visitorId);
+                    $this->messagesManager->saveMessage($name, $email, $messageInput, $ipAddress, $visitor);
 
                     // redirect back to from & handle ok status
                     return $this->redirectToRoute('public_contact', ['status' => 'ok']);

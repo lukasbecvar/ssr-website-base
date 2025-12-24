@@ -16,9 +16,13 @@
                     <div class='inbox-message'>
                         <div class="inbox-message-header">
                             <div class="inbox-message-info">
-                                {% set result = message.visitor_id / messageLimit %}
-                                {% set visitorPage = result | round(0, 'ceil') %}
-                                <a href={{ path('admin_visitor_manager', {'page': visitorPage}) }}#{{ message.visitor_id|e }} class="inbox-message-name">{{ message.name|e }}</a>
+                                {% if message.visitor is defined %}
+                                    {% set result = message.visitor.id / messageLimit %}
+                                    {% set visitorPage = result | round(0, 'ceil') %}
+                                    <a href={{ path('admin_visitor_manager', {'page': visitorPage}) }}#{{ message.visitor.id|e }} class="inbox-message-name">{{ message.name|e }}</a>
+                                {% else %}
+                                    <span class="inbox-message-name">{{ message.name|e }}</span>
+                                {% endif %}
                                 <div class="inbox-message-meta">
                                     <span class="inbox-message-time">
                                         <i class="bi bi-clock"></i> {{ message.time|date('Y-m-d H:i:s')|e }}
@@ -32,19 +36,22 @@
                                 </div>
                             </div>
                             <div class="inbox-message-actions">
-                                {# BAN/UNBAN button #}
-                                {% if banManager.isVisitorBanned(message.ip_address) %}
-                                    <form method="POST" action={{ path('admin_visitor_unban', {'page': page, 'id': message.visitor_id|e, 'referer': 'inbox'}) }} style="display:inline;" title="Unban visitor">
-                                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
-                                        <button type="submit" class="inbox-action-btn inbox-action-unban">
-                                            <i class="bi bi-shield-check"></i>
-                                        </button>
-                                    </form>
-                                {% else %}
-                                    <a class='inbox-action-btn inbox-action-ban' href={{ path('admin_visitor_ban', {'page': page, 'id':  message.visitor_id|e, 'referer': 'inbox'}) }} title="Ban visitor">
-                                        <i class="bi bi-ban"></i>
-                                    </a>
+                                {# BAN/UNBAN button - only show if visitor exists #}
+                                {% if message.visitor is defined %}
+                                    {% if banManager.isVisitorBanned(message.ip_address) %}
+                                        <form method="POST" action={{ path('admin_visitor_unban', {'page': page, 'id': message.visitor.id|e, 'referer': 'inbox'}) }} style="display:inline;" title="Unban visitor">
+                                            <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                            <button type="submit" class="inbox-action-btn inbox-action-unban">
+                                                <i class="bi bi-shield-check"></i>
+                                            </button>
+                                        </form>
+                                    {% else %}
+                                        <a class='inbox-action-btn inbox-action-ban' href={{ path('admin_visitor_ban', {'page': page, 'id': message.visitor.id|e, 'referer': 'inbox'}) }} title="Ban visitor">
+                                            <i class="bi bi-ban"></i>
+                                        </a>
+                                    {% endif %}
                                 {% endif %}
+                                {# CLOSE MESSAGE BUTTON #}
                                 <form method="POST" action={{ path('admin_inbox_close', {'page': page, 'id': message.id|e}) }} style="display:inline;" title="Close message">
                                     <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
                                     <button type="submit" class="inbox-action-btn inbox-action-close">
