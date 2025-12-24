@@ -138,7 +138,7 @@ class VisitorRepository extends ServiceEntityRepository
      * @param string $period The time period for which to retrieve the visitor count. Valid values are 'last_24_hours', 'last_week', 'last_month', 'last_year', and 'all_time'
      *
      * @throws InvalidArgumentException If an invalid period is specified
-     * 
+     *
      * @return array<string,int> An associative array where the key is the date (formatted based on the period) and the value is the count of visitors for that date
      */
     public function getVisitorsCountByPeriod(string $period): array
