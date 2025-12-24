@@ -333,7 +333,6 @@ class DatabaseManager
      * @param array<mixed> $values The array of values corresponding to the columns
      *
      * @return void
-     * @throws Exception When foreign key validation fails
      */
     public function addNew(string $tableName, array $columns, array $values): void
     {
@@ -375,7 +374,7 @@ class DatabaseManager
      * @param array<string> $columns The array of column names
      * @param array<mixed> $values The array of values corresponding to the columns
      *
-     * @throws Exception When foreign key validation fails
+     * @return void
      */
     private function validateForeignKeys(string $tableName, array $columns, array $values): void
     {
@@ -527,8 +526,6 @@ class DatabaseManager
      * @param string|int|null $value The new value to be set
      * @param int $id The unique identifier of the row
      *
-     * @throws Exception When foreign key validation fails
-     *
      * @return void
      */
     public function updateValue(string $tableName, string $row, string|int|null $value, int $id): void
@@ -568,7 +565,7 @@ class DatabaseManager
      * @param string $columnName The column name being updated
      * @param string|int|null $value The new value
      *
-     * @throws Exception When foreign key validation fails
+     * @return void
      */
     private function validateSingleForeignKey(string $tableName, string $columnName, string|int|null $value): void
     {

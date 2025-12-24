@@ -5,6 +5,7 @@ namespace App\Repository;
 use DateTime;
 use DateInterval;
 use App\Entity\Visitor;
+use Doctrine\DBAL\Exception;
 use InvalidArgumentException;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -134,89 +135,81 @@ class VisitorRepository extends ServiceEntityRepository
     /**
      * Get count of visitors grouped by date based on the specified time period
      *
-     * @param string $period The time period for which to retrieve the visitor count.
-     *               Valid values are 'last_24_hours', 'last_week', 'last_month', 'last_year', and 'all_time'
-     *
-     * @return array<string,int> An associative array where the key is the date (formatted based on the period)
-     *               and the value is the count of visitors for that date
+     * @param string $period The time period for which to retrieve the visitor count. Valid values are 'last_24_hours', 'last_week', 'last_month', 'last_year', and 'all_time'
      *
      * @throws InvalidArgumentException If an invalid period is specified
+     * 
+     * @return array<string,int> An associative array where the key is the date (formatted based on the period) and the value is the count of visitors for that date
      */
     public function getVisitorsCountByPeriod(string $period): array
     {
-        $qb = $this->createQueryBuilder('v');
+        $startDate = null;
+        $dateFormat = '';
+        $params = [];
 
-        // select data where period
         switch ($period) {
             case 'last_24_hours':
-                $qb->select('v.last_visit AS visitDate')
-                   ->where('v.last_visit >= :startDate')
-                   ->setParameter('startDate', new DateTime('-24 hours'));
+                $startDate = new DateTime('-24 hours');
+                $dateFormat = 'HOUR(last_visit)'; // group by hour
                 break;
-
             case 'last_week':
-                $qb->select('v.last_visit AS visitDate')
-                   ->where('v.last_visit >= :startDate')
-                   ->setParameter('startDate', new DateTime('-7 days'));
+                $startDate = new DateTime('-7 days');
+                $dateFormat = "DATE_FORMAT(last_visit, '%m/%d')"; // group by month/day
                 break;
-
             case 'last_month':
-                $qb->select('v.last_visit AS visitDate')
-                   ->where('v.last_visit >= :startDate')
-                   ->setParameter('startDate', new DateTime('-1 month'));
+                $startDate = new DateTime('-1 month');
+                $dateFormat = "DATE_FORMAT(last_visit, '%m/%d')"; // group by month/day
                 break;
-
             case 'last_year':
-                $qb->select('v.last_visit AS visitDate')
-                   ->where('v.last_visit >= :startDate')
-                   ->setParameter('startDate', new DateTime('-1 year'));
+                $startDate = new DateTime('-1 year');
+                $dateFormat = "DATE_FORMAT(last_visit, '%Y/%m')"; // group by year/month
                 break;
-
             case 'all_time':
-                $qb->select('v.last_visit AS visitDate');
+                $dateFormat = "DATE_FORMAT(last_visit, '%Y/%m')"; // group by year/month
                 break;
             default:
                 throw new InvalidArgumentException('Invalid period specified.');
         }
 
-        // get results
-        $results = $qb->getQuery()->getResult();
+        $sql = "SELECT {$dateFormat} AS visitDate, COUNT(id) AS visitorCount FROM visitors";
 
-        // format view date results
-        $visitorCounts = [];
-        foreach ($results as $result) {
-            $date = $result['visitDate'];
-            switch ($period) {
-                case 'last_24_hours':
-                    $dateKey = $date->format('H');
-                    break;
-                case 'last_week':
-                    $dateKey = $date->format('m/d');
-                    break;
-                case 'last_month':
-                    $dateKey = $date->format('m/d');
-                    break;
-                case 'last_year':
-                    $dateKey = $date->format('Y/m');
-                    break;
-                case 'all_time':
-                    $dateKey = $date->format('Y/m');
-                    break;
-            }
-            if (!isset($visitorCounts[$dateKey])) {
-                $visitorCounts[$dateKey] = 0;
-            }
-            $visitorCounts[$dateKey]++;
+        if ($startDate !== null) {
+            $sql .= " WHERE last_visit >= :startDate";
+            $params['startDate'] = $startDate->format('Y-m-d H:i:s');
         }
 
-        // set not found visitors count to 0
+        $sql .= " GROUP BY visitDate ORDER BY visitDate ASC";
+
+        try {
+            $connection = $this->getEntityManager()->getConnection();
+            $results = $connection->executeQuery($sql, $params)->fetchAllAssociative();
+        } catch (Exception $e) {
+            throw new InvalidArgumentException('Database query failed: ' . $e->getMessage());
+        }
+
+        $visitorCounts = [];
+        foreach ($results as $result) {
+            $visitorCounts[$result['visitDate']] = (int) $result['visitorCount'];
+        }
+
+        // special handling for 'last_24_hours' to ensure all 24 hours are present and have string keys
         if ($period === 'last_24_hours') {
-            $visitorsCountByHour = [];
+            $allHours = [];
+            // initialize all 24 hours with 0, ensuring string keys '00' through '23'
             for ($i = 0; $i < 24; $i++) {
-                $hourKey = (new DateTime("-{$i} hours"))->format('H');
-                $visitorsCountByHour[$hourKey] = $visitorCounts[$hourKey] ?? 0;
+                $hourString = str_pad((string) $i, 2, '0', STR_PAD_LEFT); // '00', '01', ..., '23'
+                $allHours[$hourString] = 0;
             }
-            return $visitorsCountByHour;
+
+            // populate with actual counts, converting integer DB hour keys to '00' format strings
+            foreach ($visitorCounts as $dbHourInt => $count) {
+                $hourString = str_pad((string) $dbHourInt, 2, '0', STR_PAD_LEFT);
+                $allHours[$hourString] = $count;
+            }
+
+            // sort by key (hour number) to ensure correct chronological order
+            ksort($allHours);
+            return $allHours;
         }
 
         return $visitorCounts;
