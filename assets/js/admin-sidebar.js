@@ -1,7 +1,7 @@
 /* admin sidebar script */
-ocument.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const body = document.body
-    const hamburger = document.querySelector(".hamburger")
+    const hamburger = document.getElementById("menu-button")
     const defaultState = body.dataset.sidebarDefault || "closed"
 
     if (!hamburger) {
