@@ -1,4 +1,4 @@
-# define base php-apache image (dev environment) 
+# base php-apache image
 FROM php:8.5-apache
 
 # set container working directory
@@ -7,7 +7,7 @@ WORKDIR /var/www
 # install required packages
 RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
-    libfreetype6-dev \ 
+    libfreetype6-dev \
     libicu-dev \
     libpng-dev \
     rpm

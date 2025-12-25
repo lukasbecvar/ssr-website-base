@@ -39,8 +39,7 @@ jobs:
       # create release asset archive without unnecessary files
       - name: Create release archive
         run: |
-          tar --warning=no-file-changed -czf ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz \
-            . || true
+          tar --warning=no-file-changed -czf ${{ github.event.repository.name }}-${{ github.ref_name }}.tar.gz . || true
 
       # upload release asset archive
       - name: Upload release asset

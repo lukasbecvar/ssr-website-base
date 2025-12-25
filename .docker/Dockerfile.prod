@@ -4,7 +4,7 @@ FROM php:8.5-apache
 # set container working directory
 WORKDIR /var/www
 
-# copy project file to image
+# copy project to image
 COPY . /var/www/
 COPY .docker/configs/php.ini /usr/local/etc/php/php.ini
 COPY .docker/configs/apache-site.conf /etc/apache2/sites-available/000-default.conf
@@ -12,7 +12,7 @@ COPY .docker/configs/apache-site.conf /etc/apache2/sites-available/000-default.c
 # install required packages
 RUN apt-get update && apt-get install -y \
     libjpeg62-turbo-dev \
-    libfreetype6-dev \ 
+    libfreetype6-dev \
     libicu-dev \
     libpng-dev \
     rpm

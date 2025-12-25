@@ -1,4 +1,4 @@
-# publisher for building and publishing docker image to github packages container registry
+# publisher for building and publishing docker image to github packages registry
 name: Publish Docker Image
 
 on:
@@ -48,5 +48,5 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/basic-website-template:${{ github.event.release.tag_name }}
-            ghcr.io/${{ github.repository_owner }}/basic-website-template:latest
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:${{ github.event.release.tag_name }}
+            ghcr.io/${{ github.repository_owner }}/${{ github.event.repository.name }}:latest
