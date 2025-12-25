@@ -7,6 +7,7 @@
 {# DATABASE BROWSER COMPONENT #}
 {% block component %}
 <div class="admin-panel database-panel">
+    {# PERMISSION CHECK #}
     {% if getUserRole() != 'Owner' and getUserRole() != 'Admin' %}
         {% include "admin/element/navigation/no-permission.twig" %}
     {% else %}
