@@ -25,7 +25,7 @@ doctrine:
                 prefix: 'App\Entity'
                 alias: App
 
-# doctrine cache config
+# doctrine cache
 when@prod:
     doctrine:
         orm:

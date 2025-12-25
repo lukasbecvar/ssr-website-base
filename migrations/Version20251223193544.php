@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Class Version20251223193544
  * 
- * The database schema migration
+ * The default database schema migration
  * 
  * @package DoctrineMigrations
  */

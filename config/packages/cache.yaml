@@ -4,7 +4,7 @@ framework:
         app: cache.adapter.filesystem
         system: cache.adapter.system
 
-        # other cache adapters
+        # doctrine cache adapters
         pools:
             doctrine.result_cache_pool:
                 adapter: cache.app
