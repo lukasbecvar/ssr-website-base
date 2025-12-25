@@ -11,6 +11,7 @@ config/reference.php
 
 # composer files
 /vendor/
+/composer.lock
 
 # node files
 /node_modules/
