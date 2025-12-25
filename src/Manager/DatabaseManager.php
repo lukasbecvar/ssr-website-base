@@ -468,10 +468,6 @@ class DatabaseManager
                             UPDATE {$refTable} SET {$refColumn} = NULL 
                             WHERE {$refColumn} IS NOT NULL
                         ");
-                        $this->logManager->log(
-                            name: 'database',
-                            message: 'Soft cascade: Set NULL in ' . $refTable . '.' . $refColumn . ' before deleting all ' . $tableName
-                        );
                     }
                 }
 
@@ -485,10 +481,6 @@ class DatabaseManager
                             UPDATE {$refTable} SET {$refColumn} = NULL 
                             WHERE {$refColumn} = ?
                         ", [$id]);
-                        $this->logManager->log(
-                            name: 'database',
-                            message: 'Soft cascade: Set NULL in ' . $refTable . '.' . $refColumn . ' where ' . $refColumn . ' = ' . $id
-                        );
                     }
                 }
 

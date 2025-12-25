@@ -1,14 +1,15 @@
+/* account settings page script */
 document.addEventListener('DOMContentLoaded', function() {
     // profile picture upload logic
-    const wrapper = document.querySelector('.settings-form--pic-upload')
+    const wrapper = document.querySelector('.settings-form-pic-upload')
     
     if (wrapper) {
         const picInputId = wrapper.dataset.inputId
         const picInput = document.getElementById(picInputId)
-        const previewContainer = document.getElementById('pic-preview-container')
-        const removeBtn = document.getElementById('pic-remove-btn')
-        const picPreview = document.getElementById('pic-preview')
         const dropzone = document.getElementById('pic-dropzone')
+        const picPreview = document.getElementById('pic-preview')
+        const removeBtn = document.getElementById('pic-remove-btn')
+        const previewContainer = document.getElementById('pic-preview-container')
 
         if (picInput && previewContainer && picPreview && removeBtn && dropzone) {
             
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // when the remove button is clicked
             removeBtn.addEventListener('click', function() {
-                picInput.value = '' // Clear the file input
+                picInput.value = '' // clear the file input
                 picPreview.src = '#'
                 previewContainer.style.display = 'none'
                 dropzone.style.display = 'flex'

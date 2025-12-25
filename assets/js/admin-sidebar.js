@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', function () {
+/* admin sidebar script */
+ocument.addEventListener('DOMContentLoaded', function () {
     const body = document.body
     const hamburger = document.querySelector(".hamburger")
     const defaultState = body.dataset.sidebarDefault || "closed"

@@ -1,3 +1,4 @@
+/* dashboard page script */
 document.addEventListener('DOMContentLoaded', () => {
     const divElement = document.getElementById('wrarning-box')
     const elements = document.getElementById('wraning-elements')

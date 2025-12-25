@@ -1,3 +1,4 @@
+/* database browser page script */
 document.addEventListener('DOMContentLoaded', function() {
     // check if hash in the URL is set (coming from foreign key link)
     if (window.location.hash) {

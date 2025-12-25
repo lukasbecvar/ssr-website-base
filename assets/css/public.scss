@@ -1,23 +1,24 @@
+/* public page style (exmple styles) */
 @use "sass:color";
 
 // colors
+$accent-color: #63b3ed;
+$border-color: #4a5568;
 $primary-dark-bg: #1a202c;
 $secondary-dark-bg: #2d3748;
 $primary-text-color: #e2e8f0;
 $secondary-text-color: #a0aec0;
-$accent-color: #63b3ed;
-$border-color: #4a5568;
 $focus-ring-color: rgba(99, 179, 237, 0.4);
 
 // fonts
-$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 $font-size-base: 1rem;
 $line-height-base: 1.6;
+$font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 
 // spacing
 $spacing-unit: 1rem;
-$border-radius-base: 0.375rem;
 $border-radius-lg: 0.5rem;
+$border-radius-base: 0.375rem;
 
 * {
     margin: 0;
@@ -26,11 +27,11 @@ $border-radius-lg: 0.5rem;
 }
 
 body {
-    font-family: $font-family-sans-serif;
+    color: $primary-text-color;
     font-size: $font-size-base;
     line-height: $line-height-base;
     background-color: $primary-dark-bg;
-    color: $primary-text-color;
+    font-family: $font-family-sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6, p, span, li, label, small, a {
@@ -51,9 +52,6 @@ main {
     max-width: 1200px;
 }
 
-// -------------------------------------------------------------
-// Components Styling
-// -------------------------------------------------------------
 .navbar {
     background-color: color.adjust($primary-dark-bg, $lightness: -5%) !important;
     border-bottom: 1px solid rgba(74, 85, 104, 0.5);

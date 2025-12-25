@@ -1,3 +1,4 @@
+/* visitors manager page script */
 document.addEventListener('DOMContentLoaded', function() {
     const timePeriodSelect = document.getElementById('time-period')
     

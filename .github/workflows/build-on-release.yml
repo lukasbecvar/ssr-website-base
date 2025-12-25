@@ -1,3 +1,4 @@
+# build website dependencies and attach archive on release (release for production)
 name: Build & Attach archive on release
 
 on:
