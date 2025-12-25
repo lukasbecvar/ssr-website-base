@@ -23,7 +23,7 @@ class UserRepository extends ServiceEntityRepository
     }
 
     /**
-     * Get user by token
+     * Get user entity by token
      *
      * @param string $token The user token
      *

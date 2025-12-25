@@ -45,6 +45,8 @@ class MessagesManager
     }
 
     /**
+     * Save message to inbox database
+     *
      * @param string $name The name of the sender
      * @param string $email The email of the sender
      * @param string $messageInput The message input

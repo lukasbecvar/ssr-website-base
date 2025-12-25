@@ -15,7 +15,7 @@ Encore
     .addEntry('bootstrap-css', './node_modules/bootstrap/dist/css/bootstrap.css')
     .addEntry('fontawesome-css', './node_modules/@fortawesome/fontawesome-free/css/all.css')
     .addEntry('bootstrap-icons-css', './node_modules/bootstrap-icons/font/bootstrap-icons.css')
-    
+
     // register js assets
     .addEntry('dashboard-js', './assets/js/dashboard.js')
     .addEntry('page-loading-js', './assets/js/page-loading.js')

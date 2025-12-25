@@ -97,7 +97,6 @@ class DatabaseBrowserController extends AbstractController
     #[Route('/admin/database/edit', methods: ['GET', 'POST'], name: 'admin_database_edit')]
     public function rowEdit(Request $request): Response
     {
-        // init error message variable
         $errorMsg = null;
 
         // get query parameters
@@ -206,7 +205,6 @@ class DatabaseBrowserController extends AbstractController
     #[Route('/admin/database/add', methods: ['GET', 'POST'], name: 'admin_database_add')]
     public function rowAdd(Request $request): Response
     {
-        // init error message variable
         $errorMsg = null;
 
         // get query parameters
@@ -279,7 +277,7 @@ class DatabaseBrowserController extends AbstractController
                         continue; // skip unknown columns
                     }
 
-                    $submittedValues[$column] = $columnValue; // Store submitted value
+                    $submittedValues[$column] = $columnValue; // store submitted value
 
                     // check if value is empty (special handling for nullable and boolean fields)
                     if ($this->databaseManager->isEmptyValue($columnValue, $columnType)) {

@@ -17,7 +17,7 @@ services:
             - main
         command: composer install --ignore-platform-reqs
     
-    # node service for frontend assets
+    # node service for building frontend assets
     node:
         image: node:latest
         container_name: website_node
@@ -54,6 +54,7 @@ services:
         restart: always
         depends_on:
             - mysql
+            - node
         environment:
             - DATABASE_DRIVER=pdo_mysql
             - DATABASE_HOST=mysql

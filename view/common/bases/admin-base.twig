@@ -31,34 +31,34 @@
 {% set current_path = app.request is defined ? app.request.pathinfo : '' %}
 {% set is_dashboard_page = current_path starts with '/admin/dashboard' %}
 <body class="{% if not is_dashboard_page %}active{% endif %}" data-sidebar-default="{{ is_dashboard_page ? 'open' : 'closed' }}">
-<div id="loader-wrapper">
-    <div id="loader"></div>
-</div>
-<main class="admin-page" id="content"> 
-    <div class="wrapper">
-        <div class="section">
-            <div class="top-navbar">
-                <div class="hamburger">
-                    <span class="menu-button" id="menu-button"><span class="menu-text" title="open/close sidebar">Menu</span><i class="fas fa-bars"></i></span>
-                    <form method="POST" action={{ path('auth_logout') }}>
-                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
-                        <button type="submit" class="logout-link menu-button" title="User logout">
-                            <i class="fas fa-sign-out-alt"></i>
-                        </button>
-                    </form>
-                </div>
-            </div>
-            {# INCLUDE SIDEBAR NAVIGATION #}
-            {% include 'admin/element/sidebar.twig' %}
-
-            {# MAIN ADMIN COMPONENT WRAPPER #}
-            {% block component %}{% endblock %}
-        </div>
+    <div id="loader-wrapper">
+        <div id="loader"></div>
     </div>
-</main>
-{# INCLUDE JAVASCRIPT ASSETS #}
-{{ encore_entry_script_tags('page-loading-js') }}
-{{ encore_entry_script_tags('admin-sidebar-js') }}
-{{ encore_entry_script_tags('update-visitor-status-js') }}
-</body>
+    <main class="admin-page" id="content"> 
+        <div class="wrapper">
+            <div class="section">
+                <div class="top-navbar">
+                    <div class="hamburger">
+                        <span class="menu-button" id="menu-button"><span class="menu-text" title="open/close sidebar">Menu</span><i class="fas fa-bars"></i></span>
+                        <form method="POST" action={{ path('auth_logout') }}>
+                            <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                            <button type="submit" class="logout-link menu-button" title="User logout">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+                {# INCLUDE SIDEBAR NAVIGATION #}
+                {% include 'admin/element/sidebar.twig' %}
+
+                {# MAIN ADMIN COMPONENT WRAPPER #}
+                {% block component %}{% endblock %}
+            </div>
+        </div>
+    </main>
+    {# INCLUDE JAVASCRIPT ASSETS #}
+    {{ encore_entry_script_tags('page-loading-js') }}
+    {{ encore_entry_script_tags('admin-sidebar-js') }}
+    {{ encore_entry_script_tags('update-visitor-status-js') }}
+    </body>
 </html>

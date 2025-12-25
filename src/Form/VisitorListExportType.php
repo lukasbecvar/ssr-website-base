@@ -38,18 +38,18 @@ class VisitorListExportType extends AbstractType
                     'Last Year' => 'Y',
                     'All Time' => 'ALL'
                 ],
+                'required' => true,
                 'label' => 'Select Time Period: ',
-                'placeholder' => 'Select a time period',
-                'required' => true
+                'placeholder' => 'Select a time period'
             ])
             ->add('format', ChoiceType::class, [
                 'choices' => [
                     'PDF' => 'PDF',
                     'EXCEL' => 'EXCEL'
                 ],
+                'required' => true,
                 'label' => 'Select export format: ',
-                'placeholder' => 'Select export format',
-                'required' => true
+                'placeholder' => 'Select export format'
             ])
         ;
     }

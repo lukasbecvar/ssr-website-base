@@ -113,6 +113,16 @@ class AppUtil
     }
 
     /**
+     * Check if assets exist
+     *
+     * @return bool True if assets exist, false otherwise
+     */
+    public function isAssetsExist(): bool
+    {
+        return file_exists($this->getAppRootDir() . '/public/build/');
+    }
+
+    /**
      * Check if connection is secure (SSL)
      *
      * @return bool Whether the connection is secure

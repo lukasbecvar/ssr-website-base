@@ -5,11 +5,12 @@ namespace App\Middleware;
 use App\Util\AppUtil;
 use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
  * Class SecurityCheckMiddleware
  *
- * Middleware for check security rules
+ * Middleware for checking security rules
  *
  * @package App\Middleware
  */
@@ -25,18 +26,28 @@ class SecurityCheckMiddleware
     }
 
     /**
-     * Check if connection is secure
+     * Handle security rules check
+     *
+     * @param RequestEvent $event The request event
      *
      * @return void
      */
-    public function onKernelRequest(): void
+    public function onKernelRequest(RequestEvent $event): void
     {
-        // check if SSL check enabled
+        // check if SSL only enabled
         if ($this->appUtil->isSSLOnly() && !$this->appUtil->isSsl()) {
-            $this->errorManager->handleError(
-                msg: 'SSL error: connection not running on ssl protocol',
-                code: Response::HTTP_UPGRADE_REQUIRED
-            );
+            // handle debug mode exception
+            if ($this->appUtil->isDevMode()) {
+                $this->errorManager->handleError(
+                    msg: 'ssl is required to access this site.',
+                    code: Response::HTTP_UPGRADE_REQUIRED
+                );
+            }
+
+            // return error response
+            $content = $this->errorManager->getErrorView(Response::HTTP_UPGRADE_REQUIRED);
+            $response = new Response($content, Response::HTTP_UPGRADE_REQUIRED);
+            $event->setResponse($response);
         }
     }
 }

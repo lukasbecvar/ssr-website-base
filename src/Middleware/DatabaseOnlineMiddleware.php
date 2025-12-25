@@ -3,44 +3,66 @@
 namespace App\Middleware;
 
 use Exception;
-use App\Manager\ErrorManager;
+use App\Util\AppUtil;
+use Psr\Log\LoggerInterface;
 use Doctrine\DBAL\Connection;
+use App\Manager\ErrorManager;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 /**
  * Class DatabaseOnlineMiddleware
  *
- * Middleware for checking if database is online
+ * Middleware for checking database connection
  *
  * @package App\Middleware
  */
 class DatabaseOnlineMiddleware
 {
+    private AppUtil $appUtil;
+    private Connection $connection;
+    private LoggerInterface $logger;
     private ErrorManager $errorManager;
-    private Connection $doctrineConnection;
 
-    public function __construct(ErrorManager $errorManager, Connection $doctrineConnection)
-    {
+    public function __construct(
+        AppUtil $appUtil,
+        Connection $connection,
+        LoggerInterface $logger,
+        ErrorManager $errorManager
+    ) {
+        $this->logger = $logger;
+        $this->appUtil = $appUtil;
+        $this->connection = $connection;
         $this->errorManager = $errorManager;
-        $this->doctrineConnection = $doctrineConnection;
     }
 
     /**
-     * Check if database is online
+     * Check database connection status
+     *
+     * @param RequestEvent $event The request event
      *
      * @return void
      */
-    public function onKernelRequest(): void
+    public function onKernelRequest(RequestEvent $event): void
     {
         try {
             // select for connection try
-            $this->doctrineConnection->executeQuery('SELECT 1');
+            $this->connection->executeQuery('SELECT 1');
         } catch (Exception $e) {
-            // handle error if database not connected
-            $this->errorManager->handleError(
-                msg: 'database connection error: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
+            // handle debug mode exception
+            if ($this->appUtil->isDevMode()) {
+                $this->errorManager->handleError(
+                    msg: 'database connection error: ' . $e->getMessage(),
+                    code: Response::HTTP_INTERNAL_SERVER_ERROR
+                );
+            } else {
+                $this->logger->error('database connection error: ' . $e->getMessage());
+            }
+
+            // return error response
+            $content = $this->errorManager->getErrorView(Response::HTTP_INTERNAL_SERVER_ERROR);
+            $response = new Response($content, Response::HTTP_INTERNAL_SERVER_ERROR);
+            $event->setResponse($response);
         }
     }
 }

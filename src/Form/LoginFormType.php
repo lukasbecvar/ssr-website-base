@@ -52,8 +52,8 @@ class LoginFormType extends AbstractType
                     'value' => $defaultValue
                 ],
                 'mapped' => true,
-                'constraints' => new NotBlank(message: 'Please enter a username'),
-                'translation_domain' => false
+                'translation_domain' => false,
+                'constraints' => new NotBlank(message: 'Please enter a username')
             ])
             ->add('password', PasswordType::class, [
                 'label' => false,
@@ -63,17 +63,17 @@ class LoginFormType extends AbstractType
                     'value' => $defaultValue
                 ],
                 'mapped' => true,
-                'constraints' => new NotBlank(message: 'Please enter a password'),
-                'translation_domain' => false
+                'translation_domain' => false,
+                'constraints' => new NotBlank(message: 'Please enter a password')
             ])
             ->add('remember', CheckboxType::class, [
                 'label' => 'Remember me',
                 'attr' => [
                     'class' => 'checkbox'
                 ],
-                'mapped' => false,
+                'translation_domain' => false,
                 'required' => false,
-                'translation_domain' => false
+                'mapped' => false
             ])
         ;
     }

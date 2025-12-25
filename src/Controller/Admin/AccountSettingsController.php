@@ -72,7 +72,6 @@ class AccountSettingsController extends AbstractController
     #[Route('/admin/account/settings/pic', methods: ['GET', 'POST'], name: 'admin_account_settings_pic_change')]
     public function accountSettingsPicChange(Request $request): Response
     {
-        // init default resources
         $errorMsg = null;
         $user = new User();
 
@@ -145,7 +144,6 @@ class AccountSettingsController extends AbstractController
     #[Route('/admin/account/settings/username', methods: ['GET', 'POST'], name: 'admin_account_settings_username_change')]
     public function accountSettingsUsernameChange(Request $request): Response
     {
-        // init default resources
         $errorMsg = null;
         $user = new User();
 
@@ -198,7 +196,6 @@ class AccountSettingsController extends AbstractController
     #[Route('/admin/account/settings/password', methods: ['GET', 'POST'], name: 'admin_account_settings_password_change')]
     public function accountSettingsPasswordChange(Request $request): Response
     {
-        // init default resources
         $errorMsg = null;
         $user = new User();
 
@@ -276,10 +273,10 @@ class AccountSettingsController extends AbstractController
         } else {
             // render error message
             return $this->render('admin/account-settings.twig', [
+                'errorMsg' => 'Failed to reset authentication token: ' . $resetState['message'],
                 'profilePicChangeForm' => null,
                 'usernameChangeForm' => null,
-                'passwordChangeForm' => null,
-                'errorMsg' => 'Failed to reset authentication token: ' . $resetState['message']
+                'passwordChangeForm' => null
             ]);
         }
     }

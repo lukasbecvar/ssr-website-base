@@ -15,6 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
  * Class RegisterController
  *
  * Register controller provides user register functionality
+ *
  * Note: Login uses custom authenticator (not Symfony security)
  * Note: This functionality is enabled only if users table is empty or admin users
  *

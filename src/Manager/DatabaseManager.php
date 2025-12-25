@@ -119,8 +119,8 @@ class DatabaseManager
                 $columnData = [
                     'name' => $fieldName,
                     'type' => strtoupper($column['Type']),
-                    'isForeignKey' => in_array($fieldName, $foreignKeys),
-                    'nullable' => $column['Null'] === 'YES'
+                    'nullable' => $column['Null'] === 'YES',
+                    'isForeignKey' => in_array($fieldName, $foreignKeys)
                 ];
 
                 // add foreign key relationship info if available
@@ -310,9 +310,7 @@ class DatabaseManager
         $data = [];
         try {
             $queryBuilder = $this->connection->createQueryBuilder();
-            $queryBuilder->select('*')->from($tableName)
-                ->where('id = :id')->setParameter('id', $id);
-
+            $queryBuilder->select('*')->from($tableName)->where('id = :id')->setParameter('id', $id);
             $statement = $this->connection->executeQuery($queryBuilder->getSQL(), $queryBuilder->getParameters());
 
             $data = $statement->fetchAllAssociative();

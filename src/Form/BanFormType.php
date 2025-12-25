@@ -35,9 +35,9 @@ class BanFormType extends AbstractType
                 'class' => 'text-input',
                 'maxlength' => 120
             ],
+            'translation_domain' => false,
             'required' => false,
-            'mapped' => true,
-            'translation_domain' => false
+            'mapped' => true
         ]);
     }
 

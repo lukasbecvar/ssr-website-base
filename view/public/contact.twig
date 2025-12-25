@@ -1,18 +1,21 @@
 {% extends 'common/bases/public-base.twig' %}
 
+{# CONTACT PAGE #}
 {% block body %}
 {# INCLUDE NAVBAR #}
 {% include 'public/elements/navbar.twig' %}
-
 <main class="container py-5">
     <section class="row justify-content-center">
         <div class="col-lg-6">
             <h1 class="h3 mb-3">{{ 'contact.title'|trans }}</h1>
             <p class="text-muted mb-4">{{ 'contact.page.intro'|trans }}</p>
 
+            {# CONTACT FORM #}
             <div class="card shadow-sm">
                 <div class="card-body">
                     {{ form_start(contactForm) }}
+                        
+                        {# ALERT MESSAGES #}
                         {% if errorMsg != null %}
                             <div class="alert alert-danger small text-center">
                                 {{ errorMsg|trans }}
@@ -24,6 +27,7 @@
                             </div>
                         {% endif %}
 
+                        {# NAME FIELD #}
                         <div class="mb-3">
                             {{ form_label(contactForm.name, null, {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(contactForm.name, {
@@ -35,6 +39,7 @@
                             {{ form_errors(contactForm.name) }}
                         </div>
 
+                        {# EMAIL FIELD #}
                         <div class="mb-3">
                             {{ form_label(contactForm.email, null, {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(contactForm.email, {
@@ -46,6 +51,7 @@
                             {{ form_errors(contactForm.email) }}
                         </div>
 
+                        {# MESSAGE FIELD #}
                         <div class="mb-3">
                             {{ form_label(contactForm.message, null, {'label_attr': {'class': 'form-label'}}) }}
                             {{ form_widget(contactForm.message, {
@@ -58,6 +64,7 @@
                             {{ form_errors(contactForm.message) }}
                         </div>
 
+                        {# CONTACT FORM SUBMIT BUTTON #}
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">
                                 {{ 'contact.form.submit.button'|trans }}

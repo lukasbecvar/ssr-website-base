@@ -24,8 +24,8 @@ The complete stack for development is in Docker Compose, including PHP, Node, an
 ## Production Build
 You can build the production version of the website using the [Dockerfile](.docker/Dockerfile.prod). The build is managed automatically with a GitHub Action: [docker-publisher](.github/workflows/docker-publisher.yml), but you can also use the production Dockerfile directly if you want.
 
-## Styling
-The admin system styling is based on Bootstrap and Font Awesome, but you can add any other styling libraries, like Tailwind, and include them in the [public-base](view/common/bases/public-base.twig) view.
+## Visitor management system
+The application uses its own visitor tracking system that provides basic visualization of metrics and information about geolocation and number of visitors. However it is very easy to implement another external system, for example by adding a script into [public-base](view/common/bases/public-base.twig)
 
 ## Translations
 Translations are managed by [Symfony-translations](https://symfony.com/doc/current/translation.html). Translation select is based on ip geolocation using [ip-api.com](https://ip-api.com). If you want to add a new language, you need to create a new translation file in the `translations` directory. The file name should be the language code (e.g. `messages.en.yml`).
@@ -40,6 +40,9 @@ External Log allows you to send logs to a remote service. Enable it in your `.en
 ### Metrics Exporter Integration
 Metrics Exporter allows you to get metrics from your website. Enable it in your `.env` file by setting `METRICS_EXPORTER_ENABLED=true` and configuring `METRICS_EXPORTER_ALLOWED_IP`. More information about Metrics Exporter can be found [here](https://github.com/lukasbecvar/admin-suite?tab=readme-ov-file#metrics-collector-for-http-services).
 
+## Styling
+The admin system styling is based on Bootstrap and Font Awesome, but you can add any other styling libraries, like Tailwind, and include them in the [public-base](view/common/bases/public-base.twig) view.
+
 ## Requirements
 - Apache / Nginx PHP compatible web server
 - PHP 8.5
@@ -49,11 +52,11 @@ Metrics Exporter allows you to get metrics from your website. Enable it in your 
 
 ## Dependencies
 * Symfony
-   * [Website](https://symfony.com/)   
+   * [Website](https://symfony.com)   
 * Bootstrap
-   * [Website](https://getbootstrap.com/)
+   * [Website](https://getbootstrap.com)
 * Boxicons
-   * [Website](https://boxicons.com/)
+   * [Website](https://boxicons.com)
 * Fontawesome
    * [Website](https://fontawesome.com)
 * Apexcharts

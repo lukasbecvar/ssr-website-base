@@ -32,16 +32,16 @@ class ProfilePicChangeFormType extends AbstractType
     {
         $builder->add('profile-pic', FileType::class, [
             'label' => false,
-            'multiple' => false,
             'mapped' => false,
+            'multiple' => false,
+            'translation_domain' => false,
             'constraints' => new NotBlank(message: 'Please add image/s'),
             'attr' => [
                 'class' => 'file-input-control profile-pic-change',
                 'placeholder' => 'Profile picture',
                 'accept' => 'image/*',
                 'image_property' => 'image'
-            ],
-            'translation_domain' => false
+            ]
         ]);
     }
 

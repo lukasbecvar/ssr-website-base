@@ -13,7 +13,11 @@ use FPDF;
  */
 class VisitorListPdfHeader extends Fpdf
 {
-    // page header
+    /**
+     * PDF header
+     *
+     * @return void
+     */
     public function header(): void
     {
         // background color

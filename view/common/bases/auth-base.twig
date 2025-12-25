@@ -5,6 +5,12 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="icon" href={{ asset('build/images/favicon.png') }} type="image/x-icon"/>
+	
+    {# REDIRECT TO ERROR IF JAVASCRIPT IS DISABLED #}
+    <noscript>
+        <meta http-equiv="refresh" content="0; URL='{{ path('error_by_code', {code: '426'}) }}'"/>
+    </noscript>
+	
 	{# INCLUDE CSS ASSETS #} 
     {{ encore_entry_link_tags('scrollbar-css') }}
     {{ encore_entry_link_tags('bootstrap-css') }}
@@ -12,12 +18,12 @@
 	<title>Admin | Login</title>
 </head>
 <body>
-<main> 
-    <div class="wrapper">
-		{% block component %}{% endblock %}
-    </div>
-</main>
-{# INCLUDE JAVASCRIPT ASSETS #}
-{{ encore_entry_script_tags('update-visitor-status-js') }}
+    <main> 
+        <div class="wrapper">
+            {% block component %}{% endblock %}
+        </div>
+    </main>
+    {# INCLUDE JAVASCRIPT ASSETS #}
+    {{ encore_entry_script_tags('update-visitor-status-js') }}
 </body>
 </html>

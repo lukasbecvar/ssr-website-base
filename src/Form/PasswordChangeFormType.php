@@ -41,11 +41,11 @@ class PasswordChangeFormType extends AbstractType
                     'placeholder' => 'password'
                 ],
                 'mapped' => true,
+                'translation_domain' => false,
                 'constraints' => new Sequentially([
                     new NotBlank(message: 'Please enter a password'),
                     new Length(min: 8, minMessage: 'Your password should be at least {{ limit }} characters', max: 50)
-                ]),
-                'translation_domain' => false
+                ])
             ])
             ->add('repassword', PasswordType::class, [
                 'label' => false,
@@ -55,11 +55,11 @@ class PasswordChangeFormType extends AbstractType
                     'placeholder' => 're password'
                 ],
                 'mapped' => false,
+                'translation_domain' => false,
                 'constraints' => new Sequentially([
                     new NotBlank(message: 'Please enter a repassword'),
                     new Length(min: 8, minMessage: 'Your password should be at least {{ limit }} characters', max: 50)
-                ]),
-                'translation_domain' => false
+                ])
             ])
         ;
     }

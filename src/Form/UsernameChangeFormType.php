@@ -40,11 +40,11 @@ class UsernameChangeFormType extends AbstractType
                 'placeholder' => 'Username'
             ],
             'mapped' => true,
+            'translation_domain' => false,
             'constraints' => new Sequentially([
                 new NotBlank(message: 'Please enter a username'),
                 new Length(min: 4, minMessage: 'Your username should be at least {{ limit }} characters', max: 50)
-            ]),
-            'translation_domain' => false
+            ])
         ]);
     }
 

@@ -160,45 +160,6 @@ class LogManager
     }
 
     /**
-     * Get logs by visitor ip address
-     *
-     * @param string $ipAddress The IP address visitor
-     * @param string $username The username of the user
-     * @param int $page The page number (pagination offset)
-     *
-     * @return Log[]|null $logs The logs based on IP address
-     */
-    public function getLogsWhereIP(string $ipAddress, string $username, int $page): ?array
-    {
-        $per_page = (int) $this->appUtil->getEnvValue('ITEMS_PER_PAGE');
-
-        // calculate offset
-        $offset = ($page - 1) * $per_page;
-
-        try {
-            // get logs from database
-            $logs = $this->logRepository->getLogsByIpAddress($ipAddress, $offset, $per_page);
-        } catch (Exception $e) {
-            $this->errorManager->handleError(
-                msg: 'error to get logs: ' . $e->getMessage(),
-                code: Response::HTTP_INTERNAL_SERVER_ERROR
-            );
-        }
-
-        // log view event
-        $this->log('database', 'user: ' . $username . ' viewed logs');
-
-        // replace browser with formated value for log reader
-        foreach ($logs as $log) {
-            $userAgent = $log->getBrowser();
-            $formatedBrowser = $this->visitorInfoUtil->getBrowserShortify($userAgent);
-            $log->setBrowser($formatedBrowser);
-        }
-
-        return $logs;
-    }
-
-    /**
      * Get logs based on status with pagination
      *
      * @param string $status The status of the logs
@@ -271,6 +232,45 @@ class LogManager
                 code: Response::HTTP_INTERNAL_SERVER_ERROR
             );
         }
+    }
+
+    /**
+     * Get logs by visitor ip address
+     *
+     * @param string $ipAddress The IP address visitor
+     * @param string $username The username of the user
+     * @param int $page The page number (pagination offset)
+     *
+     * @return Log[]|null $logs The logs based on IP address
+     */
+    public function getLogsWhereIP(string $ipAddress, string $username, int $page): ?array
+    {
+        $per_page = (int) $this->appUtil->getEnvValue('ITEMS_PER_PAGE');
+
+        // calculate offset
+        $offset = ($page - 1) * $per_page;
+
+        try {
+            // get logs from database
+            $logs = $this->logRepository->getLogsByIpAddress($ipAddress, $offset, $per_page);
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                msg: 'error to get logs: ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
+        }
+
+        // log view event
+        $this->log('database', 'user: ' . $username . ' viewed logs');
+
+        // replace browser with formated value for log reader
+        foreach ($logs as $log) {
+            $userAgent = $log->getBrowser();
+            $formatedBrowser = $this->visitorInfoUtil->getBrowserShortify($userAgent);
+            $log->setBrowser($formatedBrowser);
+        }
+
+        return $logs;
     }
 
     /**

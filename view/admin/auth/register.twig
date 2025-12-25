@@ -4,7 +4,6 @@
 {% block component %}
 <main class="register-page color-white">
     <div class="login-page-content">
-
         {# ERROR MESSAGE BOX #}
         {% if errorMsg != null %}
             {% include "common/alerts/error-alert.twig" %}
@@ -30,7 +29,10 @@
                     </div>
                 {% endif %}
 
+                {# INPUT FIELDS #}
                 <div class="auth-form-fields">
+                    
+                    {# USERNAME FIELD #}
                     {% set usernameErrors = registrationForm.username.vars.errors %}
                     <div class="auth-form-field{{ usernameErrors|length ? ' has-error' }}">
                         {{ form_widget(registrationForm.username) }}
@@ -43,6 +45,7 @@
                         {% endif %}
                     </div>
 
+                    {# PASSWORD FIELD #}
                     {% set passwordErrors = registrationForm.password.vars.errors %}
                     <div class="auth-form-field{{ passwordErrors|length ? ' has-error' }}">
                         {{ form_widget(registrationForm.password) }}
@@ -55,6 +58,7 @@
                         {% endif %}
                     </div>
 
+                    {# REPASSWORD FIELD #}
                     {% set rePasswordErrors = registrationForm['re-password'].vars.errors %}
                     <div class="auth-form-field{{ rePasswordErrors|length ? ' has-error' }}">
                         {{ form_widget(registrationForm['re-password']) }}
@@ -68,6 +72,7 @@
                     </div>
                 </div>
 
+                {# FORM SUBMIT BUTTON #}
                 <div class="auth-form-footer auth-form-footer-single">
                     <button type="submit" class="input-button">Create account</button>
                 </div>

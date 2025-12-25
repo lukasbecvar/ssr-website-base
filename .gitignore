@@ -5,21 +5,20 @@
 /.docker/services/
 
 # cache files
-config/reference.php
-/public/bundles/
 /var/
+/public/bundles/
+config/reference.php
 
 # composer files
 /vendor/
-composer.lock
 
 # node files
 /node_modules/
 /public/build/
 package-lock.json
 
-# phpunit
-.phpunit.result.cache
-
 # php codesniffer
 .phpcs-cache
+
+# phpunit
+.phpunit.result.cache

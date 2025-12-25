@@ -393,8 +393,8 @@ class VisitorManager
             'visitorsCity' => $visitorsCity,
             'visitorsCount' => $visitorsCount,
             'visitorsCountry' => $visitorsCountry,
-            'visitorsBrowsers' => $visitorsBrowsersShortify,
-            'visitorsReferers' => $visitorsReferers
+            'visitorsReferers' => $visitorsReferers,
+            'visitorsBrowsers' => $visitorsBrowsersShortify
         ];
     }
 }
