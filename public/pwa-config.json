@@ -6,11 +6,9 @@
     "display": "standalone",
     "background_color": "#2e2e2e",
     "theme_color": "#2e2e2e",
-    "icons": [
-        {
-            "src": "/build/images/favicon.png",
-            "sizes": "300x300",
-            "type": "image/png"
-        }
-    ]
+    "icons": [{
+        "src": "/build/images/favicon.png",
+        "sizes": "300x300",
+        "type": "image/png"
+    }]
 }
