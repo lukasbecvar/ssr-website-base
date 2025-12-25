@@ -7,7 +7,7 @@
 {% block component %}
 <div class="admin-panel database-panel">
     {% if getUserRole() != 'Owner' and getUserRole() != 'Admin' %}
-        <h2 class="page-title">Sorry you dont have permission to this page</h2>
+        {% include "admin/element/navigation/no-permission.twig" %}
     {% else %}
         {# ERROR MESSAGE BOX #}
         {% if errorMsg != null %}
