@@ -477,9 +477,6 @@ class DatabaseManager
 
                 $sql = 'DELETE FROM ' . $tableName . ' WHERE 1=1';
                 $this->connection->executeStatement($sql);
-
-                $sqlIndexReset = 'ALTER TABLE ' . $tableName . ' AUTO_INCREMENT = 1';
-                $this->connection->executeStatement($sqlIndexReset);
             } else {
                 // handle single row delete with soft cascade
                 if (isset($foreignKeys[$tableName])) {
@@ -509,6 +506,12 @@ class DatabaseManager
         } finally {
             // always re-enable foreign key checks
             $this->connection->executeStatement('SET FOREIGN_KEY_CHECKS = 1');
+        }
+
+        // reset auto increment index (must be done after transaction commit because it causes implicit commit)
+        if ($id == 'all') {
+            $sqlIndexReset = 'ALTER TABLE ' . $tableName . ' AUTO_INCREMENT = 1';
+            $this->connection->executeStatement($sqlIndexReset);
         }
 
         // log row delete event
