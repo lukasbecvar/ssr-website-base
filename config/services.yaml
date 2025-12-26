@@ -78,13 +78,13 @@ services:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 5 }
 
-    # user authorization check
-    App\Middleware\AuthorizationMiddleware:
+    # check if user is authenticated
+    App\Middleware\AuthenticatedCheckMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 4 }
 
-    # check if user is authenticated
-    App\Middleware\AuthenticatedCheckMiddleware:
+    # user authorization check
+    App\Middleware\AuthorizationMiddleware:
         tags:
             - { name: 'kernel.event_listener', event: 'kernel.request', priority: 3 }
 
