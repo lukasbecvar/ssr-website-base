@@ -189,18 +189,23 @@ class MessagesManager
     {
         $message = $this->messageRepository->find($id);
 
-        // check if message found
-        if ($message !== null) {
-            try {
-                // close message
-                $message->setStatus('closed');
-                $this->entityManager->flush();
-            } catch (Exception $e) {
-                $this->errorManager->handleError(
-                    msg: 'error to close message: ' . $id . ', ' . $e->getMessage(),
-                    code: Response::HTTP_INTERNAL_SERVER_ERROR
-                );
-            }
+        // check if message exists
+        if ($message == null) {
+            $this->errorManager->handleError(
+                msg: 'Message not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
+        try {
+            // close message
+            $message->setStatus('closed');
+            $this->entityManager->flush();
+        } catch (Exception $e) {
+            $this->errorManager->handleError(
+                msg: 'error to close message: ' . $id . ', ' . $e->getMessage(),
+                code: Response::HTTP_INTERNAL_SERVER_ERROR
+            );
         }
     }
 

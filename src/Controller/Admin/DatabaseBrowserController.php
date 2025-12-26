@@ -111,6 +111,14 @@ class DatabaseBrowserController extends AbstractController
         // get table columns with types
         $columnsWithTypes = $this->databaseManager->getTableColumnsWithTypes($table);
 
+        // check if row exists
+        if ($this->databaseManager->selectRowData($table, $id) == null) {
+            $this->errorManager->handleError(
+                msg: 'Row not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
+
         // get current row data
         $currentRowData = $this->databaseManager->selectRowData($table, $id);
 
@@ -164,11 +172,11 @@ class DatabaseBrowserController extends AbstractController
                 }
             }
 
-        // redirect back to browser
+            // redirect back to browser
             if ($errorMsg == null) {
                 return $this->redirectToRoute('admin_database_browser', [
-                'table' => $table,
-                'page' => $page
+                    'table' => $table,
+                    'page' => $page
                 ]);
             }
         }
@@ -355,6 +363,14 @@ class DatabaseBrowserController extends AbstractController
         $id = $this->appUtil->getQueryString('id', $request);
         $table = $this->appUtil->getQueryString('table', $request);
         $page = intval($this->appUtil->getQueryString('page', $request));
+
+        // check if row exists
+        if ($id != 'all' && $this->databaseManager->selectRowData($table, intval($id)) == null) {
+            $this->errorManager->handleError(
+                msg: 'Row not found',
+                code: Response::HTTP_NOT_FOUND
+            );
+        }
 
         // delete record
         $this->databaseManager->deleteRowFromTable($table, $id);

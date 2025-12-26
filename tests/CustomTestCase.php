@@ -56,6 +56,10 @@ class CustomTestCase extends WebTestCase
         // simulate user role
         $authManager->method('getUserRole')->willReturn($role);
 
+        // simulate isAdmin
+        $isAdmin = in_array(strtolower($role), ['admin', 'owner']);
+        $authManager->method('isAdmin')->willReturn($isAdmin);
+
         // mock test user repository
         $authManager->method('getUserRepository')->willReturn($user);
 
