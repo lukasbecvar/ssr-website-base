@@ -1,0 +1,46 @@
+<?php
+
+namespace App\Tests\Controller;
+
+use App\Tests\CustomTestCase;
+use App\Controller\AntilogController;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+
+/**
+ * Class AntilogControllerTest
+ *
+ * Test cases for antilog component
+ *
+ * @package App\Tests
+ */
+#[CoversClass(AntilogController::class)]
+class AntilogControllerTest extends CustomTestCase
+{
+    private KernelBrowser $client;
+
+    protected function setUp(): void
+    {
+        $this->client = static::createClient();
+
+        // simulate login
+        $this->simulateLogin($this->client);
+    }
+
+    /**
+     * Test enable antilog
+     *
+     * @return void
+     */
+    public function testEnableAntiLog(): void
+    {
+        $this->client->request('POST', '/antilog/5369362536', [
+            'csrf_token' => $this->getCsrfToken($this->client)
+        ]);
+
+        // assert response
+        $this->assertResponseRedirects('/admin/logs');
+        $this->assertResponseStatusCodeSame(Response::HTTP_FOUND);
+    }
+}
