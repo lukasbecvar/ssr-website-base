@@ -401,10 +401,11 @@ class AuthManager
         }
 
         // get user role
-        $role = $this->getUserRole($token);
+        $role = $this->getUserRole($token) ?? 'Unknown';
+        $role = strtolower($role);
 
         // check if user role is admin
-        if ($role == 'Owner' || $role == 'Admin') {
+        if ($role == 'owner' || $role == 'admin') {
             return true;
         }
 

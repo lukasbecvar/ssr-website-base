@@ -6,37 +6,32 @@
 
 {% block component %}
 <div class="admin-panel database-panel">
-    {# PERMISSION CHECK #}
-    {% if getUserRole() != 'Owner' and getUserRole() != 'Admin' %}
-        {% include "admin/element/navigation/no-permission.twig" %}
-    {% else %}
-        {# ERROR MESSAGE BOX #}
-        {% if errorMsg != null %}
-            {% include "common/alerts/error-alert.twig" %}
-        {% endif %}
-
-        <center>
-            <div class="card dashbord-card database-card visitors-export-form-card">
-                <div class="card-header">
-                    Download visitors data
-                </div>
-                <div class="card-body database-form-body">
-                    {{ form_start(form, {'attr': {'class': 'visitors-export-form'}}) }}
-                        <div class="form-group">
-                            <span class="form-field-label">Time period:</span>
-                            {{ form_widget(form.filter, {'attr': {'class': 'custom-select'}}) }}
-                            {{ form_errors(form.filter) }}
-                        </div>
-                        <div class="form-group">
-                            <span class="form-field-label">Export format:</span>
-                            {{ form_widget(form.format, {'attr': {'class': 'custom-select'}}) }}
-                            {{ form_errors(form.format) }}
-                        </div>
-                        <button class="input-button" type="submit">Export data</button>
-                    {{ form_end(form) }}
-                </div>
-            </div>
-        </center>
+    {# ERROR MESSAGE BOX #}
+    {% if errorMsg != null %}
+        {% include "common/alerts/error-alert.twig" %}
     {% endif %}
+
+    <center>
+        <div class="card dashbord-card database-card visitors-export-form-card">
+            <div class="card-header">
+                Download visitors data
+            </div>
+            <div class="card-body database-form-body">
+                {{ form_start(form, {'attr': {'class': 'visitors-export-form'}}) }}
+                    <div class="form-group">
+                        <span class="form-field-label">Time period:</span>
+                        {{ form_widget(form.filter, {'attr': {'class': 'custom-select'}}) }}
+                        {{ form_errors(form.filter) }}
+                    </div>
+                    <div class="form-group">
+                        <span class="form-field-label">Export format:</span>
+                        {{ form_widget(form.format, {'attr': {'class': 'custom-select'}}) }}
+                        {{ form_errors(form.format) }}
+                    </div>
+                    <button class="input-button" type="submit">Export data</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </center>
 </div>
 {% endblock %}

@@ -7,6 +7,7 @@ use App\Util\SecurityUtil;
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
 use App\Manager\DatabaseManager;
+use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -120,6 +121,7 @@ class LogReaderController extends AbstractController
      *
      * @return Response The delete confirmation page view
      */
+    #[Authorization('ADMIN')]
     #[Route('/admin/logs/delete', methods: ['GET'], name: 'admin_log_delete')]
     public function deleteAllLogs(Request $request): Response
     {
@@ -137,6 +139,7 @@ class LogReaderController extends AbstractController
      *
      * @return Response The redirect back to dashboard
      */
+    #[Authorization('ADMIN')]
     #[Route('/admin/logs/readed/all', methods: ['POST'], name: 'admin_log_readed')]
     public function setReadedAllLogs(): Response
     {

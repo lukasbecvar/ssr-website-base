@@ -6,6 +6,7 @@ use Exception;
 use App\Util\AppUtil;
 use App\Manager\ErrorManager;
 use App\Manager\DatabaseManager;
+use App\Annotation\Authorization;
 use App\Annotation\CsrfProtection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -37,6 +38,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The database tables list view
      */
+    #[Authorization('ADMIN')]
     #[Route('/admin/database', methods: ['GET'], name: 'admin_database_list')]
     public function databaseList(): Response
     {
@@ -57,6 +59,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The database table view
      */
+    #[Authorization('ADMIN')]
     #[Route('/admin/database/table', methods: ['GET'], name: 'admin_database_browser')]
     public function tableView(Request $request): Response
     {
@@ -93,6 +96,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The row editor view
      */
+    #[Authorization('ADMIN')]
     #[CsrfProtection(enabled: false)]
     #[Route('/admin/database/edit', methods: ['GET', 'POST'], name: 'admin_database_edit')]
     public function rowEdit(Request $request): Response
@@ -201,6 +205,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The new row form view
      */
+    #[Authorization('ADMIN')]
     #[CsrfProtection(enabled: false)]
     #[Route('/admin/database/add', methods: ['GET', 'POST'], name: 'admin_database_add')]
     public function rowAdd(Request $request): Response
@@ -342,6 +347,7 @@ class DatabaseBrowserController extends AbstractController
      *
      * @return Response The redirect to browser
      */
+    #[Authorization('ADMIN')]
     #[Route('/admin/database/delete', methods: ['POST'], name: 'admin_database_delete')]
     public function rowDelete(Request $request): Response
     {

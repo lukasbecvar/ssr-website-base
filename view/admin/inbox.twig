@@ -7,86 +7,81 @@
 {# CONTACT MESSAGES INBOX PAGE COMPONENT #}
 {% block component %}
 <div class="admin-panel">
-    {# PERMISSION CHECK #}
-    {% if getUserRole() != 'Owner' and getUserRole() != 'Admin' %}
-        {% include "admin/element/navigation/no-permission.twig" %}
-    {% else %}
-        {% if inboxData != null %}
-            <div class="inbox-container">
-                {% for message in inboxData %}
-                    <div class='inbox-message'>
-                        <div class="inbox-message-header">
-                            <div class="inbox-message-info">
-                                {% if message.visitor is defined %}
-                                    {% set result = message.visitor.id / messageLimit %}
-                                    {% set visitorPage = result | round(0, 'ceil') %}
-                                    <a href={{ path('admin_visitor_manager', {'page': visitorPage}) }}#{{ message.visitor.id|e }} class="inbox-message-name">{{ message.name|e }}</a>
-                                {% else %}
-                                    <span class="inbox-message-name">{{ message.name|e }}</span>
-                                {% endif %}
-                                <div class="inbox-message-meta">
-                                    <span class="inbox-message-time">
-                                        <i class="bi bi-clock"></i> {{ message.time|date('Y-m-d H:i:s')|e }}
-                                    </span>
-                                    <a class="inbox-message-ip" href={{ path('admin_visitor_ipinfo', {'ip': message.ip_address|e}) }}>
-                                        <i class="bi bi-geo-alt"></i> {{ message.ip_address|e }}
-                                    </a>
-                                </div>
-                                <div class="inbox-message-email">
-                                    <i class="bi bi-envelope"></i> <a href="mailto:{{ message.email|e }}?subject={{ 'inbox.email.reply.subject'|trans }}">{{ message.email|e }}</a>
-                                </div>
+    {% if inboxData != null %}
+        <div class="inbox-container">
+            {% for message in inboxData %}
+                <div class='inbox-message'>
+                    <div class="inbox-message-header">
+                        <div class="inbox-message-info">
+                            {% if message.visitor is defined %}
+                                {% set result = message.visitor.id / messageLimit %}
+                                {% set visitorPage = result | round(0, 'ceil') %}
+                                <a href={{ path('admin_visitor_manager', {'page': visitorPage}) }}#{{ message.visitor.id|e }} class="inbox-message-name">{{ message.name|e }}</a>
+                            {% else %}
+                                <span class="inbox-message-name">{{ message.name|e }}</span>
+                            {% endif %}
+                            <div class="inbox-message-meta">
+                                <span class="inbox-message-time">
+                                    <i class="bi bi-clock"></i> {{ message.time|date('Y-m-d H:i:s')|e }}
+                                </span>
+                                <a class="inbox-message-ip" href={{ path('admin_visitor_ipinfo', {'ip': message.ip_address|e}) }}>
+                                    <i class="bi bi-geo-alt"></i> {{ message.ip_address|e }}
+                                </a>
                             </div>
-                            <div class="inbox-message-actions">
-                                {# BAN/UNBAN button - only show if visitor exists #}
-                                {% if message.visitor is defined %}
-                                    {% if banManager.isVisitorBanned(message.ip_address) %}
-                                        <form method="POST" action={{ path('admin_visitor_unban', {'page': page, 'id': message.visitor.id|e, 'referer': 'inbox'}) }} style="display:inline;" title="Unban visitor">
-                                            <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
-                                            <button type="submit" class="inbox-action-btn inbox-action-unban">
-                                                <i class="bi bi-shield-check"></i>
-                                            </button>
-                                        </form>
-                                    {% else %}
-                                        <a class='inbox-action-btn inbox-action-ban' href={{ path('admin_visitor_ban', {'page': page, 'id': message.visitor.id|e, 'referer': 'inbox'}) }} title="Ban visitor">
-                                            <i class="bi bi-ban"></i>
-                                        </a>
-                                    {% endif %}
-                                {% endif %}
-                                {# CLOSE MESSAGE BUTTON #}
-                                <form method="POST" action={{ path('admin_inbox_close', {'page': page, 'id': message.id|e}) }} style="display:inline;" title="Close message">
-                                    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
-                                    <button type="submit" class="inbox-action-btn inbox-action-close">
-                                        <i class="bi bi-x-lg"></i>
-                                    </button>
-                                </form>
+                            <div class="inbox-message-email">
+                                <i class="bi bi-envelope"></i> <a href="mailto:{{ message.email|e }}?subject={{ 'inbox.email.reply.subject'|trans }}">{{ message.email|e }}</a>
                             </div>
                         </div>
-                        <div class="inbox-message-content">
-                            <div class="inbox-message-text">{{ message.message|linkify|raw }}</div>
+                        <div class="inbox-message-actions">
+                            {# BAN/UNBAN button - only show if visitor exists #}
+                            {% if message.visitor is defined %}
+                                {% if banManager.isVisitorBanned(message.ip_address) %}
+                                    <form method="POST" action={{ path('admin_visitor_unban', {'page': page, 'id': message.visitor.id|e, 'referer': 'inbox'}) }} style="display:inline;" title="Unban visitor">
+                                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                        <button type="submit" class="inbox-action-btn inbox-action-unban">
+                                            <i class="bi bi-shield-check"></i>
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <a class='inbox-action-btn inbox-action-ban' href={{ path('admin_visitor_ban', {'page': page, 'id': message.visitor.id|e, 'referer': 'inbox'}) }} title="Ban visitor">
+                                        <i class="bi bi-ban"></i>
+                                    </a>
+                                {% endif %}
+                            {% endif %}
+                            {# CLOSE MESSAGE BUTTON #}
+                            <form method="POST" action={{ path('admin_inbox_close', {'page': page, 'id': message.id|e}) }} style="display:inline;" title="Close message">
+                                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                <button type="submit" class="inbox-action-btn inbox-action-close">
+                                    <i class="bi bi-x-lg"></i>
+                                </button>
+                            </form>
                         </div>
                     </div>
-                {% endfor %}
-            </div>
+                    <div class="inbox-message-content">
+                        <div class="inbox-message-text">{{ message.message|linkify|raw }}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
 
-            {# PAGINATION #}
-            <div class="inbox-pagination">
-                {% if page != 1 %}
-                    <a class="inbox-pagination-btn inbox-pagination-prev" href={{ path('admin_inbox', {'page': page - 1}) }}>
-                        <i class="bi bi-arrow-left"></i> Back
-                    </a>
-                {% endif %}
-                {% if messageLimit == messageCount %}
-                    <a class="inbox-pagination-btn inbox-pagination-next" href={{ path('admin_inbox', {'page': page + 1}) }}>
-                        Next <i class="bi bi-arrow-right"></i>
-                    </a>
-                {% endif %}
-            </div>
-        {% else %}
-            <div class="inbox-empty">
-                <i class="bi bi-inbox"></i>
-                <h3>No messages found</h3>
-            </div>
-        {% endif %}
+        {# PAGINATION #}
+        <div class="inbox-pagination">
+            {% if page != 1 %}
+                <a class="inbox-pagination-btn inbox-pagination-prev" href={{ path('admin_inbox', {'page': page - 1}) }}>
+                    <i class="bi bi-arrow-left"></i> Back
+                </a>
+            {% endif %}
+            {% if messageLimit == messageCount %}
+                <a class="inbox-pagination-btn inbox-pagination-next" href={{ path('admin_inbox', {'page': page + 1}) }}>
+                    Next <i class="bi bi-arrow-right"></i>
+                </a>
+            {% endif %}
+        </div>
+    {% else %}
+        <div class="inbox-empty">
+            <i class="bi bi-inbox"></i>
+            <h3>No messages found</h3>
+        </div>
     {% endif %}
 </div>
 {% endblock %}

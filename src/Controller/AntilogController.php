@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Manager\LogManager;
 use App\Manager\AuthManager;
+use App\Annotation\Authorization;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -32,6 +33,7 @@ class AntilogController extends AbstractController
      *
      * @return Response Redirect back to the admin dashboard
      */
+    #[Authorization('ADMIN')]
     #[Route('/antilog/5369362536', methods: ['POST'], name: 'antilog')]
     public function toggleAntiLog(): Response
     {

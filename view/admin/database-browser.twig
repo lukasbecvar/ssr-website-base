@@ -1,249 +1,249 @@
 {% extends 'common/bases/admin-base.twig' %}
 
 {% block title %}
-    database
+	database
 {% endblock %}
 
 {# DATABASE BROWSER COMPONENT #}
 {% block component %}
 <div class="admin-panel database-panel">
-    {# PERMISSION CHECK #}
-    {% if getUserRole() != 'Owner' and getUserRole() != 'Admin' %}
-        {% include "admin/element/navigation/no-permission.twig" %}
-    {% else %}
-        {# TABLES-LIST #}
-        {% if tables != null %}
-            <div class="database-table-select">
-                <h3 class="database-section-title">Select table</h3>
-                <ul class="database-table-list">
-                    {% for table in tables %}
-                        {% if table != 'doctrine_migration_versions' %}
-                            <li class="database-table-list-item">
-                                <a class="db-browser-select-link" href={{ path('admin_database_browser', {'table': table, 'page': 1}) }}>
-                                    <span class="database-table-name">{{ table }}</span>
-                                    <i class="fa fa-arrow-right database-table-icon" aria-hidden="true"></i>
-                                </a>
-                            </li>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-            </div>
-        {% else %}
-            {# ROW-EDITOR #}
-            {% if editorTable != null %}
-            {% include "admin/element/navigation/database-navigation.twig" %}
-            {% if errorMsg != null %}
-                {% include "common/alerts/error-alert.twig" %}
-            {% endif %}
-            <center>
-                <div class="card dashbord-card database-card database-card-form">
-                    <div class="database-form-header">
-                        <div class="database-form-icon">
-                            <i class="fa fa-edit"></i>
-                        </div>
-                        <div class="database-form-title">
-                            <h3>Edit Record</h3>
-                            <p>Table: <strong>{{ editorTable|e }}</strong> · Row ID: <strong>{{ editorId|e }}</strong></p>
-                        </div>
-                    </div>
-                    <div class="card-body database-form-body">
-                        {% if editorReferer != null %}
-                            <form class="db-edit-form" action={{ path('admin_database_edit', {'table': editorTable, 'page': editorPage, 'id': editorId, 'referer': editorReferer}) }} method="post">
-                        {% else %}
-                            <form class="db-edit-form" action={{ path('admin_database_edit', {'table': editorTable, 'page': editorPage, 'id': editorId}) }} method="post">
-                        {% endif %}
-                                {% for field in editorField %}
-                                    {% if field.name != 'id' %}
-                                        {% set inputType = getInputTypeFromDbType(field.type) %}
-                                        {% set formattedValue = formatValueForInput(editorValues[field.name], inputType) %}
-                                        <div class="form-field-group">
-                                            <label class="text-input-title" for="editor-field-{{ loop.index }}">
-                                                <span class="field-label">
-                                                    <span class="field-name">{{ field.name|e }}</span>
-                                                    {% if field.isForeignKey %}
-                                                        <span class="field-key-icon">🔑</span>
-                                                    {% endif %}
-                                                </span>
-                                                <span class="field-type">{{ field.type|e }}</span>
-                                            </label>
-                                            
-                                            {% if inputType == 'textarea' %}
-                                                <textarea class="text-input" id="editor-field-{{ loop.index }}" name="{{ field.name|e }}" rows="4">{{ formattedValue|e }}</textarea>
-                                            {% elseif inputType == 'checkbox' %}
-                                                <div class="checkbox-wrapper">
-                                                    <input type="hidden" name="{{ field.name|e }}" value="false">
-                                                    <input type="checkbox" id="editor-field-{{ loop.index }}" name="{{ field.name|e }}" value="true" {% if formattedValue == 'true' %}checked{% endif %}>
-                                                    <label for="editor-field-{{ loop.index }}" class="checkbox-label">Enabled</label>
-                                                </div>
-                                            {% else %}
-                                                <input class="text-input" id="editor-field-{{ loop.index }}" type="{{ inputType }}" name="{{ field.name|e }}" value="{{ formattedValue|e }}" {% if inputType == 'number' %}step="any"{% endif %}>
-                                            {% endif %}
-                                        </div>
-                                    {% endif %}
-                                {% endfor %}
-                                <div class="form-actions">
-                                    <button class="form-button submit" type="submit" name="submitEdit" value="Edit">
-                                        <i class="fa fa-save"></i>
-                                        Save changes
-                                    </button>
-                                    <a href={{ path('admin_database_browser', {'table': editorTable, 'page': editorPage}) }} class="form-button cancel">
-                                        <i class="fa fa-times"></i>
-                                        Cancel
-                                    </a>
-                                </div>
-                            </form>
-                    </div>
-                </div>
-            </center>
-            {% else %}
-                {# NEW-ROW FORM #}
-                {% if newRowTable != null %}
-                    {% include "admin/element/navigation/database-navigation.twig" %}
-                    {% if errorMsg != null %}
-                        {% include "common/alerts/error-alert.twig" %}
-                    {% endif %}
-                    <center>
-                        <div class="card dashbord-card database-card database-card-form">
-                            <div class="database-form-header">
-                                <div class="database-form-icon add-icon">
-                                    <i class="fa fa-plus"></i>
-                                </div>
-                                <div class="database-form-title">
-                                    <h3>Add New Record</h3>
-                                    <p>Table: <strong>{{ newRowTable|e }}</strong></p>
-                                </div>
-                            </div>
-                            <div class="card-body database-form-body">
-                                <form class="db-edit-form" action={{ path('admin_database_add', {'table': newRowTable|e, 'page': newRowPage}) }} method="post">
-                                    {% for field in newRowColumns %}
-                                        {% if field is iterable and field.name is defined and field.name != 'id' %}
-                                            {% set inputType = getInputTypeFromDbType(field.type) %}
-                                            {% set submittedValue = submittedValues[field.name]|default('') %}
-                                            {% set formattedValue = formatValueForInput(submittedValue, inputType) %}
-                                            
-                                            <div class="form-field-group">
-                                                <label class="text-input-title" for="new-row-field-{{ loop.index }}">
-                                                    <span class="field-label">
-                                                        <span class="field-name">{{ field.name|e }}</span>
-                                                        {% if field.isForeignKey %}
-                                                            <span class="field-key-icon">🔑</span>
-                                                        {% endif %}
-                                                    </span>
-                                                    <span class="field-type">{{ field.type|e }}</span>
-                                                </label>
-                                                
-                                                {% if inputType == 'textarea' %}
-                                                    <textarea class="text-input" id="new-row-field-{{ loop.index }}" name="{{ field.name|e }}" rows="4" placeholder="{{ field.name|e }}">{{ formattedValue|e }}</textarea>
-                                                {% elseif inputType == 'checkbox' %}
-                                                    <div class="checkbox-wrapper">
-                                                        <input type="hidden" name="{{ field.name|e }}" value="false">
-                                                        <input type="checkbox" id="new-row-field-{{ loop.index }}" name="{{ field.name|e }}" value="true" {% if formattedValue == 'true' %}checked{% endif %}>
-                                                        <label for="new-row-field-{{ loop.index }}" class="checkbox-label">Enabled</label>
-                                                    </div>
-                                                {% else %}
-                                                    <input class="text-input" id="new-row-field-{{ loop.index }}" type="{{ inputType }}" name="{{ field.name|e }}" placeholder="{{ field.name|e }}" value="{{ formattedValue|e }}" {% if inputType == 'number' %}step="any"{% endif %}>
-                                                {% endif %}
-                                            </div>
-                                        {% endif %}
-                                    {% endfor %}
-                                    <div class="form-actions">
-                                        <button class="form-button submit" type="submit" name="submitSave" value="SAVE">
-                                            <i class="fa fa-plus-circle"></i>
-                                            Create row
-                                        </button>
-                                        <a href={{ path('admin_database_browser', {'table': newRowTable, 'page': newRowPage}) }} class="form-button cancel">
-                                            <i class="fa fa-times"></i>
-                                            Cancel
-                                        </a>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                    </center>
-                {% else %}
-                    {# TABLES-BROWSER #}
-                    {% if tableName != null %}
-                        {% include "admin/element/navigation/database-navigation.twig" %}
-                        {% if tableDataCount == 0 %}
-                            <div class="database-empty-state mt-3">Table '{{ tableName }}' is empty.</div>
-                        {% else %}
-                            <div class="database-table-scroll">
-                                <table class="table table-dark table-hover custom-header">
-                                    <thead>
-                                        <tr>  
-                                            {% for columnInfo in tableColumnsWithTypes %}
-                                                {% set columnName = columnInfo.name %}
-                                                {% if columnName == 'id' %}
-                                                    <th scope='col'>#</th>
-                                                {% else %}                                                 
-                                                    <th scope='col'>{{ columnName|e }}</th>
-                                                {% endif %}
-                                            {% endfor %}
-                                            {% if tableName != 'inbox_messages' %}
-                                                <th scope='col'>Edit</th>
-                                            {% endif %}
-                                            <th scope='col'>X</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {% for row in tableData %}
-                                            <tr id="row-{{ row.id|e }}">
-                                                {% for columnInfo in tableColumnsWithTypes %}
-                                                    {% set columnName = columnInfo.name %}
-                                                    
-                                                    <th scope='row'>
-                                                        {% if columnInfo.isForeignKey and row[columnName] is not empty and row[columnName] != 'NULL' %}
-                                                            {% set fkValue = row[columnName] %}
-                                                            {% set result = fkValue / limitValue %}
-                                                            {% set fkPage = result | round(0, 'ceil') %}
-                                                            
-                                                            <a class="foreign-key-link" href="{{ path('admin_database_browser', {'table': columnInfo.referencedTable, 'page': fkPage}) }}#row-{{ fkValue|e }}" 
-                                                               title="View in {{ columnInfo.referencedTable|e }} (ID: {{ fkValue|e }}, Page: {{ fkPage }})">
-                                                                {{ fkValue|e }}
-                                                            </a>
-                                                        {% else %}
-                                                            {{ row[columnName] is empty ? 'NULL' : row[columnName] }}
-                                                        {% endif %}
-                                                    </th>
-                                                {% endfor %}
-                                                {% if tableName != 'inbox_messages' %} 
-                                                    <th>
-                                                        <a class="db-delete-link edit-link" href={{ path('admin_database_edit', {'table': tableName|e, 'page': page, 'id': row.id|e}) }}>
-                                                            <i class="fa fa-edit"></i>
-                                                        </a>
-                                                    </th>
-                                                {% endif %}
-                                                <th>
-                                                    <form method="POST" action={{ path('admin_database_delete', {'table': tableName|e, 'page': page, 'id': row.id|e}) }} style="display:inline;">
-                                                        <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
-                                                        <button type="submit" class="db-delete-link" style="background:none; border:none; padding:0; cursor:pointer;">
-                                                            <i class="fa fa-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </th>
-                                            </tr>
-                                        {% endfor %} 
-                                    </tbody>
-                                </table> 
-                            </div>
-                            <div class="page-button-box database-pagination mt-3">
-                                {% if page != 1 %}
-                                    <a class="back-page-button" href={{ path('admin_database_browser', {'table': tableName, 'page': page - 1}) }}>Back</a>
-                                {% endif %}
-                                {% if limit == tableDataCount %}
-                                    <a class="back-page-button" href={{ path('admin_database_browser', {'table': tableName, 'page': page + 1}) }}>Next</a>
-                                {% endif %}
-                            </div>
-                        {% endif %}
-                    {% endif %}
-                {% endif %}
-            {% endif %}
-        {% endif %}
-    {% endif %}
+	{# TABLES-LIST #}
+	{% if tables != null %}
+		<div class="database-table-select">
+			<h3 class="database-section-title">Select table</h3>
+			<ul class="database-table-list">
+				{% for table in tables %}
+					{% if table != 'doctrine_migration_versions' %}
+						<li class="database-table-list-item">
+							<a class="db-browser-select-link" href={{ path('admin_database_browser', {'table': table, 'page': 1} ) }}>
+								<span class="database-table-name">{{ table }}</span>
+								<i class="fa fa-arrow-right database-table-icon" aria-hidden="true"></i>
+							</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+	{% else %}
+		{# ROW-EDITOR #}
+		{% if editorTable != null %}
+			{% include "admin/element/navigation/database-navigation.twig" %}
+			{% if errorMsg != null %}
+				{% include "common/alerts/error-alert.twig" %}
+			{% endif %}
+			<center>
+				<div class="card dashbord-card database-card database-card-form">
+					<div class="database-form-header">
+						<div class="database-form-icon">
+							<i class="fa fa-edit"></i>
+						</div>
+						<div class="database-form-title">
+							<h3>Edit Record</h3>
+							<p>Table:
+								<strong>{{ editorTable|e }}</strong>
+								· Row ID:
+								<strong>{{ editorId|e }}</strong>
+							</p>
+						</div>
+					</div>
+					<div class="card-body database-form-body">
+						{% if editorReferer != null %}
+							<form class="db-edit-form" action={{ path('admin_database_edit', {'table': editorTable, 'page': editorPage, 'id': editorId, 'referer': editorReferer} ) }} method="post">
+						{% else %}
+							<form class="db-edit-form" action={{ path('admin_database_edit', {'table': editorTable, 'page': editorPage, 'id': editorId} ) }} method="post">
+						{% endif %}
+							{% for field in editorField %}
+								{% if field.name != 'id' %}
+									{% set inputType = getInputTypeFromDbType(field.type) %}
+									{% set formattedValue = formatValueForInput(editorValues[field.name], inputType) %}
+									<div class="form-field-group">
+										<label class="text-input-title" for="editor-field-{{ loop.index }}">
+											<span class="field-label">
+												<span class="field-name">{{ field.name|e }}</span>
+												{% if field.isForeignKey %}
+													<span class="field-key-icon">🔑</span>
+												{% endif %}
+											</span>
+											<span class="field-type">{{ field.type|e }}</span>
+										</label>
+
+										{% if inputType == 'textarea' %}
+											<textarea class="text-input" id="editor-field-{{ loop.index }}" name="{{ field.name|e }}" rows="4">{{ formattedValue|e }}</textarea>
+										{% elseif inputType == 'checkbox' %}
+											<div class="checkbox-wrapper">
+												<input type="hidden" name="{{ field.name|e }}" value="false">
+												<input type="checkbox" id="editor-field-{{ loop.index }}" name="{{ field.name|e }}" value="true" {% if formattedValue == 'true' %} checked {% endif %}>
+												<label for="editor-field-{{ loop.index }}" class="checkbox-label">Enabled</label>
+											</div>
+										{% else %}
+											<input class="text-input" id="editor-field-{{ loop.index }}" type="{{ inputType }}" name="{{ field.name|e }}" value="{{ formattedValue|e }}" {% if inputType == 'number' %} step="any" {% endif %}>
+										{% endif %}
+									</div>
+								{% endif %}
+							{% endfor %}
+							<div class="form-actions">
+								<button class="form-button submit" type="submit" name="submitEdit" value="Edit">
+									<i class="fa fa-save"></i>
+									Save changes
+								</button>
+								<a href={{ path('admin_database_browser', {'table': editorTable, 'page': editorPage} ) }} class="form-button cancel">
+									<i class="fa fa-times"></i>
+									Cancel
+								</a>
+							</div>
+					    </form>
+					</div>
+				</div>
+			</center>
+			{% else %}
+				{# NEW-ROW FORM #}
+				{% if newRowTable != null %}
+					{% include "admin/element/navigation/database-navigation.twig" %}
+					{% if errorMsg != null %}
+						{% include "common/alerts/error-alert.twig" %}
+					{% endif %}
+					<center>
+						<div class="card dashbord-card database-card database-card-form">
+							<div class="database-form-header">
+								<div class="database-form-icon add-icon">
+									<i class="fa fa-plus"></i>
+								</div>
+								<div class="database-form-title">
+									<h3>Add New Record</h3>
+									<p>Table:
+										<strong>{{ newRowTable|e }}</strong>
+									</p>
+								</div>
+							</div>
+							<div class="card-body database-form-body">
+								<form class="db-edit-form" action={{ path('admin_database_add', {'table': newRowTable|e, 'page': newRowPage} ) }} method="post">
+									{% for field in newRowColumns %}
+										{% if field is iterable and field.name is defined and field.name != 'id' %}
+											{% set inputType = getInputTypeFromDbType(field.type) %}
+											{% set submittedValue = submittedValues[field.name]|default('') %}
+											{% set formattedValue = formatValueForInput(submittedValue, inputType) %}
+
+											<div class="form-field-group">
+												<label class="text-input-title" for="new-row-field-{{ loop.index }}">
+													<span class="field-label">
+														<span class="field-name">{{ field.name|e }}</span>
+														{% if field.isForeignKey %}
+															<span class="field-key-icon">🔑</span>
+														{% endif %}
+													</span>
+													<span class="field-type">{{ field.type|e }}</span>
+												</label>
+
+												{% if inputType == 'textarea' %}
+													<textarea class="text-input" id="new-row-field-{{ loop.index }}" name="{{ field.name|e }}" rows="4" placeholder="{{ field.name|e }}">{{ formattedValue|e }}</textarea>
+												{% elseif inputType == 'checkbox' %}
+													<div class="checkbox-wrapper">
+														<input type="hidden" name="{{ field.name|e }}" value="false">
+														<input type="checkbox" id="new-row-field-{{ loop.index }}" name="{{ field.name|e }}" value="true" {% if formattedValue == 'true' %} checked {% endif %}>
+														<label for="new-row-field-{{ loop.index }}" class="checkbox-label">Enabled</label>
+													</div>
+												{% else %}
+													<input class="text-input" id="new-row-field-{{ loop.index }}" type="{{ inputType }}" name="{{ field.name|e }}" placeholder="{{ field.name|e }}" value="{{ formattedValue|e }}" {% if inputType == 'number' %} step="any" {% endif %}>
+												{% endif %}
+											</div>
+										{% endif %}
+									{% endfor %}
+									<div class="form-actions">
+										<button class="form-button submit" type="submit" name="submitSave" value="SAVE">
+											<i class="fa fa-plus-circle"></i>
+											Create row
+										</button>
+										<a href={{ path('admin_database_browser', {'table': newRowTable, 'page': newRowPage} ) }} class="form-button cancel">
+											<i class="fa fa-times"></i>
+											Cancel
+										</a>
+									</div>
+								</form>
+							</div>
+						</div>
+					</center>
+				{% else %}
+					{# TABLES-BROWSER #}
+					{% if tableName != null %}
+						{% include "admin/element/navigation/database-navigation.twig" %}
+						{% if tableDataCount == 0 %}
+							<div class="database-empty-state mt-3">Table '{{ tableName }}' is empty.</div>
+						{% else %}
+							<div class="database-table-scroll">
+								<table class="table table-dark table-hover custom-header">
+									<thead>
+										<tr>
+											{% for columnInfo in tableColumnsWithTypes %}
+												{% set columnName = columnInfo.name %}
+												{% if columnName == 'id' %}
+													<th scope='col'>#</th>
+												{% else %}
+													<th scope='col'>{{ columnName|e }}</th>
+												{% endif %}
+											{% endfor %}
+											{% if tableName != 'inbox_messages' %}
+												<th scope='col'>Edit</th>
+											{% endif %}
+											<th scope='col'>X</th>
+										</tr>
+									</thead>
+									<tbody>
+										{% for row in tableData %}
+											<tr id="row-{{ row.id|e }}">
+												{% for columnInfo in tableColumnsWithTypes %}
+													{% set columnName = columnInfo.name %}
+
+													<th scope='row'>
+														{% if columnInfo.isForeignKey and row[columnName] is not empty and row[columnName] != 'NULL' %}
+															{% set fkValue = row[columnName] %}
+															{% set result = fkValue / limitValue %}
+															{% set fkPage = result | round(0, 'ceil') %}
+
+															<a class="foreign-key-link" href="{{ path('admin_database_browser', {'table': columnInfo.referencedTable, 'page': fkPage}) }}#row-{{ fkValue|e }}" title="View in {{ columnInfo.referencedTable|e }} (ID: {{ fkValue|e }}, Page: {{ fkPage }})">
+																{{ fkValue|e }}
+															</a>
+														{% else %}
+															{{ row[columnName] is empty ? 'NULL' : row[columnName] }}
+														{% endif %}
+													</th>
+												{% endfor %}
+												{% if tableName != 'inbox_messages' %}
+													<th>
+														<a class="db-delete-link edit-link" href={{ path('admin_database_edit', {'table': tableName|e, 'page': page, 'id': row.id|e} ) }}>
+															<i class="fa fa-edit"></i>
+														</a>
+													</th>
+												{% endif %}
+												<th>
+													<form method="POST" action={{ path('admin_database_delete', {'table': tableName|e, 'page': page, 'id': row.id|e} ) }} style="display:inline;">
+														<input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+														<button type="submit" class="db-delete-link" style="background:none; border:none; padding:0; cursor:pointer;">
+															<i class="fa fa-trash"></i>
+														</button>
+													</form>
+												</th>
+											</tr>
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+							<div class="page-button-box database-pagination mt-3">
+								{% if page != 1 %}
+									<a class="back-page-button" href={{ path('admin_database_browser', {'table': tableName, 'page': page - 1} ) }}>Back</a>
+								{% endif %}
+								{% if limit == tableDataCount %}
+									<a class="back-page-button" href={{ path('admin_database_browser', {'table': tableName, 'page': page + 1} ) }}>Next</a>
+								{% endif %}
+							</div>
+					{% endif %}
+				{% endif %}
+			{% endif %}
+		{% endif %}
+	{% endif %}
 </div>
 
 {# FOREIGN KEY HIGHLIGHTING AND SCROLLING FUNCTIONALITY #}
 {% if tableName != null %}
-    {{ encore_entry_script_tags('database-browser-js') }}
+	{{ encore_entry_script_tags('database-browser-js') }}
 {% endif %}
 {% endblock %}

@@ -9,6 +9,7 @@ use App\Form\BanFormType;
 use App\Manager\BanManager;
 use App\Util\VisitorInfoUtil;
 use App\Manager\VisitorManager;
+use App\Annotation\Authorization;
 use App\Annotation\CsrfProtection;
 use App\Form\VisitorListExportType;
 use Symfony\Component\HttpFoundation\Request;
@@ -89,6 +90,7 @@ class VisitorManagerController extends AbstractController
      *
      * @return Response The IP information view
      */
+    #[Authorization('ADMIN')]
     #[Route('/admin/visitors/ipinfo', methods: ['GET'], name: 'admin_visitor_ipinfo')]
     public function visitorIpInfo(Request $request): Response
     {
@@ -123,6 +125,7 @@ class VisitorManagerController extends AbstractController
      *
      * @return Response The delete confirmation page view
      */
+    #[Authorization('ADMIN')]
     #[Route('/admin/visitors/delete', methods: ['GET'], name: 'admin_visitor_delete')]
     public function deleteAllVisitors(Request $request): Response
     {
@@ -142,6 +145,7 @@ class VisitorManagerController extends AbstractController
      *
      * @return Response The redirect back to visitor manager
      */
+    #[Authorization('ADMIN')]
     #[CsrfProtection(enabled: false)]
     #[Route('/admin/visitors/ban', methods: ['GET', 'POST'], name: 'admin_visitor_ban')]
     public function banVisitor(Request $request): Response
@@ -200,6 +204,7 @@ class VisitorManagerController extends AbstractController
      *
      * @return Response The redirect back to visitor manager
      */
+    #[Authorization('ADMIN')]
     #[Route('/admin/visitors/unban', methods: ['POST'], name: 'admin_visitor_unban')]
     public function unbanVisitor(Request $request): Response
     {
