@@ -2,21 +2,20 @@
 This is a basic website template for creating a server-side-rendered websites with Symfony and Bootstrap. It includes a simple admin system with user management, visitor tracking, contact inbox, and logs management.
 
 ## Description
-This template is essentially the skeleton of the [becvar-site](https://github.com/lukasbecvar/becvar-site) application, with just the public part removed. The admin system includes its own user system, visitor tracking, contact inbox, and logs, and is ready for further expansion. The public part is prepared for integrating a new design and content.
+This template is essentially the skeleton of the [becvar-site](https://github.com/lukasbecvar/becvar-site) application. The admin system includes its own user system, visitor tracking, contact inbox, and logs, and is ready for further expansion. The public part is prepared for integrating a new design and content.
 
 ## Preview
 ![system preview](.github/assets/preview.gif)
 
 ## Bare-metal installation (with mysql/apache)
-- install app [Requirements](#requirements)
+- Install app [Requirements](#requirements)
 - Clone the repository to your /www directory
-- configure apache config like [apache-site.conf](./docker/configs/apache-site.conf)
-- for production use only APP_ENV=prod! (in .env)
-- configure app environment in .env.prod
-- install dependencies `composer install && npm install && npm run build`
-- create database `doctrine:database:create`
-- migrate database structure `doctrine:migrations:migrate --no-interaction`
-- install opcache (optional)
+- Configure apache config like [apache-site.conf](./docker/configs/apache-site.conf)
+- Configure app environment in .env.prod (For production use only APP_ENV=prod (in .env))
+- Install dependencies `composer install && npm install && npm run build`
+- Create database `doctrine:database:create`
+- Migrate database structure `doctrine:migrations:migrate --no-interaction`
+- Configure opcache (optional)
 
 ## Development environment
 The complete stack for development is in Docker Compose, including PHP, Node, and Composer. You just need to run the docker-start script.
