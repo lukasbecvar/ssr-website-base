@@ -6,7 +6,11 @@ use Twig\TwigFunction;
 use Twig\Extension\AbstractExtension;
 
 /**
- * DatabaseHelperExtension - provides helper functions for database forms
+ * DatabaseHelperExtension
+ *
+ * Twig extension provides helper functions for database forms
+ *
+ * @package App\Twig
  */
 class DatabaseHelperExtension extends AbstractExtension
 {
@@ -32,8 +36,16 @@ class DatabaseHelperExtension extends AbstractExtension
      */
     public function getInputTypeFromDbType(string $dbType): string
     {
+        // normalize type
+        $dbType = strtoupper($dbType);
+
+        // handle special boolean case (TINYINT(1) is often used as boolean in MySQL)
+        if ($dbType === 'TINYINT(1)' || $dbType === 'BOOLEAN') {
+            return 'checkbox';
+        }
+
         // extract base type from type with length (e.g., "VARCHAR(255)" -> "VARCHAR")
-        $baseType = preg_replace('/\([^)]*\)/', '', strtoupper($dbType));
+        $baseType = preg_replace('/\([^)]*\)/', '', $dbType);
 
         switch ($baseType) {
             case 'INT':
@@ -58,10 +70,6 @@ class DatabaseHelperExtension extends AbstractExtension
 
             case 'TIME':
                 return 'time';
-
-            case 'BOOLEAN':
-            case 'TINYINT(1)':
-                return 'checkbox';
 
             case 'TEXT':
             case 'LONGTEXT':
