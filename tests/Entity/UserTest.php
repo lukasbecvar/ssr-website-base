@@ -33,7 +33,7 @@ class UserTest extends TestCase
         $user->setRole('ROLE_ADMIN');
         $user->setIpAddress('10.0.0.1');
         $user->setToken('random_token');
-        $user->setRegistedTime($time);
+        $user->setRegisteredTime($time);
         $user->setLastLoginTime($time);
         $user->setProfilePic('avatar-image');
         $user->setVisitor($visitor);
@@ -44,7 +44,7 @@ class UserTest extends TestCase
         $this->assertEquals('ROLE_ADMIN', $user->getRole());
         $this->assertEquals('10.0.0.1', $user->getIpAddress());
         $this->assertEquals('random_token', $user->getToken());
-        $this->assertSame($time, $user->getRegistedTime());
+        $this->assertSame($time, $user->getRegisteredTime());
         $this->assertSame($time, $user->getLastLoginTime());
         $this->assertEquals('avatar-image', $user->getProfilePic());
         $this->assertSame($visitor, $user->getVisitor());

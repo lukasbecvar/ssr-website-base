@@ -39,7 +39,7 @@ class CustomTestCase extends WebTestCase
         $user->setRole($role);
         $user->setIpAddress('127.0.0.1');
         $user->setToken('zbjNNyuudM3HQGWe6xqWwjyncbtZB22D');
-        $user->setRegistedTime(new DateTime());
+        $user->setRegisteredTime(new DateTime());
         $user->setLastLoginTime(null);
         $user->setProfilePic('image');
 

@@ -44,7 +44,7 @@ class User
     private ?string $token = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?DateTimeInterface $registed_time = null;
+    private ?DateTimeInterface $registered_time = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?DateTimeInterface $last_login_time = null;
@@ -190,25 +190,25 @@ class User
     }
 
     /**
-     * Get the user registed time
+     * Get the user registered time
      *
-     * @return DateTimeInterface|null The user registed time
+     * @return DateTimeInterface|null The user registered time
      */
-    public function getRegistedTime(): ?DateTimeInterface
+    public function getRegisteredTime(): ?DateTimeInterface
     {
-        return $this->registed_time;
+        return $this->registered_time;
     }
 
     /**
-     * Set the user registed time
+     * Set the user registered time
      *
-     * @param DateTimeInterface $registed_time The user registed time
+     * @param DateTimeInterface $registered_time The user registered time
      *
      * @return static The user object
      */
-    public function setRegistedTime(DateTimeInterface $registed_time): static
+    public function setRegisteredTime(DateTimeInterface $registered_time): static
     {
-        $this->registed_time = $registed_time;
+        $this->registered_time = $registered_time;
 
         return $this;
     }

@@ -221,7 +221,7 @@ class AuthManager
             ->setRole('Owner')
             ->setIpAddress($ipAddress)
             ->setToken($token)
-            ->setRegistedTime(new DateTime())
+            ->setRegisteredTime(new DateTime())
             ->setLastLoginTime(null)
             ->setProfilePic($imageBase64)
             ->setVisitor($visitor);

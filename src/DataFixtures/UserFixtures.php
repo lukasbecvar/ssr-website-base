@@ -50,7 +50,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
             ->setRole('Owner')
             ->setIpAddress('127.0.0.1')
             ->setToken('zHKrsWUjWZGJfi2dkpAEKrkkEpW2LHn2')
-            ->setRegistedTime(new DateTime('2023-03-22 12:00:00'))
+            ->setRegisteredTime(new DateTime('2023-03-22 12:00:00'))
             ->setLastLoginTime(null)
             ->setProfilePic('non-pic')
             ->setVisitor($manager->getRepository(Visitor::class)->find(1));
@@ -71,7 +71,7 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
                 ->setRole('User')
                 ->setIpAddress('127.0.0.1')
                 ->setToken(ByteString::fromRandom(32)->toString())
-                ->setRegistedTime(new DateTime('23-06-14 13:55:41'))
+                ->setRegisteredTime(new DateTime('23-06-14 13:55:41'))
                 ->setLastLoginTime(null)
                 ->setProfilePic('profile_pic')
                 ->setVisitor($manager->getRepository(Visitor::class)->find($i));

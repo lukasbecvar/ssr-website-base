@@ -68,7 +68,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
         $this->assertSelectorTextContains('body', 'role');
         $this->assertSelectorTextContains('body', 'ip_address');
         $this->assertSelectorTextContains('body', 'token');
-        $this->assertSelectorTextContains('body', 'registed_time');
+        $this->assertSelectorTextContains('body', 'registered_time');
         $this->assertSelectorTextContains('body', 'last_login_time');
         $this->assertSelectorTextContains('body', 'profile_pic');
         $this->assertSelectorTextContains('body', 'visitor_id');
@@ -121,7 +121,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'role' => 'Owner',
             'ip_address' => '127.0.0.1',
             'token' => 'zHKrsWUjWZGJfi2dkpAEKrkkEpW2LHn2',
-            'registed_time' => '2023-03-22T12:00',
+            'registered_time' => '2023-03-22T12:00',
             'last_login_time' => '2025-12-26T14:32',
             'profile_pic' => 'non-pic',
             'visitor_id' => 1001,
@@ -150,7 +150,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'role' => 'Owner',
             'ip_address' => '127.0.0.1',
             'token' => 'zHKrsWUjWZGJfi2dkpAEKrkkEpW2LHn2',
-            'registed_time' => '2023-03-22T12:00',
+            'registered_time' => '2023-03-22T12:00',
             'last_login_time' => '2025-12-26T14:32',
             'profile_pic' => 'non-pic',
             'visitor_id' => 'greregeg',
@@ -179,7 +179,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'role' => 'Owner',
             'ip_address' => '127.0.0.1',
             'token' => 'zHKrsWUjWZGJfi2dkpAEKrkkEpW2LHn2',
-            'registed_time' => '2023-03-22T12:00',
+            'registered_time' => '2023-03-22T12:00',
             'last_login_time' => '2025-12-26T14:32',
             'profile_pic' => 'non-pic',
             'visitor_id' => 4854841515,
@@ -208,7 +208,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'role' => 'Owner',
             'ip_address' => '127.0.0.1',
             'token' => 'zHKrsWUjWZGJfi2dkpAEKrkkEpW2LHn2',
-            'registed_time' => '2023-03-22T12:00',
+            'registered_time' => '2023-03-22T12:00',
             'last_login_time' => '2025-12-26T14:32',
             'profile_pic' => 'non-pic',
             'visitor_id' => 1001,
@@ -251,7 +251,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'role' => 'Owner',
             'ip_address' => '127.0.0.1',
             'token' => 'zHKrsWUjWZGJfi2dkpAEKrkkEpW2LHn2',
-            'registed_time' => '2023-03-22T12:00',
+            'registered_time' => '2023-03-22T12:00',
             'last_login_time' => '2025-12-26T14:32',
             'profile_pic' => 'non-pic',
             'visitor_id' => 1001,
@@ -277,7 +277,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'role' => 'Owner',
             'ip_address' => '127.0.0.1',
             'token' => 'zHKrsWUjWZGJfi2dkpAEKrkkEpW2LHn2',
-            'registed_time' => '2023-03-22T12:00',
+            'registered_time' => '2023-03-22T12:00',
             'last_login_time' => '2025-12-26T14:32',
             'profile_pic' => 'non-pic',
             'visitor_id' => 'greregeg',
@@ -303,7 +303,7 @@ class DatabaseBrowserControllerTest extends CustomTestCase
             'role' => 'Owner',
             'ip_address' => '127.0.0.1',
             'token' => ByteString::fromRandom(32)->toString(),
-            'registed_time' => '2023-03-22T12:00',
+            'registered_time' => '2023-03-22T12:00',
             'last_login_time' => '2025-12-26T14:32',
             'profile_pic' => 'non-pic',
             'visitor_id' => 1001,
