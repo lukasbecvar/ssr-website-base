@@ -48,7 +48,7 @@ class ExceptionEventSubscriberTest extends TestCase
      *
      * @return ExceptionEvent The exception event
      */
-    private function createExceptionEvent(Throwable $exception): ExceptionEvent
+    public function createExceptionEvent(Throwable $exception): ExceptionEvent
     {
         /** @var HttpKernelInterface&MockObject $kernelMock */
         $kernelMock = $this->createMock(HttpKernelInterface::class);

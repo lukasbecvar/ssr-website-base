@@ -34,7 +34,7 @@ class SessionUtil
      *
      * @return SessionInterface|null
      */
-    private function getSession(): ?SessionInterface
+    public function getSession(): ?SessionInterface
     {
         try {
             return $this->requestStack->getSession();

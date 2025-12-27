@@ -148,7 +148,7 @@ class DatabaseManager
      *
      * @return array<string, array<string, string>> The foreign key relationships
      */
-    private function getForeignKeyRelationships(string $tableName): array
+    public function getForeignKeyRelationships(string $tableName): array
     {
         $relationships = [];
 
@@ -189,7 +189,7 @@ class DatabaseManager
      *
      * @return array<string> The list of foreign key column names
      */
-    private function getForeignKeys(string $tableName): array
+    public function getForeignKeys(string $tableName): array
     {
         return array_keys($this->getForeignKeyRelationships($tableName));
     }
@@ -374,7 +374,7 @@ class DatabaseManager
      *
      * @return void
      */
-    private function validateForeignKeys(string $tableName, array $columns, array $values): void
+    public function validateForeignKeys(string $tableName, array $columns, array $values): void
     {
         // get foreign key information
         $sql = "
@@ -560,7 +560,7 @@ class DatabaseManager
      *
      * @return void
      */
-    private function validateSingleForeignKey(string $tableName, string $columnName, string|int|null $value): void
+    public function validateSingleForeignKey(string $tableName, string $columnName, string|int|null $value): void
     {
         // skip validation for null or empty values
         if ($value === null || $value === '') {
@@ -688,7 +688,7 @@ class DatabaseManager
      *
      * @return array<mixed> The processed values
      */
-    private function processBooleanValues(string $tableName, array $columns, array $values): array
+    public function processBooleanValues(string $tableName, array $columns, array $values): array
     {
         $processedValues = [];
         $columnTypes = $this->getTableColumnsWithTypes($tableName);
@@ -739,7 +739,7 @@ class DatabaseManager
      *
      * @return int|string|null The processed value
      */
-    private function processBooleanValue(string $tableName, string $columnName, string|int|null $value): int|string|null
+    public function processBooleanValue(string $tableName, string $columnName, string|int|null $value): int|string|null
     {
         $columnTypes = $this->getTableColumnsWithTypes($tableName);
         $columnType = null;
