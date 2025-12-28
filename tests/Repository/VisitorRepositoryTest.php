@@ -208,4 +208,37 @@ class VisitorRepositoryTest extends TestCase
         // assert result
         $this->assertEquals($expected, $result);
     }
+
+    /**
+     * Test getVisitorsFirstVisitSite
+     *
+     * @return void
+     */
+    public function testGetVisitorsFirstVisitSite(): void
+    {
+        $queryResult = [
+            ['site' => 'example.com', 'visitorCount' => 20],
+            ['site' => 'google.com', 'visitorCount' => 15]
+        ];
+        $expected = ['example.com' => 20, 'google.com' => 15];
+
+        $query = $this->createMock(Query::class);
+        $queryBuilder = $this->createMock(QueryBuilder::class);
+
+        $this->entityManager->expects($this->once())->method('createQueryBuilder')->willReturn($queryBuilder);
+        $queryBuilder->expects($this->exactly(2))->method('select')->willReturnCallback(fn() => $queryBuilder);
+        $queryBuilder->expects($this->once())->method('from')->with(Visitor::class, 'v')->willReturnSelf();
+        $queryBuilder->expects($this->once())->method('groupBy')->with('v.first_visit_site')->willReturnSelf();
+        $queryBuilder->expects($this->once())->method('orderBy')->with('visitorCount', 'DESC')->willReturnSelf();
+        $queryBuilder->expects($this->once())->method('getQuery')->willReturn($query);
+
+        // mock result
+        $query->expects($this->once())->method('getResult')->willReturn($queryResult);
+
+        // call tested method
+        $result = $this->visitorRepository->getVisitorsFirstVisitSite();
+
+        // assert result
+        $this->assertEquals($expected, $result);
+    }
 }

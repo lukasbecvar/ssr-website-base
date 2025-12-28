@@ -306,4 +306,27 @@ class VisitorRepository extends ServiceEntityRepository
 
         return $visitorsReferers;
     }
+
+    /**
+     * Get list of first visit sites and their count
+     *
+     * @return array<string,int> An associative array where the key is the site and the value is the count of visitors
+     */
+    public function getVisitorsFirstVisitSite(): array
+    {
+        $results = $this->createQueryBuilder('v')
+            ->select('v.first_visit_site AS site, COUNT(v.id) AS visitorCount')
+            ->groupBy('v.first_visit_site')
+            ->orderBy('visitorCount', 'DESC')
+            ->getQuery()
+            ->getResult();
+
+        // convert results to associative array
+        $visitorsFirstVisitSite = [];
+        foreach ($results as $result) {
+            $visitorsFirstVisitSite[$result['site']] = $result['visitorCount'];
+        }
+
+        return $visitorsFirstVisitSite;
+    }
 }

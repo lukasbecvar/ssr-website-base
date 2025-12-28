@@ -234,6 +234,7 @@ class VisitorManagerTest extends TestCase
         $this->visitorRepository->method('getVisitorsByCity')->willReturn(['New York' => 50]);
         $this->visitorRepository->method('getVisitorsUsedBrowsers')->willReturn(['Chrome 1.0' => 5, 'Chrome 2.0' => 5, 'Firefox' => 3]);
         $this->visitorRepository->method('getVisitorsReferers')->willReturn(['google.com' => 20]);
+        $this->visitorRepository->method('getVisitorsFirstVisitSite')->willReturn(['example.com' => 10]);
 
         // mock shortify
         $this->visitorInfoUtil->method('getBrowserShortify')->will(new ReturnCallback(function ($browser) {
@@ -253,6 +254,8 @@ class VisitorManagerTest extends TestCase
         // check structure
         $this->assertArrayHasKey('visitorsCity', $metrics);
         $this->assertArrayHasKey('visitorsCount', $metrics);
+        $this->assertArrayHasKey('visitorsFirstVisitSite', $metrics);
+        $this->assertEquals(10, $metrics['visitorsFirstVisitSite']['example.com']);
     }
 
     /**

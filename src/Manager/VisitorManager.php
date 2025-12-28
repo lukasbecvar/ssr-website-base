@@ -365,6 +365,9 @@ class VisitorManager
         // get visitors referer metrics
         $visitorsReferers = $this->visitorRepository->getVisitorsReferers();
 
+        // get visitors first visit site metrics
+        $visitorsFirstVisitSite = $this->visitorRepository->getVisitorsFirstVisitSite();
+
         // shotify browsers array
         $visitorsBrowsersShortify = [];
 
@@ -387,6 +390,7 @@ class VisitorManager
         arsort($visitorsCity);
         arsort($visitorsCountry);
         arsort($visitorsBrowsersShortify);
+        arsort($visitorsFirstVisitSite);
 
         // build return metrics data
         return [
@@ -394,7 +398,8 @@ class VisitorManager
             'visitorsCount' => $visitorsCount,
             'visitorsCountry' => $visitorsCountry,
             'visitorsReferers' => $visitorsReferers,
-            'visitorsBrowsers' => $visitorsBrowsersShortify
+            'visitorsBrowsers' => $visitorsBrowsersShortify,
+            'visitorsFirstVisitSite' => $visitorsFirstVisitSite
         ];
     }
 }
