@@ -40,7 +40,10 @@ class JsonUtilTest extends TestCase
     protected function tearDown(): void
     {
         // cleanup
-        array_map('unlink', glob("$this->tempDir/*.*"));
+        $files = glob("$this->tempDir/*.*");
+        if ($files !== false) {
+            array_map('unlink', $files);
+        }
         rmdir($this->tempDir);
     }
 

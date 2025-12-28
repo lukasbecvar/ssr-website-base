@@ -1,5 +1,5 @@
 parameters:
-    level: 6
+    level: 7
     treatPhpDocTypesAsCertain: false
     paths:
         - config
@@ -9,4 +9,3 @@ includes:
     - vendor/phpstan/phpstan-symfony/extension.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-doctrine/extension.neon
-    

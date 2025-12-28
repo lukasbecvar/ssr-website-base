@@ -106,7 +106,7 @@ class MessagesManager
 
         // execute query
         try {
-            return $query->getSingleScalarResult();
+            return (int) $query->getSingleScalarResult();
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 msg: 'error to get messages count: ' . $e->getMessage(),

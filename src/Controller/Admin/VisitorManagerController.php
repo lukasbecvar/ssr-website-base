@@ -104,7 +104,6 @@ class VisitorManagerController extends AbstractController
 
         // get ip info
         $ipInfoData = $this->visitorInfoUtil->getIpInfo($ipAddress);
-        $ipInfoData = json_decode(json_encode($ipInfoData), true);
 
         // return visitor manager view
         return $this->render('admin/visitors-manager.twig', [

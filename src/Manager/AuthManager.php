@@ -168,7 +168,7 @@ class AuthManager
         $visitor = $this->visitorManager->getVisitorRepository($ipAddress);
 
         // check if user repo found
-        if ($user != null) {
+        if ($user instanceof User) {
             // update last login time
             $user->setLastLoginTime(new DateTime());
 
@@ -370,13 +370,15 @@ class AuthManager
      *
      * @param array<mixed> $array The criteria to search
      *
-     * @return object|null The user entity or null if not found
+     * @return User|null The user entity or null if not found
      */
-    public function getUserRepository(array $array): ?object
+    public function getUserRepository(array $array): ?User
     {
         // try to find user in database
         try {
-            return $this->userRepository->findOneBy($array);
+            /** @var User|null $user */
+            $user = $this->userRepository->findOneBy($array);
+            return $user;
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 msg: 'find error: ' . $e->getMessage(),

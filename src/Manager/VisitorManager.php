@@ -222,7 +222,7 @@ class VisitorManager
                 $queryBuilder->where('v.id IN (:onlineIds)')->setParameter('onlineIds', $onlineVisitors);
             }
 
-            return $queryBuilder->getQuery()->getSingleScalarResult();
+            return (int) $queryBuilder->getQuery()->getSingleScalarResult();
         } catch (Exception $e) {
             $this->errorManager->handleError(
                 msg: 'error getting visitor count: ' . $e->getMessage(),

@@ -334,8 +334,9 @@ class AppUtilTest extends TestCase
         // perform update
         $this->appUtil->updateEnvValue('MY_VAR', 'new_value');
 
-        // verify content
+        // verify
         $newContent = file_get_contents($testEnvFile);
+        $this->assertNotFalse($newContent);
         $this->assertStringContainsString('MY_VAR=new_value', $newContent);
         $this->assertStringContainsString('ANOTHER_VAR=foo', $newContent);
     }

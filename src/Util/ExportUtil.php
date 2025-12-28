@@ -143,6 +143,9 @@ class ExportUtil
 
         // get the contents of the buffer
         $output = ob_get_clean();
+        if ($output === false) {
+            $output = '';
+        }
 
         // prepare the response
         $response = new Response($output);

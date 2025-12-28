@@ -76,7 +76,8 @@ class VisitorInfoUtil
         // escape referer
         if ($referer !== null) {
             $referer = $this->securityUtil->escapeString($referer);
-            $referer = parse_url($referer, PHP_URL_HOST) ?? 'Unknown';
+            $parsedHost = parse_url($referer, PHP_URL_HOST);
+            $referer = $parsedHost !== false && $parsedHost !== null ? $parsedHost : 'Unknown';
         }
 
         return $referer ?? 'Unknown';
@@ -110,9 +111,9 @@ class VisitorInfoUtil
      */
     public function getBrowserShortify(?string $userAgent = null): ?string
     {
-        // set useragent if not set
-        if ($userAgent == null) {
-            $userAgent = $this->getUserAgent();
+        // ensure userAgent is always a string
+        if ($userAgent === null) {
+            $userAgent = $this->getUserAgent() ?? 'Unknown';
         }
 
         $output = null;
@@ -121,11 +122,11 @@ class VisitorInfoUtil
         $browserList = $this->jsonUtil->getJson(__DIR__ . '/../../config/browser-list.json');
 
         // check if browser list found
-        if ($browserList != null) {
+        if ($browserList !== null) {
             // check all user agents
             foreach ($browserList as $index => $value) {
-                // check if index found in agent
-                if (str_contains($userAgent, $index)) {
+                // $userAgent is now guaranteed to be a string
+                if (is_string($index) && str_contains($userAgent, $index)) {
                     $output = $index;
                     break;
                 }
@@ -133,7 +134,7 @@ class VisitorInfoUtil
         }
 
         // check if output is not found in browser list
-        if ($output == null) {
+        if ($output === null) {
             // identify common browsers using switch statement
             switch (true) {
                 case preg_match('/MSIE (\d+\.\d+);/', $userAgent):
@@ -177,7 +178,7 @@ class VisitorInfoUtil
                     $output = 'Opera';
                     break;
                 default:
-                    // if not found, check user agent length
+                    // if not found, use 'Unknown' or the full user agent if it's short
                     if (str_contains($userAgent, ' ') || strlen($userAgent) >= 39) {
                         $output = 'Unknown';
                     } else {
