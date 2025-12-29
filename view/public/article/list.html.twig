@@ -1,0 +1,42 @@
+{% extends 'common/bases/public-base.twig' %}
+
+{% block body %}
+    {% include 'public/elements/navbar.twig' %}
+    <main class="container pt-3 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                <h1 class="mb-5 display-5 fw-bold article-title">Articles</h1>
+                <div class="article-feed">
+                    {# NO ARTICLES FOUND #}
+                    {% if articles|length == 0 %}
+                        <div class="alert alert-info" role="alert">
+                            No articles found.
+                        </div>
+                    {% endif %}
+
+                    {# ARTICLE CARDS #}
+                    {% for article in articles %}
+                        <div class="article-card mb-4">
+                            <div class="p-4">
+                                <h2 class="h3 mb-1">
+                                    <a href={{ path('public_article_detail', {'slug': article.slug}) }} class="text-decoration-none article-card-title">
+                                        {{ article.title }}
+                                    </a>
+                                </h2>
+                                <div class="mb-3 text-muted small">
+                                    <span>Published on: {{ article.publishTime|date('d.m.Y') }}</span>
+                                </div>
+                                <p class="article-excerpt mb-4">
+                                    {{ article.content|striptags|slice(0, 300) ~ '...' }}
+                                </p>
+                                <a href={{ path('public_article_detail', {'slug': article.slug}) }} class="read-more-link">
+                                    Read full article <i class="fa fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </main>
+{% endblock %}

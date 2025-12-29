@@ -2403,6 +2403,88 @@ tr.target-row, tr.target-row:hover {
 	row-gap: 0px;
 }
 
+/* article editor */
+.article-editor-form {
+	max-width: 95%; 
+	width: 100%;
+}
+
+.green-tag {
+	background-color: #28a745 !important;
+}
+
+.orange-tag {
+	background: #ffc107 !important;
+}
+
+.grey-tag {
+	background: #6c757d !important;
+}
+
+div.tox-tinymce {
+    border: 1px solid rgba(122, 132, 144, 0.28) !important;
+    border-radius: 12px !important;
+    background-color: rgba(25, 30, 40, 0.92) !important;
+    box-shadow: none !important;
+    outline: none !important;
+    outline-color: transparent !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+div.tox-tinymce:focus-within, div.tox-tinymce.tox-tinymce--focused {
+    border-color: #4f46e5 !important;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
+    outline: none !important;
+    outline-color: transparent !important;
+}
+
+div.tox-tinymce * {
+    outline: none !important;
+    outline-color: transparent !important;
+}
+
+div.tox-edit-area__iframe {
+    background-color: transparent !important;
+}
+
+.tox-editor-header {
+	background-color: rgba(25, 30, 40, 0.5) !important;
+    border-bottom: 1px solid rgba(122, 132, 144, 0.15) !important;
+    padding: 0 !important;
+}
+
+.tox .tox-toolbar, .tox .tox-toolbar__primary, .tox .tox-toolbar__group {
+    background-color: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+}
+
+.tox .tox-tbtn {
+    background: transparent !important;
+    color: #a6b0bf !important;
+    border-radius: 6px !important;
+    margin: 2px !important;
+}
+
+.tox .tox-tbtn:hover {
+    background: rgba(122, 132, 144, 0.2) !important;
+    color: #fff !important;
+}
+
+.tox .tox-tbtn--enabled, .tox .tox-tbtn--enabled:hover {
+    background: rgba(79, 70, 229, 0.15) !important;
+    color: #818cf8 !important;
+}
+
+.tox-promotion, .tox-statusbar {
+    display: none !important;
+}
+
+.database-card-form {
+    margin-bottom: 80px !important;
+}
+
 /* account settings */
 .settings-panel {
     padding: 12px;

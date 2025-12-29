@@ -1,0 +1,63 @@
+{% extends 'common/bases/admin-base.twig' %}
+
+{% block title %}
+    Articles
+{% endblock %}
+
+{% block component %}
+<div class="admin-panel database-panel">
+    {# INCLUDE NAVIGATION TOOLBAR #}
+    {% include 'admin/element/navigation/article-navigation.twig' %}
+    <div class="database-table-scroll">
+        <table class="table table-dark table-hover custom-header">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Published</th>
+                    <th scope="col">Edited</th>
+                    <th scope="col">Edit</th>
+                    <th scope="col">X</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for article in articles %}
+                    <tr id="row-{{ article.id }}">
+                        <th scope="row">{{ article.id }}</th>
+                        <th scope="row">{{ article.title }}</th>
+                        <th scope="row">
+                            {% if article.status == 'published' %}
+                                <span class="badge green-tag">Published</span>
+                            {% elseif article.status == 'draft' %}
+                                <span class="badge orange-tag">Draft</span>
+                            {% else %}
+                                <span class="badge grey-tag">Hidden</span>
+                            {% endif %}
+                        </th>
+                        <th scope="row">{{ article.publishTime|date('Y-m-d H:i') }}</th>
+                        <th scope="row">{{ article.editedTime ? article.editedTime|date('Y-m-d H:i') : '-' }}</th>
+                        <th scope="row">
+                            <a href={{ path('admin_articles_edit', {'id': article.id}) }} class="db-delete-link edit-link">
+                                <i class="fa fa-edit"></i>
+                            </a>
+                        </th>
+                        <th scope="row">
+                            <form method="POST" action={{ path('admin_articles_delete', {'id': article.id}) }}>
+                                <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+                                <button type="submit" class="db-delete-link" onclick="return confirm('Are you sure?')">
+                                    <i class="fa fa-trash"></i>
+                                </button>
+                            </form>
+                        </th>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center">No articles found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

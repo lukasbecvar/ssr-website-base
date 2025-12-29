@@ -1,0 +1,33 @@
+{% extends 'common/bases/public-base.twig' %}
+
+{% block body %}
+    {% include 'public/elements/navbar.twig' %}
+    <main class="container pt-3 pb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10 col-xl-8">
+                {# BACK LINK #}
+                <div class="mb-4">
+                    <a href={{ path('public_articles_list') }} class="text-decoration-none small d-inline-flex align-items-center back-link p-0">
+                        <i class="fa fa-arrow-left me-2"></i> Back to Articles
+                    </a>
+                </div>
+
+                {# ARTICLE CONTENT #}
+                <article class="article-container">
+                    <header class="mb-4">
+                        <h1 class="fw-bold article-title mb-2">{{ article.title }}</h1>
+                        <div class="text-muted small d-flex gap-3 border-bottom pb-3 border-secondary border-opacity-25">
+                            <span><i class="fa fa-calendar-alt me-1"></i> {{ article.publishTime|date('d.m.Y') }}</span>
+                            {% if article.editedTime %}
+                                <span class="fst-italic"><i class="fa fa-pen me-1"></i> Updated: {{ article.editedTime|date('d.m.Y') }}</span>
+                            {% endif %}
+                        </div>
+                    </header>
+                    <div class="article-content">
+                        {{ article.content|raw }}
+                    </div>
+                </article>
+            </div>
+        </div>
+    </main>
+{% endblock %}

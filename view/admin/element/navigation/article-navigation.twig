@@ -1,0 +1,28 @@
+<ul class="breadcrumb database-breadcrumb">
+    {# ARTICLE EDITOR BACK BUTTON #}
+    {% if page_title|default('') == 'New Article' or page_title|default('') == 'Edit Article' %}
+        <li>
+            <a class="selector-button btn-small" href={{ path('admin_articles_list') }} title="Back to list">
+                <strong>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </strong>
+            </a>
+        </li>
+        <li class="count-text-in-menu" style="margin-left: auto; margin-right: 15px;">{{ page_title|default('') }}</li>
+    {% else %}
+        {# LIST TOOLBAR #}
+        <li>
+            <a class="selector-button btn-small" href={{ path('admin_dashboard') }} title="Back to dashboard">
+                <strong>
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i>
+                </strong>
+            </a>
+        </li>
+        <li>
+            <a class="selector-button btn-small" href={{ path('admin_articles_new') }} title="Add new article">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li class="count-text-in-menu" style="margin-left: auto; margin-right: 15px;">Articles List</li>
+    {% endif %}
+</ul>

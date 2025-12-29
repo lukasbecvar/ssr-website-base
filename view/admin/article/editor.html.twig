@@ -1,0 +1,84 @@
+{% extends 'common/bases/admin-base.twig' %}
+
+{% block title %}
+    {{ page_title }}
+{% endblock %}
+
+{% block component %}
+<div class="admin-panel">
+    {# INCLUDE NAVIGATION TOOLBAR #}
+    {% include 'admin/element/navigation/article-navigation.twig' %}
+    <center>
+        <div class="card dashbord-card database-card database-card-form article-editor-form">
+            <div class="database-form-header">
+                <div class="database-form-icon">
+                    <i class="fa fa-file-text"></i>
+                </div>
+                <div class="database-form-title">
+                    <h3>{{ page_title }}</h3>
+                </div>
+            </div>
+            <div class="card-body database-form-body">
+                {{ form_start(form, {'attr': {'class': 'db-edit-form', 'id': 'article-form'}}) }}
+                    <input type="hidden" name="csrf_token" value={{ csrf_token('internal-csrf-token') }}>
+
+                    <div class="form-field-group">
+                        <label class="text-input-title">Title</label>
+                        {% set titleErrors = form.title.vars.errors %}
+                        <div class={{ titleErrors|length ? ' has-error' }}>
+                            {{ form_widget(form.title) }}
+                            {% if titleErrors|length %}
+                                <ul class="auth-field-errors">
+                                    {% for error in titleErrors %}
+                                        <li>{{ error.message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-field-group">
+                        <label class="text-input-title">Status</label>
+                        {% set statusErrors = form.status.vars.errors %}
+                        <div class="{{ statusErrors|length ? ' has-error' }}">
+                            {{ form_widget(form.status) }}
+                            {% if statusErrors|length %}
+                                <ul class="auth-field-errors">
+                                    {% for error in statusErrors %}
+                                        <li>{{ error.message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-field-group">
+                        <label class="text-input-title">Content</label>
+                        {% set contentErrors = form.content.vars.errors %}
+                        <div class={{ contentErrors|length ? ' has-error' }}>
+                            {{ form_widget(form.content, {'attr': {'class': 'text-input tinymce-editor', 'rows': 20}}) }}
+                            {% if contentErrors|length %}
+                                <ul class="auth-field-errors">
+                                    {% for error in contentErrors %}
+                                        <li>{{ error.message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        {{ form_widget(form.submit) }}
+                        <a href={{ path('admin_articles_list') }} class="form-button cancel">
+                            <i class="fa fa-times"></i> Cancel
+                        </a>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </center>
+</div>
+
+{# TINYMCE INTEGRATION #}
+{{ encore_entry_script_tags('article-editor-js') }}
+{% endblock %}

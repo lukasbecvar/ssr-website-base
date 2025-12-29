@@ -1,0 +1,14 @@
+framework:
+    html_sanitizer:
+        sanitizers:
+            article_content:
+                allow_safe_elements: true
+                allow_static_elements: true
+                allow_attributes:
+                    'src': ['img']
+                    'href': ['a']
+                    'target': ['a']
+                    'alt': ['img']
+                    'title': ['img', 'a']
+                    'class': '*'
+                    'style': '*'

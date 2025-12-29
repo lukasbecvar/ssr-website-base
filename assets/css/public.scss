@@ -52,6 +52,18 @@ main {
     max-width: 1200px;
 }
 
+.card {
+    border: 1px solid $border-color;
+    border-radius: $border-radius-lg;
+    background-color: $secondary-dark-bg;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-body {
+    color: $primary-text-color;
+}
+
+/* navbar */
 .navbar {
     background-color: color.adjust($primary-dark-bg, $lightness: -5%) !important;
     border-bottom: 1px solid rgba(74, 85, 104, 0.5);
@@ -113,17 +125,7 @@ main {
     padding-bottom: 0.5rem;
 }
 
-.card {
-    border: 1px solid $border-color;
-    border-radius: $border-radius-lg;
-    background-color: $secondary-dark-bg;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-.card-body {
-    color: $primary-text-color;
-}
-
+/* contact form */
 .form-control {
     background-color: $primary-dark-bg;
     border: 1px solid $border-color;
@@ -184,4 +186,96 @@ input:-webkit-autofill:active {
 
 .websiteIN {
     display: none;
+}
+
+/* articles page */
+.article-title {
+    color: #63b3ed !important;
+    font-size: 2.5rem;
+}
+
+.back-link {
+    color: #a0aec0 !important;
+    transition: color 0.2s ease;
+}
+
+.back-link:hover {
+    color: #63b3ed !important;
+}
+
+.article-content {
+    color: #e2e8f0;
+    font-size: 1.1rem;
+    line-height: 1.1 !important;
+}
+
+.article-content p {
+    margin-bottom: 0.15rem;
+}
+
+.article-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin: 10px 0;
+    border: 1px solid rgba(74, 85, 104, 0.5);
+}
+
+.article-content h1, .article-content h2, .article-content h3 {
+    color: #63b3ed;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.article-content ul, .article-content ol {
+    margin-bottom: 0.5rem;
+}
+
+.article-content blockquote {
+    border-left: 3px solid #63b3ed;
+    padding-left: 15px;
+    margin: 15px 0;
+    color: #a0aec0;
+    font-style: italic;
+}
+
+.article-card {
+    background-color: #2d3748;
+    border: 1px solid #4a5568;
+    border-radius: 0.5rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.article-card:hover {
+    border-color: #63b3ed;
+    transform: scale(1.005);
+}
+
+.article-card-title {
+    color: #e2e8f0;
+    font-weight: 700;
+    transition: color 0.2s ease;
+}
+
+.article-card:hover .article-card-title {
+    color: #63b3ed;
+}
+
+.article-excerpt {
+    color: #a0aec0;
+    font-size: 1.05rem;
+    line-height: 1.2 !important;
+}
+
+.read-more-link {
+    color: #63b3ed;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.read-more-link:hover {
+    color: #90cdf4;
 }

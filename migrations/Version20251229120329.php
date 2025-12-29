@@ -8,13 +8,13 @@ use Doctrine\DBAL\Schema\Schema;
 use Doctrine\Migrations\AbstractMigration;
 
 /**
- * Class Version20251223193544
+ * Class Version20251228162749
  * 
  * The default database schema migration
  * 
  * @package DoctrineMigrations
  */
-final class Version20251223193544 extends AbstractMigration
+final class Version20251228162749 extends AbstractMigration
 {
     /**
      * Get the migration description
@@ -35,6 +35,7 @@ final class Version20251223193544 extends AbstractMigration
      */
     public function up(Schema $schema): void
     {
+        $this->addSql('CREATE TABLE articles (id INT AUTO_INCREMENT NOT NULL, title VARCHAR(255) NOT NULL, slug VARCHAR(255) NOT NULL, content LONGTEXT NOT NULL, status VARCHAR(20) NOT NULL, publish_time DATETIME NOT NULL, edited_time DATETIME DEFAULT NULL, UNIQUE INDEX UNIQ_BFDD3168989D9B62 (slug), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE inbox_messages (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, email VARCHAR(255) NOT NULL, message LONGTEXT NOT NULL, time DATETIME NOT NULL, ip_address VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, visitor_id INT DEFAULT NULL, INDEX inbox_messages_name_idx (name), INDEX inbox_messages_email_idx (email), INDEX inbox_messages_status_idx (status), INDEX inbox_messages_ip_address_idx (ip_address), INDEX inbox_messages_visitor_id_idx (visitor_id), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE logs (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, value LONGTEXT NOT NULL, time DATETIME NOT NULL, ip_address VARCHAR(255) NOT NULL, browser VARCHAR(255) NOT NULL, status VARCHAR(255) NOT NULL, visitor_id INT DEFAULT NULL, INDEX IDX_F08FC65C70BEE6D (visitor_id), INDEX logs_name_idx (name), INDEX logs_status_idx (status), INDEX logs_ip_address_idx (ip_address), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
         $this->addSql('CREATE TABLE users (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, role VARCHAR(255) NOT NULL, ip_address VARCHAR(255) NOT NULL, token VARCHAR(255) NOT NULL, registered_time DATETIME NOT NULL, last_login_time DATETIME DEFAULT NULL, profile_pic LONGTEXT NOT NULL, visitor_id INT DEFAULT NULL, UNIQUE INDEX UNIQ_1483A5E9F85E0677 (username), UNIQUE INDEX UNIQ_1483A5E95F37A13B (token), INDEX users_role_idx (role), INDEX users_token_idx (token), INDEX users_name_idx (username), INDEX users_ip_address_idx (ip_address), INDEX users_visitor_id_idx (visitor_id), PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8mb4');
@@ -56,6 +57,7 @@ final class Version20251223193544 extends AbstractMigration
         $this->addSql('ALTER TABLE inbox_messages DROP FOREIGN KEY FK_F635C51D70BEE6D');
         $this->addSql('ALTER TABLE logs DROP FOREIGN KEY FK_F08FC65C70BEE6D');
         $this->addSql('ALTER TABLE users DROP FOREIGN KEY FK_1483A5E970BEE6D');
+        $this->addSql('DROP TABLE articles');
         $this->addSql('DROP TABLE inbox_messages');
         $this->addSql('DROP TABLE logs');
         $this->addSql('DROP TABLE users');

@@ -62,6 +62,8 @@ The admin system styling is based on Bootstrap and Font Awesome, but you can add
    * [Github](https://github.com/apexcharts/apexcharts.js)
 * PhpunitPrettyPrint
    * [Github](https://github.com/indentno/phpunit-pretty-print)
+* Tinymce
+   * [Github](https://github.com/tinymce/tinymce)
 
 ## License
 This software is licensed under the [MIT license](LICENSE)

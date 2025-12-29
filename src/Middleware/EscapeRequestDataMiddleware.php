@@ -32,6 +32,12 @@ class EscapeRequestDataMiddleware
     {
         $request = $event->getRequest();
 
+        // skip middleware for articles editor (allow HTML content)
+        $route = $request->attributes->get('_route');
+        if (in_array($route, ['admin_articles_new', 'admin_articles_edit'])) {
+            return;
+        }
+
         // get form data for all request methods
         $formData = $request->query->all() + $request->request->all();
 

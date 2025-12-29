@@ -53,6 +53,12 @@ class NonAuthRedirectTest extends WebTestCase
             ['method' => 'GET', 'url' => '/admin/database/table'],
             ['method' => 'POST', 'url' => '/admin/database/delete']
         ],
+        'admin_articles' => [
+            ['method' => 'GET', 'url' => '/admin/articles'],
+            ['method' => 'GET', 'url' => '/admin/articles/new'],
+            ['method' => 'GET', 'url' => '/admin/articles/edit'],
+            ['method' => 'POST', 'url' => '/admin/articles/delete']
+        ],
         'admin_visitor_manager' => [
             ['method' => 'GET', 'url' => '/admin/visitors'],
             ['method' => 'POST', 'url' => '/admin/visitors/ban'],
