@@ -3,6 +3,7 @@
 namespace App\Tests\Util;
 
 use App\Util\AppUtil;
+use App\Util\JsonUtil;
 use App\Util\SecurityUtil;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +21,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 class AppUtilTest extends TestCase
 {
     private AppUtil $appUtil;
+    private JsonUtil & MockObject $jsonUtilMock;
     private SecurityUtil & MockObject $securityUtilMock;
     private KernelInterface & MockObject $kernelInterfaceMock;
 
@@ -28,13 +30,12 @@ class AppUtilTest extends TestCase
     protected function setUp(): void
     {
         // mock dependencies
+        $this->jsonUtilMock = $this->createMock(JsonUtil::class);
         $this->securityUtilMock = $this->createMock(SecurityUtil::class);
-
-        // mock kernel interface
         $this->kernelInterfaceMock = $this->createMock(KernelInterface::class);
 
         // create instance of AppUtil
-        $this->appUtil = new AppUtil($this->securityUtilMock, $this->kernelInterfaceMock);
+        $this->appUtil = new AppUtil($this->jsonUtilMock, $this->securityUtilMock, $this->kernelInterfaceMock);
 
         // create temp dir
         $this->tempDir = sys_get_temp_dir() . '/app_util_test_' . uniqid();

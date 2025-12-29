@@ -17,11 +17,13 @@ use Symfony\Component\HttpKernel\KernelInterface;
  */
 class AppUtil
 {
+    private JsonUtil $jsonUtil;
     private SecurityUtil $securityUtil;
     private KernelInterface $kernelInterface;
 
-    public function __construct(SecurityUtil $securityUtil, KernelInterface $kernelInterface)
+    public function __construct(JsonUtil $jsonUtil, SecurityUtil $securityUtil, KernelInterface $kernelInterface)
     {
+        $this->jsonUtil = $jsonUtil;
         $this->securityUtil = $securityUtil;
         $this->kernelInterface = $kernelInterface;
     }
@@ -53,6 +55,46 @@ class AppUtil
     public function getEnvValue(string $key): string
     {
         return $_ENV[$key];
+    }
+
+    /**
+     * Load config file (json files only)
+     *
+     * @param string $configFile The config file to load
+     *
+     * @return array<mixed>|null The config file content, null if the file does not exist
+     */
+    public function loadConfig(string $configFile): ?array
+    {
+        $rootDir = $this->getAppRootDir();
+        $candidatePaths = [
+            $this->getCustomConfigDirectory() . '/' . $configFile,
+            $rootDir . '/' . $configFile,
+            $rootDir . '/config/' . $configFile
+        ];
+
+        foreach (array_unique($candidatePaths) as $configPath) {
+            if (file_exists($configPath)) {
+                return $this->jsonUtil->getJson($configPath);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Get writable directory for custom configuration overrides
+     *
+     * @return string The custom config directory
+     */
+    public function getCustomConfigDirectory(): string
+    {
+        $override = $_ENV['APP_CUSTOM_CONFIG_DIR'] ?? getenv('APP_CUSTOM_CONFIG_DIR');
+        if (!empty($override)) {
+            return rtrim($override, '/');
+        }
+
+        return $this->getAppRootDir();
     }
 
     /**
@@ -199,6 +241,22 @@ class AppUtil
     public function getYamlConfig(string $configFile): mixed
     {
         return Yaml::parseFile($this->getAppRootDir() . '/config/' . $configFile);
+    }
+
+    /**
+     * Check if feature flag is disabled
+     *
+     * @param string $featureFlag The feature flag to check
+     *
+     * @return bool True if feature flag is disabled, false otherwise
+     */
+    public function isFeatureFlagDisabled(string $featureFlag): bool
+    {
+        // get feature flags config
+        $disabledFeatureFlags = $this->loadConfig('feature-flags.json');
+
+        // check if feature flag is disabled
+        return isset($disabledFeatureFlags[$featureFlag]) && $disabledFeatureFlags[$featureFlag] === false;
     }
 
     /**

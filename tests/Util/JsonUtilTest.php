@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Util;
 
-use App\Util\AppUtil;
 use App\Util\JsonUtil;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\TestCase;
@@ -18,7 +17,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 class JsonUtilTest extends TestCase
 {
     private JsonUtil $jsonUtil;
-    private AppUtil & MockObject $appUtilMock;
     private LoggerInterface & MockObject $loggerMock;
 
     private string $tempDir;
@@ -26,11 +24,10 @@ class JsonUtilTest extends TestCase
     protected function setUp(): void
     {
         // mock dependencies
-        $this->appUtilMock = $this->createMock(AppUtil::class);
         $this->loggerMock = $this->createMock(LoggerInterface::class);
 
         // create instance of JsonUtil
-        $this->jsonUtil = new JsonUtil($this->appUtilMock, $this->loggerMock);
+        $this->jsonUtil = new JsonUtil($this->loggerMock);
 
         // temp dir
         $this->tempDir = sys_get_temp_dir() . '/json_util_test_' . uniqid();

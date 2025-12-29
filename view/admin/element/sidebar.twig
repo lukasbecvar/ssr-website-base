@@ -40,24 +40,28 @@
 			    <span class="item">Logs</span>
 	    	</a>
 		</li>
-        <li>
-			<a class="s-menu-button" href={{ path('admin_inbox', {'page': 1}) }}>
-				<span class="icon"><i class="fas fa-envelope"></i></span>
-				<span class="item">Inbox</span>
-			</a>
-		</li>
+		{% if not isFeatureFlagDisabled('contact') %}
+			<li>
+				<a class="s-menu-button" href={{ path('admin_inbox', {'page': 1}) }}>
+					<span class="icon"><i class="fas fa-envelope"></i></span>
+					<span class="item">Inbox</span>
+				</a>
+			</li>
+		{% endif %}
 		<li>
         	<a class="s-menu-button" href={{ path('admin_database_list') }}>
     			<span class="icon"><i class="fas fa-database ml-1"></i></span>
         		<span class="item">Database</span>
         	</a>
         </li>
-        <li>
-        	<a class="s-menu-button" href={{ path('admin_articles_list') }}>
-                <span class="icon"><i class="fas fa-newspaper ml-1"></i></span>
-                <span class="item">Articles</span>
-            </a>
-        </li>
+		{% if not isFeatureFlagDisabled('article') %}
+			<li>
+				<a class="s-menu-button" href={{ path('admin_articles_list') }}>
+					<span class="icon"><i class="fas fa-newspaper ml-1"></i></span>
+					<span class="item">Articles</span>
+				</a>
+			</li>
+		{% endif %}
         <li>
 			<a class="s-menu-button" href={{ path('admin_visitor_manager', {'page': 1}) }}>
 				<span class="icon"><i class="fas fa-user ml-1"></i></span>

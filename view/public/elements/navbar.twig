@@ -13,12 +13,16 @@
                 <li class="nav-item">
                     <a class="nav-link" href={{ path('public_home') }}>{{ 'public.nav.home'|trans }}</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href={{ path('public_articles_list') }}>Articles</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href={{ path('public_contact') }}>{{ 'public.nav.contact'|trans }}</a>
-                </li>
+                {% if not isFeatureFlagDisabled('article') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ path('public_articles_list') }}>Articles</a>
+                    </li>
+                {% endif %}
+                {% if not isFeatureFlagDisabled('contact') %}
+                    <li class="nav-item">
+                        <a class="nav-link" href={{ path('public_contact') }}>{{ 'public.nav.contact'|trans }}</a>
+                    </li>
+                {% endif %}
                 <li class="nav-item">
                     <a class="nav-link" href={{ path('admin_init') }}>admin</a>
                 </li>
